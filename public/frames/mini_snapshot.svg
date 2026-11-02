@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" fill="none">
+  <rect x="10" y="10" width="180" height="180" rx="6" stroke="#d6d3d1" stroke-width="8"/>
+  <rect x="22" y="22" width="156" height="156" rx="2" stroke="#a8a29e" stroke-width="2"/>
+  <!-- Washi taped corners -->
+  <rect x="4" y="18" width="42" height="14" rx="2" transform="rotate(-18 4 18)" fill="#fda4af" opacity="0.9"/>
+  <rect x="154" y="10" width="42" height="14" rx="2" transform="rotate(16 154 10)" fill="#c4b5fd" opacity="0.9"/>
+  <rect x="8" y="168" width="42" height="14" rx="2" transform="rotate(12 8 168)" fill="#fde68a" opacity="0.9"/>
+  <rect x="150" y="160" width="42" height="14" rx="2" transform="rotate(-14 150 160)" fill="#86efac" opacity="0.9"/>
+</svg>
