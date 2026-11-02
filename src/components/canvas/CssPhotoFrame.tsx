@@ -1,27 +1,42 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type MutableRefObject,
+} from "react";
+import { readFileAsDataUrl, sanitizePhotoSrc } from "@/lib/photoDataUrl";
 
 /** Pure-CSS scrapbook photo frame shells */
 export type CssFrameArchetype =
   | "polaroid"
+  | "pink_polaroid"
+  | "film_strip"
+  | "gold_mirror"
+  | "doodle"
+  | "stamp"
+  | "whipped_cream"
+  | "y2k_gel"
+  | "holo_sleeve"
+  /** Legacy */
   | "toploader"
   | "square_washi"
-  | "heart_mask"
-  | "stamp"
-  | "gold_mirror";
+  | "heart_mask";
 
 export const CSS_FRAME_ARCHETYPES: {
   id: CssFrameArchetype;
   label: string;
   emoji: string;
 }[] = [
-  { id: "polaroid", label: "Polaroid", emoji: "📷" },
-  { id: "toploader", label: "Toploader", emoji: "💎" },
-  { id: "square_washi", label: "Washi", emoji: "🎀" },
-  { id: "heart_mask", label: "Heart", emoji: "💕" },
-  { id: "stamp", label: "Stamp", emoji: "✉️" },
-  { id: "gold_mirror", label: "Gold", emoji: "✨" },
+  { id: "polaroid", label: "Classic Polaroid", emoji: "📷" },
+  { id: "pink_polaroid", label: "Rose Heart Polaroid", emoji: "💗" },
+  { id: "whipped_cream", label: "Y2K Translucent Deco", emoji: "🧁" },
+  { id: "film_strip", label: "Retro Film Strip", emoji: "🎞️" },
+  { id: "gold_mirror", label: "Glitter Gold Foil", emoji: "✨" },
+  { id: "stamp", label: "Scalloped Stamp", emoji: "✉️" },
+  { id: "doodle", label: "Doodle Scrap", emoji: "✏️" },
+  { id: "holo_sleeve", label: "Cyber Chrome Glass", emoji: "🪩" },
 ];
 
 /** Map legacy SVG-era presets onto CSS archetypes */
@@ -32,18 +47,29 @@ export function resolveCssFrame(
     case "polaroid":
     case "classic-polaroid":
       return "polaroid";
+    case "pink_polaroid":
+    case "heart_mask":
+      return "pink_polaroid";
+    case "film_strip":
+      return "film_strip";
     case "toploader":
     case "deco-toploader":
-      return "toploader";
+      return "film_strip";
     case "square_washi":
     case "mini-snapshot":
       return "square_washi";
-    case "heart_mask":
-      return "heart_mask";
+    case "doodle":
+      return "doodle";
     case "stamp":
       return "stamp";
     case "gold_mirror":
       return "gold_mirror";
+    case "whipped_cream":
+      return "whipped_cream";
+    case "y2k_gel":
+      return "y2k_gel";
+    case "holo_sleeve":
+      return "holo_sleeve";
     default:
       return "polaroid";
   }
@@ -62,6 +88,7 @@ type CssPhotoFrameProps = {
   onEndAdjust?: () => void;
   onPhotoChange?: (src: string) => void;
   onPhotoOffsetChange?: (x: number, y: number) => void;
+  replaceTriggerRef?: MutableRefObject<(() => void) | null>;
 };
 
 function clamp(n: number, min: number, max: number) {
@@ -80,6 +107,7 @@ function PhotoAperture({
   onEndAdjust,
   onPhotoChange,
   onPhotoOffsetChange,
+  replaceTriggerRef,
 }: {
   photoSrc?: string | null;
   photoOffsetX: number;
@@ -92,10 +120,13 @@ function PhotoAperture({
   onEndAdjust?: () => void;
   onPhotoChange?: (src: string) => void;
   onPhotoOffsetChange?: (x: number, y: number) => void;
+  /** When set, parent can call this to open the replace picker */
+  replaceTriggerRef?: MutableRefObject<(() => void) | null>;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const slotRef = useRef<HTMLDivElement>(null);
   const lastTapRef = useRef(0);
+  const pickerLockRef = useRef(false);
   const panStartRef = useRef<{
     x: number;
     y: number;
@@ -104,6 +135,42 @@ function PhotoAperture({
   } | null>(null);
   const [localAdjusting, setLocalAdjusting] = useState(false);
   const isAdjusting = adjusting || localAdjusting;
+  const safePhotoSrc = sanitizePhotoSrc(photoSrc);
+  const hasPhoto = Boolean(safePhotoSrc);
+
+  function openPhotoPicker() {
+    if (pickerLockRef.current) return;
+    pickerLockRef.current = true;
+    const input = fileRef.current;
+    if (input) {
+      // Temporarily enable so a programmatic click works even after a photo exists
+      input.disabled = false;
+      input.value = "";
+      input.click();
+    }
+    window.setTimeout(() => {
+      pickerLockRef.current = false;
+      if (fileRef.current && hasPhoto) {
+        fileRef.current.disabled = true;
+      }
+    }, 900);
+  }
+
+  useEffect(() => {
+    if (!replaceTriggerRef) return;
+    // Explicit replace only — never auto-open on frame touch/drag
+    replaceTriggerRef.current = () => openPhotoPicker();
+    return () => {
+      replaceTriggerRef.current = null;
+    };
+  });
+
+  useEffect(() => {
+    const input = fileRef.current;
+    if (!input) return;
+    // Once filled, keep the file input disabled so accidental taps never re-open the picker
+    input.disabled = hasPhoto;
+  }, [hasPhoto]);
 
   useEffect(() => {
     if (!isAdjusting) return;
@@ -118,19 +185,25 @@ function PhotoAperture({
   }, [isAdjusting, onEndAdjust]);
 
   function onPhotoPointerDown(e: React.PointerEvent) {
-    e.stopPropagation();
+    if (!hasPhoto) return;
     const now = Date.now();
     const isDouble = now - lastTapRef.current < 320;
     lastTapRef.current = now;
-    if (!photoSrc) return;
+
+    // Double-tap enters crop/adjust — otherwise let parent handle select/drag
     if (isDouble) {
       e.preventDefault();
+      e.stopPropagation();
       setLocalAdjusting(true);
       onRequestAdjust?.();
       return;
     }
-    if (!isAdjusting) return;
+    if (!isAdjusting) {
+      // Do NOT open file picker; allow selection/transform
+      return;
+    }
     e.preventDefault();
+    e.stopPropagation();
     panStartRef.current = {
       x: e.clientX,
       y: e.clientY,
@@ -160,7 +233,7 @@ function PhotoAperture({
   return (
     <div
       ref={slotRef}
-      className={`overflow-hidden ${className} ${
+      className={`relative overflow-hidden rounded-[inherit] ${className} ${
         isAdjusting ? "ring-2 ring-pink-400 ring-offset-1" : ""
       }`}
       style={
@@ -176,10 +249,11 @@ function PhotoAperture({
           : undefined
       }
     >
-      {photoSrc ? (
+      {hasPhoto ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={photoSrc}
+          key={safePhotoSrc!}
+          src={safePhotoSrc!}
           alt={alt}
           draggable={false}
           onPointerDown={onPhotoPointerDown}
@@ -190,13 +264,13 @@ function PhotoAperture({
           onPointerCancel={() => {
             panStartRef.current = null;
           }}
-          className={`h-full w-full select-none object-cover ${
-            isAdjusting
-              ? "cursor-grab active:cursor-grabbing"
-              : ""
+          className={`pointer-events-auto h-full w-full select-none rounded-[inherit] object-cover ${
+            isAdjusting ? "cursor-grab active:cursor-grabbing" : "cursor-grab"
           }`}
           style={{
-            transform: `translate(${photoOffsetX}%, ${photoOffsetY}%) scale(1.2)`,
+            transform: isAdjusting
+              ? `translate(${photoOffsetX}%, ${photoOffsetY}%) scale(1.2)`
+              : `translate(${photoOffsetX}%, ${photoOffsetY}%) scale(1.15)`,
             transformOrigin: "center center",
           }}
         />
@@ -204,10 +278,14 @@ function PhotoAperture({
         <button
           type="button"
           className="absolute inset-0 z-[1] flex min-h-[48px] min-w-[48px] flex-col items-center justify-center gap-1 bg-pink-50/90 px-2 text-center"
-          onPointerDown={(e) => e.stopPropagation()}
-          onClick={(e) => {
+          onPointerDown={(e) => {
+            e.preventDefault();
             e.stopPropagation();
-            fileRef.current?.click();
+          }}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openPhotoPicker();
           }}
           aria-label="Tap to add photo"
         >
@@ -215,13 +293,13 @@ function PhotoAperture({
             📸
           </span>
           <span className="text-[0.65rem] font-extrabold leading-tight text-pink-500">
-            Tap to Add
+            Tap to add photo
           </span>
         </button>
       )}
 
       {isAdjusting ? (
-        <span className="pointer-events-none absolute inset-x-1 bottom-1 rounded-full bg-white/90 px-2 py-0.5 text-center text-[0.55rem] font-extrabold text-pink-600 shadow">
+        <span className="pointer-events-none absolute inset-x-1 bottom-1 z-10 rounded-full bg-white/90 px-2 py-0.5 text-center text-[0.55rem] font-extrabold text-pink-600 shadow">
           Adjust · tap outside
         </span>
       ) : null}
@@ -230,11 +308,18 @@ function PhotoAperture({
         ref={fileRef}
         type="file"
         accept="image/*"
-        className="hidden"
+        disabled={hasPhoto}
+        className="pointer-events-none absolute h-0 w-0 opacity-0"
+        tabIndex={-1}
+        aria-hidden
+        onClick={(e) => e.stopPropagation()}
         onChange={(e) => {
           const file = e.target.files?.[0];
+          pickerLockRef.current = false;
           if (!file) return;
-          onPhotoChange?.(URL.createObjectURL(file));
+          void readFileAsDataUrl(file)
+            .then((dataUrl) => onPhotoChange?.(dataUrl))
+            .catch((err) => console.error("Photo read failed", err));
           e.target.value = "";
         }}
       />
@@ -258,6 +343,7 @@ export function CssPhotoFrame({
   onEndAdjust,
   onPhotoChange,
   onPhotoOffsetChange,
+  replaceTriggerRef,
 }: CssPhotoFrameProps) {
   const kind = resolveCssFrame(archetype);
   const apertureProps = {
@@ -270,12 +356,13 @@ export function CssPhotoFrame({
     onEndAdjust,
     onPhotoChange,
     onPhotoOffsetChange,
+    replaceTriggerRef,
   };
 
   if (kind === "polaroid") {
     return (
       <div
-        className={`relative aspect-[3/4] w-full rotate-[-2deg] rounded-sm bg-[#fffaf7] p-[8%] pb-[22%] shadow-[0_12px_28px_rgba(74,43,69,0.18)] ring-1 ring-black/5 ${className}`}
+        className={`relative mx-auto aspect-[3/4] w-full max-w-[280px] rotate-[-2deg] rounded-sm bg-[#fffaf7] p-[8%] pb-[22%] shadow-[0_12px_28px_rgba(74,43,69,0.18)] ring-1 ring-black/5 ${className}`}
         data-frame="polaroid"
       >
         <PhotoAperture
@@ -289,25 +376,34 @@ export function CssPhotoFrame({
     );
   }
 
-  if (kind === "toploader") {
+  if (kind === "pink_polaroid") {
     return (
       <div
-        className={`relative aspect-[3/4] w-full rounded-2xl border-2 border-pink-200 bg-white/50 p-3 shadow-lg backdrop-blur-sm ${className}`}
-        data-frame="toploader"
+        className={`relative mx-auto aspect-[3/4] w-full max-w-[280px] rotate-[1.5deg] rounded-sm p-[8%] pb-[22%] ${className}`}
+        data-frame="pink_polaroid"
+        style={{
+          backgroundImage: "linear-gradient(180deg, #ffe4e6 0%, #fdf2f8 100%)",
+          backgroundColor: "#fff1f2",
+          boxShadow:
+            "0 12px 28px rgba(244,114,182,0.22), 0 0 0 2px rgba(254,205,211,0.8)",
+        }}
       >
+        <span
+          aria-hidden
+          className="pointer-events-none absolute right-3 top-2 text-sm drop-shadow"
+        >
+          💕
+        </span>
         <PhotoAperture
           {...apertureProps}
-          className="relative h-full w-full rounded-xl bg-pink-50/80"
+          className="relative h-full w-full rounded-[2px] bg-[#fff1f2]"
         />
-        {["-left-1 -top-1", "-right-1 -top-1", "-left-1 -bottom-1", "-right-1 -bottom-1"].map(
-          (pos) => (
-            <span
-              key={pos}
-              aria-hidden
-              className={`pointer-events-none absolute ${pos} z-10 h-3 w-3 rounded-full bg-gradient-to-br from-pink-200 via-fuchsia-300 to-violet-300 shadow-[0_0_6px_rgba(244,114,182,0.7)] ring-1 ring-white/80`}
-            />
-          ),
-        )}
+        <p
+          className="pointer-events-none absolute inset-x-[8%] bottom-[6%] truncate text-center font-[var(--font-toy),cursive] text-[0.7rem] font-bold tracking-wide"
+          style={{ color: "rgba(251, 113, 133, 0.9)" }}
+        >
+          {caption}
+        </p>
       </div>
     );
   }
@@ -315,7 +411,7 @@ export function CssPhotoFrame({
   if (kind === "square_washi") {
     return (
       <div
-        className={`relative aspect-square w-full ${className}`}
+        className={`relative mx-auto aspect-square w-full max-w-[280px] ${className}`}
         data-frame="square_washi"
       >
         <div className="relative h-full w-full overflow-hidden rounded-md bg-[#faf7f2] p-[10%] shadow-[0_10px_22px_rgba(74,43,69,0.16)] ring-1 ring-stone-300/70">
@@ -324,7 +420,6 @@ export function CssPhotoFrame({
             className="relative h-full w-full rounded-sm bg-pink-50"
           />
         </div>
-        {/* Washi strips — top corners */}
         <span
           aria-hidden
           className="pointer-events-none absolute -left-1 -top-2 z-10 h-5 w-14 -rotate-12 rounded-sm bg-[repeating-linear-gradient(90deg,#fda4af_0_6px,#fecdd3_6px_12px,#fff_12px_14px)] opacity-95 shadow-sm"
@@ -337,17 +432,36 @@ export function CssPhotoFrame({
     );
   }
 
-  if (kind === "heart_mask") {
+  if (kind === "doodle" || kind === "heart_mask") {
     return (
       <div
-        className={`relative aspect-square w-full rounded-[1.5rem] bg-gradient-to-br from-pink-100 via-rose-50 to-fuchsia-100 p-3 shadow-[0_12px_26px_rgba(244,114,182,0.25)] ${className}`}
-        data-frame="heart_mask"
+        className={`relative mx-auto aspect-square w-full max-w-[280px] ${className}`}
+        data-frame="doodle"
       >
-        <PhotoAperture
-          {...apertureProps}
-          heartMask
-          className="relative h-full w-full bg-pink-100"
-        />
+        <div
+          className="relative h-full w-full bg-[#fffaf7] p-[11%] shadow-[0_10px_22px_rgba(74,43,69,0.16)]"
+          style={{
+            borderRadius: "18% 22% 16% 24% / 20% 16% 24% 18%",
+            boxShadow:
+              "0 0 0 3px #fda4af, 0 0 0 6px #c4b5fd, 0 10px 22px rgba(74,43,69,0.16)",
+          }}
+        >
+          <PhotoAperture
+            {...apertureProps}
+            className="relative h-full w-full rounded-sm bg-pink-50"
+          />
+        </div>
+        {["-left-1 -top-1", "-right-1 -top-0.5", "-left-0.5 -bottom-1", "-right-1 -bottom-0.5"].map(
+          (pos, i) => (
+            <span
+              key={pos}
+              aria-hidden
+              className={`pointer-events-none absolute ${pos} z-10 text-sm ${i % 2 ? "text-violet-400" : "text-pink-400"}`}
+            >
+              ♡
+            </span>
+          ),
+        )}
       </div>
     );
   }
@@ -355,7 +469,7 @@ export function CssPhotoFrame({
   if (kind === "stamp") {
     return (
       <div
-        className={`relative aspect-[4/5] w-full bg-white p-[9%] shadow-[0_10px_22px_rgba(74,43,69,0.16)] ${className}`}
+        className={`relative mx-auto aspect-[4/5] w-full max-w-[280px] bg-white p-[9%] shadow-[0_10px_22px_rgba(74,43,69,0.16)] ${className}`}
         data-frame="stamp"
         style={{
           // Scalloped postage-stamp edge via radial mask
@@ -383,16 +497,143 @@ export function CssPhotoFrame({
     );
   }
 
-  // gold_mirror
+  if (kind === "whipped_cream") {
+    return (
+      <div
+        className={`relative mx-auto aspect-[3/4] w-full max-w-[280px] ${className}`}
+        data-frame="whipped_cream"
+      >
+        <div
+          className="relative h-full w-full overflow-hidden bg-white/55 p-[12%] shadow-[0_12px_28px_rgba(255,182,193,0.35)] backdrop-blur-[2px] ring-1 ring-white/80"
+          style={{
+            borderRadius: "28% 32% 30% 34% / 34% 28% 36% 30%",
+            boxShadow:
+              "0 0 0 4px rgba(255,255,255,0.85), 0 0 0 8px rgba(251,207,232,0.55), 0 12px 28px rgba(244,114,182,0.22)",
+          }}
+        >
+          <PhotoAperture
+            {...apertureProps}
+            className="relative h-full w-full rounded-[1rem] bg-pink-50/80"
+          />
+        </div>
+        <span aria-hidden className="pointer-events-none absolute -left-1 top-3 text-lg opacity-90">
+          🫧
+        </span>
+        <span aria-hidden className="pointer-events-none absolute -right-1 bottom-6 text-base opacity-90">
+          🧁
+        </span>
+      </div>
+    );
+  }
+
+  if (kind === "y2k_gel") {
+    return (
+      <div
+        className={`relative mx-auto aspect-[3/4] w-full max-w-[280px] rounded-2xl p-[4%] shadow-[0_14px_32px_rgba(125,211,252,0.35)] ${className}`}
+        data-frame="y2k_gel"
+        style={{
+          backgroundImage:
+            "linear-gradient(135deg, rgba(244,114,182,0.55), rgba(167,139,250,0.55), rgba(34,211,238,0.55), rgba(250,204,21,0.45))",
+          backgroundSize: "200% 200%",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="h-full w-full rounded-xl bg-white/35 p-[4%] shadow-inner ring-1 ring-white/60 backdrop-blur-[1px]">
+          <PhotoAperture
+            {...apertureProps}
+            className="relative h-full w-full rounded-lg bg-fuchsia-50/70"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (kind === "film_strip") {
+    return (
+      <div
+        className={`relative mx-auto aspect-[3/4] w-full max-w-[280px] bg-zinc-900 p-[6%] pb-[10%] shadow-[0_12px_28px_rgba(0,0,0,0.35)] ${className}`}
+        data-frame="film_strip"
+        style={{
+          backgroundImage: `
+            repeating-linear-gradient(
+              90deg,
+              transparent 0 10%,
+              rgba(255,255,255,0.12) 10% 14%,
+              transparent 14% 24%
+            )
+          `,
+          backgroundSize: "100% 8%",
+          backgroundPosition: "0 0, 0 100%",
+          backgroundRepeat: "repeat-x",
+        }}
+      >
+        <div className="absolute inset-x-0 top-0 flex h-[8%] justify-around px-1">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <span key={`t${i}`} className="h-full w-[10%] rounded-sm bg-zinc-950/80" />
+          ))}
+        </div>
+        <div className="absolute inset-x-0 bottom-0 flex h-[8%] justify-around px-1">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <span key={`b${i}`} className="h-full w-[10%] rounded-sm bg-zinc-950/80" />
+          ))}
+        </div>
+        <div className="relative mt-[8%] h-[76%] w-full overflow-hidden rounded-sm bg-zinc-800 p-1">
+          <PhotoAperture
+            {...apertureProps}
+            className="relative h-full w-full bg-zinc-700"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (kind === "holo_sleeve") {
+    return (
+      <div
+        className={`relative mx-auto aspect-[3/4] w-full max-w-[280px] rounded-xl p-[5%] shadow-[0_14px_30px_rgba(192,132,252,0.4)] ${className}`}
+        data-frame="holo_sleeve"
+        style={{
+          backgroundImage:
+            "linear-gradient(120deg, #f9a8d4, #c4b5fd, #7dd3fc, #fde68a, #f9a8d4)",
+          backgroundSize: "300% 300%",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="h-full w-full rounded-lg bg-white/90 p-[4%] shadow-inner ring-1 ring-white/70">
+          <PhotoAperture
+            {...apertureProps}
+            className="relative h-full w-full rounded-md bg-violet-50"
+          />
+        </div>
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-xl opacity-40"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.8) 0 2px, transparent 3px), radial-gradient(circle at 70% 60%, rgba(255,255,255,0.7) 0 1.5px, transparent 2px)",
+            backgroundSize: "40px 40px, 28px 28px",
+          }}
+        />
+      </div>
+    );
+  }
+
+  // gold_mirror — thin glitter foil border (longhands only — no `background` shorthand)
   return (
     <div
-      className={`relative aspect-[3/4] w-full rounded-xl bg-gradient-to-br from-amber-200 via-yellow-100 to-amber-300 p-[7%] shadow-[0_14px_30px_rgba(180,120,40,0.35)] ${className}`}
+      className={`relative mx-auto aspect-[3/4] w-full max-w-[280px] rounded-lg p-[3.5%] shadow-[0_14px_30px_rgba(180,120,40,0.35)] ${className}`}
       data-frame="gold_mirror"
+      style={{
+        backgroundImage:
+          "linear-gradient(135deg, #fde68a, #f59e0b, #fef3c7, #d97706, #fde68a)",
+        backgroundSize: "200% 200%",
+        backgroundRepeat: "no-repeat",
+      }}
     >
-      <div className="h-full w-full rounded-lg bg-gradient-to-br from-amber-100/80 to-yellow-50/60 p-[4%] shadow-inner">
+      <div className="h-full w-full rounded-md bg-white p-[3%] shadow-inner">
         <PhotoAperture
           {...apertureProps}
-          className="relative h-full w-full rounded-md bg-pink-50 ring-1 ring-amber-300/50"
+          className="relative h-full w-full rounded-sm bg-pink-50"
         />
       </div>
     </div>

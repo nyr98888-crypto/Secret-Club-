@@ -10,7 +10,7 @@ import {
 import { ensureClubScrapbook } from "@/lib/scrapbookStore";
 import { ToyLockbox } from "./ToyLockbox";
 import { SlotMachineRoller } from "./SlotMachineRoller";
-import { VipUpgradeModal } from "./VipUpgradeModal";
+import { UnlockVaultModal } from "@/components/vault/UnlockVaultModal";
 import { vibrateTap } from "@/lib/haptics";
 import { ensureAudio, playPop } from "@/lib/audio";
 
@@ -185,7 +185,7 @@ export function FoundClubWizard({ onDone }: { onDone: () => void }) {
         </div>
       )}
 
-      <VipUpgradeModal open={vipOpen} onClose={() => setVipOpen(false)} />
+      <UnlockVaultModal open={vipOpen} onClose={() => setVipOpen(false)} />
     </div>
   );
 }

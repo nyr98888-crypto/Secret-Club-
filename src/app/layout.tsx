@@ -1,54 +1,36 @@
 import type { Metadata, Viewport } from "next";
-import { Baloo_2, Fredoka, Nunito, Orbitron, Rajdhani } from "next/font/google";
 import { StealthModeToggle } from "@/components/StealthModeToggle";
 import { AudioUnlock } from "@/components/AudioUnlock";
 import "./globals.css";
 
-const bestieDisplay = Baloo_2({
-  subsets: ["latin"],
-  variable: "--font-bestie-display",
-  weight: ["600", "700", "800"],
-});
-
-const bestieBody = Nunito({
-  subsets: ["latin"],
-  variable: "--font-bestie-body",
-  weight: ["500", "600", "700", "800"],
-});
-
-const squadDisplay = Orbitron({
-  subsets: ["latin"],
-  variable: "--font-squad-display",
-  weight: ["600", "700", "800"],
-});
-
-const squadBody = Rajdhani({
-  subsets: ["latin"],
-  variable: "--font-squad-body",
-  weight: ["500", "600", "700"],
-});
-
-const toyFont = Fredoka({
-  subsets: ["latin"],
-  variable: "--font-toy",
-  weight: ["400", "500", "600", "700"],
-});
-
 export const metadata: Metadata = {
-  title: "Secret Club — BestieVault & SquadVault",
-  description:
-    "Found a private club, lock drops with a 3-key emoji passcode, and print matching Club IDs.",
-  manifest: "/manifest.webmanifest",
+  title: "Secret Club",
+  description: "Tactile Scrapbook & Bestie Journal",
+  applicationName: "Secret Club",
+  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
+    statusBarStyle: "black-translucent",
     title: "Secret Club",
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: ["/icon-192.png"],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffe6f2",
+  themeColor: "#F472B6",
   width: "device-width",
   initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -58,9 +40,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-circle="bestie">
-      <body
-        className={`${bestieDisplay.variable} ${bestieBody.variable} ${squadDisplay.variable} ${squadBody.variable} ${toyFont.variable} antialiased`}
-      >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&family=Orbitron:wght@600;700;800&family=Rajdhani:wght@500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta name="apple-mobile-web-app-title" content="Secret Club" />
+      </head>
+      <body className="antialiased">
         <AudioUnlock />
         <div className="top-chrome-actions" aria-label="Quick controls">
           <div id="top-chrome-slot" className="flex items-center gap-2" />

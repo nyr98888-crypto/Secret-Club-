@@ -8,6 +8,7 @@ export type SweetPoke = {
   icon: string;
   title: string;
   soundType: PokeSoundType;
+  /** Hex gradient — never Tailwind oklch utilities (breaks PNG export) */
   sealColor: string;
 };
 
@@ -17,42 +18,42 @@ export const POKE_OPTIONS: SweetPoke[] = [
     icon: "💖",
     title: "Bestie Hug",
     soundType: "magic",
-    sealColor: "from-pink-400 to-rose-400",
+    sealColor: "linear-gradient(135deg, #f472b6 0%, #fb7185 100%)",
   },
   {
     id: "knock",
     icon: "🚪",
-    title: "Knock Knock",
+    title: "Secret Knock",
     soundType: "knock",
-    sealColor: "from-amber-400 to-orange-400",
+    sealColor: "linear-gradient(135deg, #fbbf24 0%, #fb923c 100%)",
   },
   {
     id: "sparkle",
-    icon: "✨",
-    title: "Magic Vibe",
+    icon: "🪄",
+    title: "Magic Wish",
     soundType: "bell",
-    sealColor: "from-purple-400 to-indigo-400",
+    sealColor: "linear-gradient(135deg, #c084fc 0%, #818cf8 100%)",
+  },
+  {
+    id: "drop",
+    icon: "🎵",
+    title: "Drop Song",
+    soundType: "marimba",
+    sealColor: "linear-gradient(135deg, #e879f9 0%, #8b5cf6 100%)",
   },
   {
     id: "snack",
     icon: "🍓",
     title: "Snack Break",
     soundType: "pop",
-    sealColor: "from-red-400 to-pink-500",
-  },
-  {
-    id: "shh",
-    icon: "🤫",
-    title: "Top Secret",
-    soundType: "marimba",
-    sealColor: "from-fuchsia-400 to-pink-400",
+    sealColor: "linear-gradient(135deg, #f87171 0%, #ec4899 100%)",
   },
   {
     id: "bell",
     icon: "🔔",
     title: "Ding Dong",
     soundType: "bell",
-    sealColor: "from-yellow-300 to-amber-400",
+    sealColor: "linear-gradient(135deg, #fde047 0%, #fbbf24 100%)",
   },
 ];
 
@@ -78,22 +79,21 @@ export function SweetPokeModal({
 
   function handlePick(poke: SweetPoke) {
     setSelectedPoke(poke);
-    playPokeSound(poke.soundType);
-    // Place first, then close — ensures canvas receives the charm
+    // Placement sound + burst happen on the stamp itself
     onStickPoke(poke);
     window.setTimeout(() => onClose(), 0);
   }
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/30 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/35 p-0 backdrop-blur-sm sm:items-center sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="sweet-poke-title"
       onClick={onClose}
     >
       <div
-        className="flex w-full max-w-sm flex-col items-center gap-5 rounded-3xl border-4 border-pink-300 bg-white p-6 shadow-2xl"
+        className="flex w-full max-w-sm flex-col items-center gap-5 rounded-t-3xl border-4 border-b-0 border-pink-300 bg-white p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-2xl sm:rounded-3xl sm:border-b-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="text-center">
@@ -107,7 +107,7 @@ export function SweetPokeModal({
             Pick a Sound Charm
           </h3>
           <p className="text-xs text-slate-500">
-            One tap sticks a sealed sound charm on the page!
+            One tap stamps a playable charm onto the page!
           </p>
         </div>
 
@@ -118,29 +118,31 @@ export function SweetPokeModal({
               <button
                 key={poke.id}
                 type="button"
-                onPointerUp={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handlePick(poke);
+                onClick={() => handlePick(poke)}
+                onPointerEnter={() => {
+                  setSelectedPoke(poke);
+                  playPokeSound(poke.soundType);
                 }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handlePick(poke);
-                }}
-                className={`flex min-h-[48px] min-w-[48px] flex-col items-center justify-center rounded-2xl border-2 p-3 transition-all active:scale-95 ${
-                  isSelected
-                    ? "scale-105 border-pink-500 bg-pink-50 shadow-md"
-                    : "border-pink-100 bg-white hover:border-pink-200 hover:bg-pink-50/50"
-                }`}
+                className={`flex min-h-[88px] flex-col items-center justify-center gap-1 rounded-2xl border-2 p-2
+                  transition active:scale-95 ${
+                    isSelected
+                      ? "border-pink-400 bg-pink-50 shadow-md ring-2 ring-pink-200"
+                      : "border-pink-100 bg-white hover:border-pink-200"
+                  }`}
               >
-                <span className="mb-1 text-3xl" aria-hidden>
+                <span
+                  className="grid h-10 w-10 place-items-center rounded-full text-xl text-white shadow"
+                  style={{
+                    backgroundImage: poke.sealColor,
+                    backgroundColor: "#f472b6",
+                  }}
+                  aria-hidden
+                >
                   {poke.icon}
                 </span>
-                <span className="text-[11px] font-bold text-slate-700">
+                <span className="text-center text-[0.65rem] font-black leading-tight text-slate-700">
                   {poke.title}
                 </span>
-                <span className="mt-0.5 text-[9px] text-pink-500">🔊 Tap to stick</span>
               </button>
             );
           })}
@@ -149,7 +151,7 @@ export function SweetPokeModal({
         <button
           type="button"
           onClick={onClose}
-          className="min-h-[48px] w-full rounded-2xl bg-slate-100 py-3 text-sm font-bold text-slate-500 transition-all hover:bg-slate-200 active:scale-95"
+          className="min-h-[44px] w-full rounded-full border border-slate-200 bg-slate-50 text-sm font-bold text-slate-600"
         >
           Cancel
         </button>

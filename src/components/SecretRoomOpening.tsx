@@ -150,87 +150,67 @@ export function SecretRoomOpening({
       <p className="relative z-10 mb-1 font-toy text-sm font-bold uppercase tracking-[0.2em] text-pink-500">
         {club.vaultType === "squad" ? "SquadVault" : "BestieVault"}
       </p>
-      <h1 className="relative z-10 mb-6 max-w-md text-center font-toy text-3xl font-black tracking-tight text-slate-800 sm:text-4xl">
-        {emblem} {title}
+      <h1 className="relative z-10 mb-4 max-w-md text-center font-toy text-3xl font-black tracking-tight text-slate-800 sm:text-4xl">
+        <span aria-hidden>{emblem}</span> {title}
       </h1>
 
-      {/* Floating diary stage */}
+      {/* 3D fuzzy diary cover — hero welcome above the lock */}
       <div
-        className={`relative z-10 mb-5 transition-all duration-700 ${
+        className={`relative z-10 mb-4 transition-all duration-700 ${
           opening ? "scale-125 opacity-0" : "scale-100 opacity-100"
         }`}
-        style={{ perspective: 1000 }}
+        style={{ perspective: 1200 }}
       >
-        <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-tr from-pink-300/50 via-fuchsia-200/40 to-sky-200/40 blur-3xl sm:h-96 sm:w-96" />
-
         <div
-          className={`relative ${
-            opening ? "animate-[secret-cover-open_1s_ease-in_forwards]" : "animate-float"
-          }`}
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-[58%] h-40 w-[70%] -translate-x-1/2 rounded-[100%]
+            bg-pink-400/25 blur-2xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full
+            bg-gradient-to-tr from-pink-300/45 via-fuchsia-200/35 to-rose-200/40 blur-3xl sm:h-[22rem] sm:w-[22rem]"
+        />
+
+        <button
+          type="button"
+          onClick={tapPadlock}
+          disabled={opening}
+          aria-label="Tap fuzzy diary to unlock"
+          className={`relative mx-auto block w-[min(72vw,18.5rem)] origin-center outline-none
+            transition active:scale-[0.98]
+            ${opening ? "animate-[secret-cover-open_1s_ease-in_forwards]" : "animate-diary-welcome"}
+            ${lockClicked ? "scale-105" : ""}`}
         >
-          {/* Soft CSS hardcover under the hero art for theme emblem */}
-          <div
-            className="relative mx-auto w-[min(78vw,21.25rem)] overflow-hidden rounded-[1.75rem]
-              border-[6px] border-[#f9a8d4] bg-gradient-to-br from-[#fff0f7] via-[#ffe4ef] to-[#fbcfe8]
-              shadow-[0_25px_50px_-12px_rgba(244,114,182,0.45)]"
-            style={{ aspectRatio: "340 / 460" }}
+          <span
+            className="relative block overflow-hidden rounded-[1.6rem]
+              shadow-[0_28px_50px_-8px_rgba(190,24,93,0.45),0_12px_24px_rgba(244,114,182,0.35),0_0_0_1px_rgba(255,255,255,0.55)]"
+            style={{ aspectRatio: "3 / 4" }}
           >
             <Image
-              src="/hero-book.png"
-              alt="Locked secret diary"
+              src="/fuzzy-diary-cover.png"
+              alt="Secret Club fuzzy diary cover"
               fill
               priority
-              className={`object-contain p-2 drop-shadow-lg transition duration-500 ${
-                opening ? "opacity-0" : "opacity-100"
-              }`}
-              sizes="340px"
+              className="object-cover object-center"
+              sizes="(max-width: 640px) 72vw, 296px"
             />
-
-            {/* Theme emblem plate */}
-            <div className="pointer-events-none absolute inset-x-8 top-10 z-10 flex flex-col items-center gap-2">
-              <span className="grid h-16 w-16 place-items-center rounded-full border-4 border-white/80 bg-white/70 text-4xl shadow-md backdrop-blur-sm">
-                {emblem}
-              </span>
-              <span
-                className="max-w-[12rem] truncate rounded-full bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300
-                  px-3 py-1 text-center text-[0.7rem] font-black tracking-wide text-amber-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]"
-                style={{ textShadow: "0 1px 0 rgba(255,255,255,0.6)" }}
-              >
-                {title}
-              </span>
-            </div>
-
-            {/* Clasp + interactive padlock hot zone */}
-            <button
-              type="button"
-              onClick={tapPadlock}
-              disabled={opening}
-              aria-label="Tap padlock to focus unlock"
-              className={`absolute right-3 top-1/2 z-20 flex -translate-y-1/2 flex-col items-center gap-1
-                transition ${lockClicked ? "scale-110" : "hover:scale-105"} active:scale-95`}
-            >
-              <span
-                aria-hidden
-                className="h-10 w-4 rounded-sm bg-gradient-to-b from-amber-200 via-yellow-400 to-amber-500 shadow-md ring-1 ring-amber-600/40"
-              />
-              <span
-                className={`grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-pink-300 via-rose-400 to-amber-300
-                  text-2xl shadow-[0_8px_20px_rgba(244,114,182,0.55)] ring-4 ring-white/70
-                  ${lockClicked ? "animate-pulse" : ""}`}
-              >
-                🔒
-              </span>
-            </button>
-          </div>
-        </div>
+          </span>
+          {/* Soft ground shadow under the floating book */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -bottom-3 left-1/2 h-5 w-[72%] -translate-x-1/2 rounded-[100%]
+              bg-pink-900/20 blur-md"
+          />
+        </button>
       </div>
 
       <p
-        className={`relative z-10 mb-5 rounded-full border border-pink-200 bg-white/80 px-4 py-2 text-center
+        className={`relative z-10 mb-4 rounded-full border border-pink-200 bg-white/85 px-4 py-2 text-center
           text-xs font-extrabold text-pink-600 shadow-sm backdrop-blur-sm transition
           ${opening ? "opacity-0" : "animate-pulse"}`}
       >
-        ✨ Tap Padlock or Enter Passcode to Unlock ✨
+        ✨ Tap the diary or enter your passcode to unlock ✨
       </p>
 
       {/* Passcode pad lives in front of the floating diary */}

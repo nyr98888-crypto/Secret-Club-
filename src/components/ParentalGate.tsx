@@ -1,41 +1,62 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const PARENT_QUESTION = "Parent Verification: What is 7 × 9?";
-const PARENT_ANSWER = 63;
+type MathChallenge = { prompt: string; answer: number };
+
+function randomChallenge(): MathChallenge {
+  const a = 6 + Math.floor(Math.random() * 4); // 6–9
+  const b = 7 + Math.floor(Math.random() * 3); // 7–9
+  return {
+    prompt: `Parent Verification: What is ${a} × ${b}?`,
+    answer: a * b,
+  };
+}
 
 export function ParentalGate({
   open,
   onClose,
   onUnlocked,
+  priceLabel = "$4.99",
 }: {
   open: boolean;
   onClose: () => void;
   onUnlocked: () => void;
+  priceLabel?: string;
 }) {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
   const [wrong, setWrong] = useState(false);
+  const [attempts, setAttempts] = useState(0);
+  const challenge = useMemo(
+    () => (open ? randomChallenge() : { prompt: "", answer: 0 }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- reshuffle when opened
+    [open],
+  );
 
   useEffect(() => {
     if (!open) return;
     setValue("");
     setError("");
     setWrong(false);
+    setAttempts(0);
   }, [open]);
 
   function submit() {
-    if (Number(value.trim()) === PARENT_ANSWER) {
+    if (attempts >= 5) {
+      setError("Too many tries — take a breath and ask a grown-up again.");
+      return;
+    }
+    if (Number(value.trim()) === challenge.answer) {
       setError("");
       setValue("");
       setWrong(false);
       onUnlocked();
       return;
     }
+    setAttempts((n) => n + 1);
     setError("Hmm, that isn’t right. Ask a grown-up!");
     setWrong(false);
-    // Retrigger CSS animation
     requestAnimationFrame(() => setWrong(true));
   }
 
@@ -50,10 +71,10 @@ export function ParentalGate({
     >
       <div className={`modal parental-gate ${wrong ? "is-wrong" : ""}`}>
         <h2 id="parent-gate-title">Ask a grown-up to unlock</h2>
-        <p className="font-semibold">{PARENT_QUESTION}</p>
+        <p className="font-semibold">{challenge.prompt}</p>
         <p className="fine-print">
-          Grown-ups unlock the Magic Chest. Checkout opens next — no prices shown
-          here.
+          This opens a secure one-time {priceLabel} Stripe checkout for the
+          lifetime Magic Chest unlock. No subscriptions.
         </p>
         <input
           inputMode="numeric"
@@ -72,8 +93,13 @@ export function ParentalGate({
           <button type="button" className="btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button type="button" className="btn-primary" onClick={submit}>
-            Continue to checkout
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={submit}
+            disabled={attempts >= 5}
+          >
+            Continue to {priceLabel} checkout
           </button>
         </div>
       </div>

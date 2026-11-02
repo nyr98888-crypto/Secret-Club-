@@ -1,7 +1,14 @@
 import { createHmac, timingSafeEqual } from "crypto";
 
 function pepper(): string {
-  return process.env.PASSCODE_PEPPER || "dev-pepper-change-me";
+  const value = process.env.PASSCODE_PEPPER;
+  if (!value) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("PASSCODE_PEPPER is required in production");
+    }
+    return "dev-pepper-change-me";
+  }
+  return value;
 }
 
 export function normalizeGlyphs(glyphs: string[]): string[] {

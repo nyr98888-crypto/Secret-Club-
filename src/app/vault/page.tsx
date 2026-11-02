@@ -12,6 +12,7 @@ import { inviteMessage, nativeShare } from "@/lib/share";
 import {
   createScrapbook,
   ensureClubScrapbook,
+  isBrandNewShelf,
   readActiveScrapbook,
   readScrapbooks,
   setActiveScrapbookId,
@@ -20,18 +21,22 @@ import {
   type StoredScrapbook,
 } from "@/lib/scrapbookStore";
 import { SecretRoomOpening } from "@/components/SecretRoomOpening";
-import { VipUpgradeModal } from "@/components/VipUpgradeModal";
+import { UnlockVaultModal } from "@/components/vault/UnlockVaultModal";
+import { useVaultAccess } from "@/hooks/useVaultAccess";
 import { VaultTopChrome } from "@/components/VaultTopChrome";
 import { ScrapbookCanvas } from "@/components/ScrapbookCanvas";
 import { Bookshelf } from "@/components/Bookshelf";
 import { NewScrapbookModal } from "@/components/NewScrapbookModal";
 import { useScrapbookState } from "@/hooks/useScrapbookState";
+import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 
 type ViewMode = "secret_room" | "scrapbook" | "bookshelf";
 
 export default function VaultPage() {
   const router = useRouter();
   const { backdropTheme, setBackdropTheme } = useScrapbookState();
+  const { isLandscapeBook, mode } = useDeviceLayout();
+  const { canCreateScrapbook } = useVaultAccess();
   const [club, setClub] = useState<LocalClub | null>(null);
   const [ready, setReady] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("secret_room");
@@ -53,14 +58,20 @@ export default function VaultPage() {
       return;
     }
     setClub(existing);
+    const brandNew = isBrandNewShelf();
     const ensured = ensureClubScrapbook(
       existing.clubName,
       existing.clubIcon || "📒",
     );
     setBook(ensured);
     setShelf(readScrapbooks());
-    // Always land in the floating diary room; session unlock only skips re-entry if they just unlocked
-    setViewMode(isVaultUnlocked() ? "scrapbook" : "secret_room");
+    // First-time users skip the lock screen and land on Page 1 with a welcome polaroid
+    if (brandNew || isVaultUnlocked()) {
+      setVaultUnlocked(true);
+      setViewMode("scrapbook");
+    } else {
+      setViewMode("secret_room");
+    }
     setReady(true);
   }, [router]);
 
@@ -90,8 +101,9 @@ export default function VaultPage() {
       return;
     }
 
-    const url =
-      typeof window !== "undefined" ? `${window.location.origin}/vault` : "/vault";
+    const origin =
+      typeof window !== "undefined" ? window.location.origin : "";
+    const url = `${origin}/vault`;
     const text = `${inviteMessage(club.clubName, url)}\nPasscode: ${club.passcode.join(" ")}`;
     const result = await nativeShare({
       title: club.clubName,
@@ -136,9 +148,18 @@ export default function VaultPage() {
   if (viewMode === "bookshelf") {
     return (
       <main
-        className="theme-shell min-h-dvh py-10"
+        className="theme-shell vault-workspace min-h-dvh py-10 transition-all duration-500 ease-out"
         data-circle={club.vaultType}
         data-aesthetic={club.aesthetic}
+        data-backdrop={backdropTheme.id}
+        style={{
+          backgroundImage:
+            backdropTheme.css ||
+            "linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%)",
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
+          backgroundRepeat: "no-repeat",
+        }}
       >
         <div className="shell">
           <Bookshelf
@@ -150,7 +171,22 @@ export default function VaultPage() {
               setBook(readActiveScrapbook());
               setViewMode("scrapbook");
             }}
-            onCreateNew={() => setNewBookOpen(true)}
+            onDeleted={(nextActiveId) => {
+              refreshShelf();
+              if (nextActiveId) {
+                setActiveScrapbookId(nextActiveId);
+                setBook(readActiveScrapbook());
+              } else {
+                setBook(null);
+              }
+            }}
+            onCreateNew={() => {
+              if (!canCreateScrapbook(shelf.length)) {
+                setVipOpen(true);
+                return;
+              }
+              setNewBookOpen(true);
+            }}
           />
           <div className="mt-8 flex justify-center gap-3">
             <button
@@ -175,6 +211,10 @@ export default function VaultPage() {
           onClose={() => setNewBookOpen(false)}
           onRequestVip={() => setVipOpen(true)}
           onCreate={(name, themeIcon) => {
+            if (!canCreateScrapbook(shelf.length)) {
+              setVipOpen(true);
+              return;
+            }
             const created = createScrapbook({ name, themeIcon });
             upsertScrapbook(created);
             setActiveScrapbookId(created.id);
@@ -184,7 +224,11 @@ export default function VaultPage() {
             setViewMode("scrapbook");
           }}
         />
-        <VipUpgradeModal open={vipOpen} onClose={() => setVipOpen(false)} />
+        <UnlockVaultModal
+          open={vipOpen}
+          onClose={() => setVipOpen(false)}
+          onUnlocked={() => setVipOpen(false)}
+        />
       </main>
     );
   }
@@ -202,7 +246,14 @@ export default function VaultPage() {
       data-circle={club.vaultType}
       data-aesthetic={club.aesthetic}
       data-backdrop={backdropTheme.id}
-      style={{ background: backdropTheme.css }}
+      style={{
+        backgroundImage:
+          backdropTheme.css ||
+          "linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%)",
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+        backgroundRepeat: "no-repeat",
+      }}
     >
       <VaultTopChrome
         inviteLabel={`💌 Invite ${inviteWho}`}
@@ -213,22 +264,27 @@ export default function VaultPage() {
         onBackdropChange={setBackdropTheme}
       />
 
-      <div className="flex min-h-0 w-full flex-1 flex-col">
+      <div className="relative z-[1] flex min-h-0 w-full flex-1 flex-col">
         <header
-          className={`sticky top-0 z-40 shrink-0 border-b px-4 py-3 backdrop-blur-md transition-all duration-500 ease-out sm:px-6 md:pr-80 xl:pr-[22rem] ${
+          className={`print-hide sticky top-0 z-40 shrink-0 overflow-visible border-b px-3 backdrop-blur-md transition-all duration-500 ease-out sm:px-6 lg:pr-80 xl:pr-[22rem] ${
             darkMood
               ? "border-white/10 bg-slate-950/55"
               : "border-pink-100 bg-white/80"
           }`}
+          style={{
+            paddingTop: "max(0.5rem, env(safe-area-inset-top))",
+            paddingBottom: "0.5rem",
+          }}
         >
-          <div className="grid grid-cols-1 items-center gap-3 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
-            <div className="min-w-0">
+          {/* Fixed top nav (~48px): title | Bookshelf · Vibes · ••• */}
+          <div className="flex h-12 items-center justify-between gap-2">
+            <div className="min-w-0 flex-1">
               <h1
-                className={`m-0 flex items-center gap-2 text-xl font-black tracking-tight ${
+                className={`m-0 flex items-center gap-1.5 text-base font-black tracking-tight sm:gap-2 sm:text-xl ${
                   darkMood ? "text-pink-100" : "text-slate-800"
                 }`}
               >
-                <span className="text-2xl leading-none" aria-hidden>
+                <span className="shrink-0 text-xl leading-none sm:text-2xl" aria-hidden>
                   {icon}
                 </span>
                 <span className="truncate">{title}</span>
@@ -241,15 +297,26 @@ export default function VaultPage() {
             </div>
 
             <div
-              id="header-spread-slot"
-              className="flex justify-center md:justify-self-center"
+              id="header-spread-slot-desktop"
+              className={`flex-1 justify-center ${
+                isLandscapeBook ? "flex" : "hidden"
+              }`}
             />
 
             <div
               id="header-actions-slot"
-              className="flex min-w-0 justify-start md:justify-end"
+              className="flex shrink-0 items-center justify-end"
             />
           </div>
+
+          {/* Portrait page pill — lives in header, clears the clipboard clasp */}
+          <div
+            id="header-spread-slot"
+            className={`justify-center pb-1 pt-2 ${
+              isLandscapeBook ? "hidden" : "flex"
+            }`}
+            data-viewport-mode={mode}
+          />
         </header>
 
         {book ? (
@@ -265,7 +332,11 @@ export default function VaultPage() {
         ) : null}
       </div>
 
-      <VipUpgradeModal open={vipOpen} onClose={() => setVipOpen(false)} />
+      <UnlockVaultModal
+        open={vipOpen}
+        onClose={() => setVipOpen(false)}
+        onUnlocked={() => setVipOpen(false)}
+      />
     </main>
   );
 }

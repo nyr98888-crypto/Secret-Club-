@@ -4,6 +4,7 @@ import {
   upsertEntitlement,
 } from "./store";
 import { getOrCreateBrowserId, readVipCookie, setVipCookie } from "./session";
+import { issueVipLicense, verifyVipLicense } from "./license";
 
 export const FREE_VAULT_LIMIT = 1;
 export const VIP_VAULT_LIMIT = 5;
@@ -13,7 +14,10 @@ export async function resolveEntitlement() {
   const browserId = await getOrCreateBrowserId();
   const row = await getEntitlement(browserId);
   const cookieVip = await readVipCookie();
-  const vipLifetime = row.vipLifetime || cookieVip;
+  const licenseVip =
+    row.licenseKey != null &&
+    verifyVipLicense(row.licenseKey, browserId).ok;
+  const vipLifetime = row.vipLifetime || cookieVip || licenseVip;
   return { ...row, browserId, vipLifetime };
 }
 
@@ -23,6 +27,12 @@ export async function grantVip(opts: {
   customerId?: string | null;
 }) {
   const current = await getEntitlement(opts.browserId);
+  const license =
+    current.licenseKey &&
+    verifyVipLicense(current.licenseKey, opts.browserId).ok
+      ? { key: current.licenseKey }
+      : issueVipLicense(opts.browserId);
+
   const next = await upsertEntitlement({
     ...current,
     browserId: opts.browserId,
@@ -31,6 +41,7 @@ export async function grantVip(opts: {
       opts.sessionId ?? current.stripeCheckoutSessionId,
     stripeCustomerId: opts.customerId ?? current.stripeCustomerId,
     purchasedAt: new Date().toISOString(),
+    licenseKey: license.key,
   });
   await setVipCookie(opts.browserId);
   return next;

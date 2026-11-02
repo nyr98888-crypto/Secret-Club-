@@ -8,9 +8,14 @@ const SESSION_COOKIE = "sc_session";
 const VIP_COOKIE = "sc_vip";
 
 function secretKey() {
-  return new TextEncoder().encode(
-    process.env.AUTH_SECRET || "dev-auth-secret-change-me",
-  );
+  const secret = process.env.AUTH_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("AUTH_SECRET is required in production");
+    }
+    return new TextEncoder().encode("dev-auth-secret-change-me");
+  }
+  return new TextEncoder().encode(secret);
 }
 
 export async function getOrCreateBrowserId(): Promise<string> {
@@ -83,7 +88,17 @@ export async function readVipCookie(): Promise<boolean> {
   if (!token) return false;
   try {
     const { payload } = await jwtVerify(token, secretKey());
-    return payload.vip === true;
+    if (payload.vip !== true) return false;
+    // Bind VIP cookie to this browser id so stolen cookies can't unlock others
+    const browserId = jar.get(BROWSER_COOKIE)?.value;
+    if (
+      browserId &&
+      typeof payload.browserId === "string" &&
+      payload.browserId !== browserId
+    ) {
+      return false;
+    }
+    return true;
   } catch {
     return false;
   }

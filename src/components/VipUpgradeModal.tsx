@@ -3,6 +3,9 @@
 import { useEffect, useId, useState } from "react";
 import { ParentalGate } from "./ParentalGate";
 
+const VIP_PRICE =
+  process.env.NEXT_PUBLIC_VIP_PRICE_LABEL?.trim() || "$4.99";
+
 const FEATURES = [
   "💖 500+ Exclusive Squad Stickers & Mascot Decos",
   "📸 All Holographic Frames & Glitter Toploaders",
@@ -19,8 +22,7 @@ type VipUpgradeModalProps = {
 };
 
 /**
- * Price-agnostic Magic Chest VIP upgrade.
- * Checkout amount lives only on Stripe — never shown in this UI.
+ * $4.99 one-time Parent Guarantee checkout for the Magic Chest VIP unlock.
  */
 export function VipUpgradeModal({
   open,
@@ -95,20 +97,25 @@ export function VipUpgradeModal({
               bg-gradient-to-b from-[#fff7fb] via-[#ffe4f3] to-[#e9d5ff]
               p-5 shadow-[0_14px_0_rgba(244,114,182,0.4)] sm:p-6"
           >
-            {/* Sparkle deco */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-yellow-200/50 blur-2xl"
+              className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[#fef08a]/50 blur-2xl"
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute -bottom-8 -left-4 h-28 w-28 rounded-full bg-pink-300/40 blur-2xl"
+              className="pointer-events-none absolute -bottom-8 -left-4 h-28 w-28 rounded-full bg-[#f9a8d4]/40 blur-2xl"
             />
 
             <div className="relative z-[1] text-center">
-              <div className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-2xl border-4 border-white
-                bg-gradient-to-br from-amber-200 via-pink-300 to-violet-300 text-3xl
-                shadow-[0_6px_0_rgba(244,114,182,0.35)]">
+              <div
+                className="mx-auto mb-3 grid h-16 w-16 place-items-center rounded-2xl border-4 border-white
+                text-3xl shadow-[0_6px_0_rgba(244,114,182,0.35)]"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(135deg, #fde68a 0%, #f9a8d4 50%, #c4b5fd 100%)",
+                  backgroundColor: "#f9a8d4",
+                }}
+              >
                 🎁
               </div>
               <h2
@@ -121,6 +128,19 @@ export function VipUpgradeModal({
                 Unlock exclusive stickers, holographic frames, sparkle gems, and
                 rare sound charms for your scrapbook!
               </p>
+
+              {/* Clear one-time price for parents */}
+              <div className="mx-auto mt-4 inline-flex flex-col items-center rounded-2xl border-2 border-white bg-white/90 px-5 py-3 shadow-sm">
+                <span className="text-[0.65rem] font-black uppercase tracking-wider text-[#8a5f7c]">
+                  One-time Parent Unlock
+                </span>
+                <span className="text-3xl font-black tracking-tight text-[#5b2a4a]">
+                  {VIP_PRICE}
+                </span>
+                <span className="text-[0.7rem] font-bold text-emerald-700">
+                  Lifetime · No subscription · No ads
+                </span>
+              </div>
             </div>
 
             <ul className="relative z-[1] mt-5 space-y-2.5">
@@ -135,31 +155,27 @@ export function VipUpgradeModal({
               ))}
             </ul>
 
-            {/* Parent Safety Guarantee */}
-            <div className="relative z-[1] mt-4 flex flex-col gap-2 rounded-2xl border-2 border-emerald-200 bg-emerald-50/80 p-3.5 text-left">
-              <p className="m-0 text-xs font-bold uppercase tracking-wide text-emerald-800">
+            <div className="relative z-[1] mt-4 flex flex-col gap-2 rounded-2xl border-2 border-[#a7f3d0] bg-[#ecfdf5]/90 p-3.5 text-left">
+              <p className="m-0 text-xs font-bold uppercase tracking-wide text-[#065f46]">
                 🛡️ Parent Safety Guarantee
               </p>
-              <ul className="m-0 flex list-none flex-col gap-2 p-0 text-[0.78rem] font-semibold leading-snug text-emerald-900/90">
+              <ul className="m-0 flex list-none flex-col gap-2 p-0 text-[0.78rem] font-semibold leading-snug text-[#064e3b]/90">
                 <li>
                   ✅ <span className="font-extrabold">Works 100% Offline &amp; Locally:</span>{" "}
-                  No constant internet connection needed once loaded. Scrapbooks
-                  live right on your device.
+                  Scrapbooks live on your device — no constant internet needed
+                  once loaded.
                 </li>
                 <li>
                   ✅ <span className="font-extrabold">Zero Stranger Contact:</span>{" "}
-                  No public discovery feeds, no open chatrooms, and no search
-                  algorithms.
+                  No public feeds, open chatrooms, or discovery algorithms.
                 </li>
                 <li>
                   ✅ <span className="font-extrabold">Privacy First:</span> Zero
-                  personal data collection, zero tracking cookies, and no kid
-                  email/phone accounts required.
+                  kid accounts, zero tracking cookies, no email/phone required.
                 </li>
                 <li>
-                  ✅ <span className="font-extrabold">No Ad Traps:</span> 100%
-                  ad-free forever. One simple unlock, zero recurring
-                  microtransactions or countdown clocks.
+                  ✅ <span className="font-extrabold">No Ad Traps:</span> One{" "}
+                  {VIP_PRICE} unlock. Zero recurring charges or countdown clocks.
                 </li>
               </ul>
             </div>
@@ -173,13 +189,22 @@ export function VipUpgradeModal({
             <div className="relative z-[1] mt-5 flex flex-col items-center gap-3">
               <button
                 type="button"
-                className="toy-btn w-full bg-gradient-to-r from-pink-400 via-fuchsia-400 to-violet-400
-                  px-5 py-4 text-lg text-white disabled:opacity-60"
+                className="toy-btn w-full px-5 py-4 text-lg text-white disabled:opacity-60"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(90deg, #f472b6 0%, #e879f9 50%, #a78bfa 100%)",
+                  backgroundColor: "#f472b6",
+                }}
                 disabled={busy}
                 onClick={() => setGateOpen(true)}
               >
-                {busy ? "Opening checkout…" : "Unlock Full Vault ✨"}
+                {busy
+                  ? "Opening checkout…"
+                  : `Unlock for ${VIP_PRICE} ✨`}
               </button>
+              <p className="m-0 text-center text-[0.65rem] font-semibold text-[#8a5f7c]">
+                Grown-ups verify next, then Stripe Checkout opens securely.
+              </p>
               <button
                 type="button"
                 className="text-sm font-semibold text-[#8a5f7c] underline-offset-2 hover:underline"
@@ -196,6 +221,7 @@ export function VipUpgradeModal({
         open={gateOpen}
         onClose={() => setGateOpen(false)}
         onUnlocked={startCheckout}
+        priceLabel={VIP_PRICE}
       />
     </>
   );

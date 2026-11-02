@@ -109,6 +109,7 @@ export async function getEntitlement(
     stripeCheckoutSessionId: null,
     purchasedAt: null,
     pdfExportCount: 0,
+    licenseKey: null,
   };
 }
 

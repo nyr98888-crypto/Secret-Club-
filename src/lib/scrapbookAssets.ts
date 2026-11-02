@@ -1,13 +1,21 @@
 import type { PokeSoundType } from "@/utils/pokeAudio";
+import type { StickerItem } from "@/constants/stickers";
+import { WASHI_TAPES, type WashiPatternId } from "@/lib/washiTapes";
 
 export type FramePreset =
   | "polaroid"
+  | "pink_polaroid"
+  | "film_strip"
+  | "gold_mirror"
+  | "doodle"
+  | "stamp"
+  | "whipped_cream"
+  | "y2k_gel"
+  | "holo_sleeve"
+  /** Legacy aliases */
   | "toploader"
   | "square_washi"
   | "heart_mask"
-  | "stamp"
-  | "gold_mirror"
-  /** @deprecated legacy SVG presets — still resolved by CssPhotoFrame */
   | "classic-polaroid"
   | "deco-toploader"
   | "mini-snapshot";
@@ -37,6 +45,8 @@ export type DrawerAsset = {
   locked?: boolean;
   /** Unified photo-card frame preset */
   framePreset?: FramePreset;
+  /** Procedural washi pattern id */
+  washiPatternId?: WashiPatternId;
 };
 
 export const ASSET_TABS: { id: AssetCategory; label: string }[] = [
@@ -47,215 +57,165 @@ export const ASSET_TABS: { id: AssetCategory; label: string }[] = [
   { id: "pokes", label: "Pokes" },
 ];
 
-/** Generous free starter pack — joyful out of the box, light VIP tease */
-export const DEFAULT_DRAWER_ASSETS: DrawerAsset[] = [
-  // —— Stickers (8 free) ——
-  {
-    id: "sticker-strawberry",
+/** Convert a catalog sticker into a placeable drawer asset */
+export function stickerToDrawerAsset(sticker: StickerItem): DrawerAsset {
+  return {
+    id: sticker.id,
     category: "stickers",
-    label: "Strawberry",
-    emoji: "🍓",
-    src: "",
-    defaultWidth: 16,
-  },
-  {
-    id: "sticker-panda",
-    category: "stickers",
-    label: "Panda",
-    emoji: "🐼",
-    src: "",
-    defaultWidth: 16,
-  },
-  {
-    id: "sticker-ribbon",
-    category: "stickers",
-    label: "Ribbon",
-    emoji: "🎀",
-    src: "",
-    defaultWidth: 16,
-  },
-  {
-    id: "sticker-blossom",
-    category: "stickers",
-    label: "Blossom",
-    emoji: "🌸",
-    src: "",
-    defaultWidth: 16,
-  },
-  {
-    id: "sticker-cupcake",
-    category: "stickers",
-    label: "Cupcake",
-    emoji: "🧁",
-    src: "",
-    defaultWidth: 16,
-  },
-  {
-    id: "sticker-kitten",
-    category: "stickers",
-    label: "Kitten",
-    emoji: "🐱",
-    src: "",
-    defaultWidth: 16,
-  },
-  {
-    id: "sticker-daisy",
-    category: "stickers",
-    label: "Daisy",
-    emoji: "🌼",
-    src: "",
-    defaultWidth: 16,
-  },
-  {
-    id: "sticker-peace",
-    category: "stickers",
-    label: "Peace Sign",
-    emoji: "✌️",
-    src: "",
-    defaultWidth: 16,
-  },
-  {
-    id: "pack-magic-chest",
-    category: "stickers",
-    label: "Magic Chest",
-    emoji: "🎁",
-    src: "",
-    defaultWidth: 16,
-    locked: true,
-    action: "open-vip",
-  },
+    label: sticker.name,
+    src: sticker.src,
+    defaultWidth: 18,
+    locked: sticker.isLocked,
+    action: sticker.isLocked ? "open-vip" : undefined,
+  };
+}
 
-  // —— Frames (CSS photo shells) ——
+/** VIP tease tile shown in the stickers tray */
+export const MAGIC_CHEST_ASSET: DrawerAsset = {
+  id: "pack-magic-chest",
+  category: "stickers",
+  label: "Magic Chest",
+  emoji: "🎁",
+  src: "",
+  defaultWidth: 16,
+  locked: true,
+  action: "open-vip",
+};
+
+const GEM_CUTS: {
+  id: string;
+  label: string;
+  emoji: string;
+  src: string;
+}[] = [
+  { id: "heart-sapphire", label: "Heart Gem", emoji: "💖", src: "/gems/heart-sapphire.svg" },
+  { id: "star-prism", label: "Star Prism", emoji: "⭐", src: "/gems/star-prism.svg" },
+  { id: "teardrop-emerald", label: "Teardrop Emerald", emoji: "💧", src: "/gems/teardrop-emerald.svg" },
+  { id: "brilliant-diamond", label: "Brilliant Diamond", emoji: "💎", src: "/gems/brilliant-diamond.svg" },
+  { id: "amethyst-cushion", label: "Amethyst Cushion", emoji: "💜", src: "/gems/amethyst-cushion.svg" },
+  { id: "daisy-blossom", label: "Daisy Blossom Gem", emoji: "🌸", src: "/gems/daisy-blossom.svg" },
+  { id: "opal-crescent", label: "Opal Crescent Moon", emoji: "🌙", src: "/gems/opal-crescent.svg" },
+  { id: "ring-pop-hex", label: "Ring Pop Hexagon", emoji: "🍬", src: "/gems/ring-pop-hex.svg" },
+  { id: "ruby-ribbon-bow", label: "Ruby Ribbon Bow", emoji: "🎀", src: "/gems/ruby-ribbon-bow.svg" },
+  { id: "gummy-bear", label: "Gummy Crystal Bear", emoji: "🧸", src: "/gems/gummy-bear.svg" },
+  { id: "crystal-butterfly", label: "Crystal Butterfly", emoji: "🦋", src: "/gems/crystal-butterfly.svg" },
+  { id: "sunburst-topaz", label: "Sunburst Topaz", emoji: "☀️", src: "/gems/sunburst-topaz.svg" },
+  { id: "strawberry-ruby", label: "Strawberry Ruby", emoji: "🍓", src: "/gems/strawberry-ruby.svg" },
+  { id: "disco-sphere", label: "Disco Sphere", emoji: "🪩", src: "/gems/disco-sphere.svg" },
+  { id: "aqua-bubble-pearl", label: "Aqua Bubble Pearl", emoji: "🫧", src: "/gems/aqua-bubble-pearl.svg" },
+  { id: "princess-marquise", label: "Princess Marquise", emoji: "👑", src: "/gems/princess-marquise.svg" },
+];
+
+/** Frames / washi / gems — stickers come from the generated catalog */
+export const DEFAULT_DRAWER_ASSETS: DrawerAsset[] = [
+  // —— Frames (8 photo sleeves) ——
   {
     id: "frame-polaroid",
     category: "frames",
-    label: "Polaroid",
+    label: "Classic Polaroid",
     emoji: "📷",
     src: "",
-    defaultWidth: 28,
+    defaultWidth: 18,
     defaultRotation: -2,
     framePreset: "polaroid",
   },
   {
-    id: "frame-toploader",
+    id: "frame-rose-heart",
     category: "frames",
-    label: "Toploader",
-    emoji: "💎",
+    label: "Rose Heart Polaroid",
+    emoji: "💗",
     src: "",
-    defaultWidth: 28,
+    defaultWidth: 18,
+    defaultRotation: 2,
+    framePreset: "pink_polaroid",
+  },
+  {
+    id: "frame-y2k-deco",
+    category: "frames",
+    label: "Y2K Translucent Deco",
+    emoji: "🧁",
+    src: "",
+    defaultWidth: 18,
     defaultRotation: -1,
-    framePreset: "toploader",
+    framePreset: "whipped_cream",
   },
   {
-    id: "frame-square-washi",
+    id: "frame-film-strip",
     category: "frames",
-    label: "Washi Square",
-    emoji: "🎀",
+    label: "Retro Film Strip",
+    emoji: "🎞️",
     src: "",
-    defaultWidth: 26,
-    defaultRotation: 3,
-    framePreset: "square_washi",
+    defaultWidth: 17,
+    defaultRotation: -3,
+    framePreset: "film_strip",
   },
   {
-    id: "frame-heart",
+    id: "frame-gold-foil",
     category: "frames",
-    label: "Heart",
-    emoji: "💕",
+    label: "Glitter Gold Foil",
+    emoji: "✨",
     src: "",
-    defaultWidth: 26,
-    framePreset: "heart_mask",
+    defaultWidth: 18,
+    framePreset: "gold_mirror",
   },
   {
     id: "frame-stamp",
     category: "frames",
-    label: "Stamp",
+    label: "Scalloped Stamp",
     emoji: "✉️",
     src: "",
-    defaultWidth: 26,
+    defaultWidth: 17,
     defaultRotation: 2,
     framePreset: "stamp",
   },
   {
-    id: "frame-gold-mirror",
+    id: "frame-doodle-scrap",
     category: "frames",
-    label: "Gold Mirror",
-    emoji: "✨",
+    label: "Doodle Scrap",
+    emoji: "✏️",
     src: "",
-    defaultWidth: 28,
-    framePreset: "gold_mirror",
-  },
-
-  // —— Washi (4 free) ——
-  {
-    id: "washi-grid",
-    category: "washi",
-    label: "Grid",
-    emoji: "▦",
-    src: "/washi_tape/lavender_dash.svg",
-    defaultWidth: 42,
-    defaultRotation: -4,
-  },
-  {
-    id: "washi-strawberries",
-    category: "washi",
-    label: "Strawberries",
-    emoji: "🍓",
-    src: "/washi_tape/pink_dots.svg",
-    defaultWidth: 42,
+    defaultWidth: 18,
     defaultRotation: 3,
+    framePreset: "doodle",
   },
   {
-    id: "washi-hearts",
-    category: "washi",
-    label: "Hearts",
-    emoji: "💕",
-    src: "/washi_tape/pink_dots.svg",
-    defaultWidth: 42,
-    defaultRotation: -6,
-  },
-  {
-    id: "washi-polka",
-    category: "washi",
-    label: "Polka Dots",
-    emoji: "⚪",
-    src: "/washi_tape/lavender_dash.svg",
-    defaultWidth: 42,
-    defaultRotation: 5,
+    id: "frame-cyber-chrome",
+    category: "frames",
+    label: "Cyber Chrome Glass",
+    emoji: "🪩",
+    src: "",
+    defaultWidth: 18,
+    defaultRotation: 1,
+    framePreset: "holo_sleeve",
   },
 
-  // —— Gems (4 free) ——
-  {
-    id: "gem-heart-ruby",
-    category: "gems",
-    label: "Heart Ruby",
-    emoji: "❤️",
-    src: "/gems/crystal.svg",
-    defaultWidth: 14,
-  },
-  {
-    id: "gem-star-topaz",
-    category: "gems",
-    label: "Star Topaz",
-    emoji: "🌟",
-    src: "/gems/star_gem.svg",
-    defaultWidth: 14,
-  },
-  {
-    id: "gem-round-diamond",
-    category: "gems",
-    label: "Round Diamond",
-    emoji: "💎",
-    src: "/gems/crystal.svg",
-    defaultWidth: 14,
-  },
-  {
-    id: "gem-opal",
-    category: "gems",
-    label: "Opal",
-    emoji: "🫧",
-    src: "/gems/star_gem.svg",
-    defaultWidth: 14,
-  },
+  // —— Washi (procedural) ——
+  ...WASHI_TAPES.map(
+    (tape, i): DrawerAsset => ({
+      id: `washi-${tape.id}`,
+      category: "washi",
+      label: tape.label,
+      emoji: tape.emoji,
+      src: "",
+      defaultWidth: 48,
+      defaultRotation:
+        [-4, 3, -6, 5, -2, 4, -3, 2, -5, 3, -1, 4][i] ?? 0,
+      washiPatternId: tape.id,
+    }),
+  ),
+
+  // —— Gems (16 cuts) ——
+  ...GEM_CUTS.map(
+    (gem, i): DrawerAsset => ({
+      id: `gem-${gem.id}`,
+      category: "gems",
+      label: gem.label,
+      emoji: gem.emoji,
+      src: gem.src,
+      defaultWidth: 14,
+      defaultRotation: [-4, 3, -6, 5, -2, 4, -3, 2, -5, 3, -1, 4, -2, 5, -4, 1][i] ?? 0,
+    }),
+  ),
 ];
 
 export type PlacedElementData = {
@@ -264,28 +224,37 @@ export type PlacedElementData = {
   category: AssetCategory;
   src: string;
   label: string;
-  /** Position as % of page (0–100) */
   x: number;
   y: number;
   rotation: number;
-  /** Base width as % of canvas (before scale) */
   width: number;
-  /** Uniform scale factor (resize handle). Default 1; clamp 0.5–2.5 */
   scale?: number;
-  /** User photo nested inside a frame asset (object URL or data URL) */
   photoSrc?: string | null;
-  /** Pan offsets for Adjust Photo mode (% of aperture) */
   photoOffsetX?: number;
   photoOffsetY?: number;
-  /** Which unified photo-card layout to use */
   framePreset?: FramePreset;
-  /** Sticker / poke emoji glyph */
   emoji?: string;
   soundType?: PokeSoundType;
   sealColor?: string;
+  /** Who sent this sound charm — shown on the badge */
+  fromName?: string;
+  washiPatternId?: WashiPatternId;
 };
 
 export type SpawnPoint = { x: number; y: number };
+
+/** Cap initial frame / polaroid size so dropzones stay compact (~≤280px). */
+function initialWidthFor(asset: DrawerAsset): number {
+  if (asset.category === "frames") {
+    return Math.min(asset.defaultWidth, 20);
+  }
+  return asset.defaultWidth;
+}
+
+function naturalRotation(preferred?: number): number {
+  const jitter = Math.random() * 12 - 6; // ±6°
+  return (preferred ?? 0) + jitter;
+}
 
 export function createPlacedElement(
   asset: DrawerAsset,
@@ -302,14 +271,15 @@ export function createPlacedElement(
     label: asset.label,
     x: spawn?.x ?? 28 + Math.random() * 30,
     y: spawn?.y ?? 28 + Math.random() * 30,
-    rotation: asset.defaultRotation ?? (Math.random() * 10 - 5),
-    width: asset.defaultWidth,
+    rotation: naturalRotation(asset.defaultRotation),
+    width: initialWidthFor(asset),
     scale: 1,
     photoSrc: asset.category === "frames" ? null : undefined,
     photoOffsetX: asset.category === "frames" ? 0 : undefined,
     photoOffsetY: asset.category === "frames" ? 0 : undefined,
     framePreset: asset.framePreset,
-    emoji: asset.emoji,
+    emoji: asset.emoji && asset.category !== "washi" ? asset.emoji : undefined,
+    washiPatternId: asset.washiPatternId,
   };
 }
 
@@ -322,6 +292,7 @@ export function createPlacedPoke(
     sealColor: string;
   },
   spawn?: SpawnPoint,
+  fromName?: string,
 ): PlacedElementData {
   return {
     id:
@@ -334,12 +305,15 @@ export function createPlacedPoke(
     label: poke.title,
     x: spawn?.x ?? 28 + Math.random() * 30,
     y: spawn?.y ?? 28 + Math.random() * 30,
-    rotation: Math.random() * 8 - 4,
-    width: 22,
+    rotation: naturalRotation(),
+    width: 26,
     scale: 1,
     emoji: poke.icon,
     soundType: poke.soundType,
-    sealColor: poke.sealColor,
+    sealColor:
+      poke.sealColor ||
+      "linear-gradient(135deg, #f472b6 0%, #fb7185 100%)",
+    fromName: fromName?.trim() || "You",
   };
 }
 

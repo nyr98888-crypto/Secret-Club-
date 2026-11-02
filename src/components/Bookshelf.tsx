@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import type { StoredScrapbook } from "@/lib/scrapbookStore";
-import { renameScrapbook, setActiveScrapbookId } from "@/lib/scrapbookStore";
+import {
+  deleteScrapbook,
+  renameScrapbook,
+  setActiveScrapbookId,
+} from "@/lib/scrapbookStore";
 
 type BookshelfProps = {
   scrapbooks: StoredScrapbook[];
@@ -10,6 +14,8 @@ type BookshelfProps = {
   onOpen: (id: string) => void;
   onRefresh: () => void;
   onCreateNew?: () => void;
+  /** Called after a delete so the vault can sync the open book */
+  onDeleted?: (nextActiveId: string | null) => void;
 };
 
 export function Bookshelf({
@@ -18,9 +24,23 @@ export function Bookshelf({
   onOpen,
   onRefresh,
   onCreateNew,
+  onDeleted,
 }: BookshelfProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
+  const canDelete = scrapbooks.length > 1;
+
+  function requestDelete(book: StoredScrapbook) {
+    if (!canDelete) return;
+    const ok = window.confirm(
+      "Delete this scrapbook? All decorated pages will be removed.",
+    );
+    if (!ok) return;
+    const result = deleteScrapbook(book.id);
+    if (!result.removed) return;
+    onRefresh();
+    onDeleted?.(result.activeId);
+  }
 
   return (
     <section className="mx-auto w-full max-w-3xl px-2">
@@ -30,7 +50,7 @@ export function Bookshelf({
           Scrapbook Covers
         </h2>
         <p className="fine-print m-0 mt-1">
-          Tap a cover to open · hold the title plate to rename
+          Tap a cover to open · rename or delete from the title plate
         </p>
       </div>
 
@@ -84,16 +104,35 @@ export function Bookshelf({
                   </button>
                 </form>
               ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditingId(book.id);
-                    setDraft(book.name);
-                  }}
-                  className="text-[0.65rem] font-bold text-pink-500 underline-offset-2 hover:underline"
-                >
-                  Rename title plate
-                </button>
+                <div className="flex w-full max-w-[11rem] flex-wrap items-center justify-center gap-x-2 gap-y-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingId(book.id);
+                      setDraft(book.name);
+                    }}
+                    className="inline-flex items-center gap-0.5 text-[0.65rem] font-bold text-pink-500 underline-offset-2 hover:underline"
+                  >
+                    <span aria-hidden>✏️</span> Rename
+                  </button>
+                  {canDelete ? (
+                    <button
+                      type="button"
+                      onClick={() => requestDelete(book)}
+                      className="inline-flex items-center gap-0.5 rounded-full bg-rose-500/10 px-2 py-0.5 text-[0.65rem] font-bold text-rose-600 underline-offset-2 hover:bg-rose-500/20"
+                      aria-label={`Delete ${book.name}`}
+                    >
+                      <span aria-hidden>🗑️</span> Delete
+                    </button>
+                  ) : (
+                    <span
+                      className="text-[0.6rem] font-bold text-slate-400"
+                      title="Keep at least one scrapbook"
+                    >
+                      Last book
+                    </span>
+                  )}
+                </div>
               )}
             </div>
           );

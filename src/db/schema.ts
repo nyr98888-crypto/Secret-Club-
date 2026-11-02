@@ -53,4 +53,5 @@ export const browserEntitlements = pgTable("browser_entitlements", {
   stripeCheckoutSessionId: text("stripe_checkout_session_id"),
   purchasedAt: timestamp("purchased_at"),
   pdfExportCount: integer("pdf_export_count").default(0).notNull(),
+  licenseKey: text("license_key"),
 });

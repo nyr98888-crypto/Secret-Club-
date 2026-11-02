@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { ensureAudio, playShutterClick } from "@/lib/audio";
+import { readFileAsDataUrl } from "@/lib/photoDataUrl";
 
 type AddSnapButtonProps = {
   onSnapReady: (photoSrc: string) => void;
@@ -40,9 +41,12 @@ export function AddSnapButton({ onSnapReady, className = "" }: AddSnapButtonProp
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (!file) return;
-          const url = URL.createObjectURL(file);
-          void ensureAudio().then(() => playShutterClick());
-          onSnapReady(url);
+          void readFileAsDataUrl(file)
+            .then((dataUrl) => {
+              void ensureAudio().then(() => playShutterClick());
+              onSnapReady(dataUrl);
+            })
+            .catch((err) => console.error("Snap read failed", err));
           e.target.value = "";
         }}
       />

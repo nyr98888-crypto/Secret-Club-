@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
 import type { Aesthetic, CircleMode } from "@/lib/types";
+import { captureCanvasPng } from "@/lib/exportPage";
 import { VipUpsell } from "./VipUpsell";
 
 export function ClubIdCard({
@@ -58,10 +58,7 @@ export function ClubIdCard({
         return;
       }
 
-      const canvas = await html2canvas(sheetRef.current, {
-        scale: 2,
-        backgroundColor: null,
-      });
+      const canvas = await captureCanvasPng(sheetRef.current);
       const img = canvas.toDataURL("image/png");
       const pdf = new jsPDF({
         orientation: "landscape",

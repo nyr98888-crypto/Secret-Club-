@@ -1,11 +1,21 @@
 export const BACKDROP_STORAGE_KEY = "secret_club_backdrop";
 
 export type BackdropPresetId =
+  | "strawberry-pop"
+  | "electric-grape"
+  | "cotton-candy"
+  | "neon-lemonade"
+  | "mint-bubblegum"
+  | "peach-sunset"
+  | "midnight-starlight"
+  | "rainbow-swirl"
+  | "barbie-core"
+  | "aqua-mermaid"
+  /** Legacy ids (mapped on read) */
   | "strawberry-milk"
   | "lavender-dream"
   | "lemon-sorbet"
   | "mint-choc"
-  | "cotton-candy"
   | "peach-pop"
   | "goth-fairy"
   | "unicorn"
@@ -13,7 +23,7 @@ export type BackdropPresetId =
 
 export type BackdropTheme = {
   id: BackdropPresetId;
-  /** CSS background value applied to the room wrapper */
+  /** CSS background-image value applied to the room wrapper */
   css: string;
   /** Dark mood → light header text */
   dark?: boolean;
@@ -22,7 +32,17 @@ export type BackdropTheme = {
 };
 
 export type CandySwatch = {
-  id: Exclude<BackdropPresetId, "custom-hue">;
+  id: Exclude<
+    BackdropPresetId,
+    | "custom-hue"
+    | "strawberry-milk"
+    | "lavender-dream"
+    | "lemon-sorbet"
+    | "mint-choc"
+    | "peach-pop"
+    | "goth-fairy"
+    | "unicorn"
+  >;
   emoji: string;
   label: string;
   /** Tailwind gradient classes for the bubble face */
@@ -31,68 +51,93 @@ export type CandySwatch = {
   dark?: boolean;
 };
 
+/** Saturated candy Room Vibes — kids love rich, punchy hues */
 export const CANDY_SWATCHES: CandySwatch[] = [
   {
-    id: "strawberry-milk",
+    id: "strawberry-pop",
     emoji: "🍓",
-    label: "Strawberry Milk",
-    bubbleClass: "bg-gradient-to-br from-pink-200 via-rose-100 to-pink-300",
-    css: "linear-gradient(160deg, #fecdd3 0%, #fff1f2 42%, #fda4af 100%)",
+    label: "Strawberry Pop",
+    bubbleClass: "bg-gradient-to-br from-[#ff758c] to-[#ff7eb3]",
+    css: "linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%)",
   },
   {
-    id: "lavender-dream",
+    id: "electric-grape",
     emoji: "💜",
-    label: "Lavender Dream",
-    bubbleClass: "bg-gradient-to-br from-purple-200 via-violet-100 to-fuchsia-200",
-    css: "linear-gradient(160deg, #e9d5ff 0%, #f5f3ff 45%, #f5d0fe 100%)",
-  },
-  {
-    id: "lemon-sorbet",
-    emoji: "🍋",
-    label: "Lemon Sorbet",
-    bubbleClass: "bg-gradient-to-br from-amber-200 via-yellow-100 to-orange-200",
-    css: "linear-gradient(160deg, #fde68a 0%, #fef9c3 45%, #fdba74 100%)",
-  },
-  {
-    id: "mint-choc",
-    emoji: "🍃",
-    label: "Mint Choc Shake",
-    bubbleClass: "bg-gradient-to-br from-emerald-200 via-teal-100 to-cyan-200",
-    css: "linear-gradient(160deg, #a7f3d0 0%, #ccfbf1 45%, #a5f3fc 100%)",
+    label: "Electric Grape",
+    bubbleClass: "bg-gradient-to-br from-[#a18cd1] to-[#fbc2eb]",
+    css: "linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)",
   },
   {
     id: "cotton-candy",
-    emoji: "🍬",
-    label: "Cotton Candy Sky",
-    bubbleClass: "bg-gradient-to-br from-sky-200 via-blue-100 to-indigo-200",
-    css: "linear-gradient(160deg, #bae6fd 0%, #dbeafe 45%, #c7d2fe 100%)",
+    emoji: "🍭",
+    label: "Cotton Candy",
+    bubbleClass: "bg-gradient-to-br from-[#89f7fe] to-[#66a6ff]",
+    css: "linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)",
   },
   {
-    id: "peach-pop",
+    id: "neon-lemonade",
+    emoji: "🍋",
+    label: "Neon Lemonade",
+    bubbleClass: "bg-gradient-to-br from-[#f6d365] to-[#fda085]",
+    css: "linear-gradient(135deg, #f6d365 0%, #fda085 100%)",
+  },
+  {
+    id: "mint-bubblegum",
+    emoji: "🍃",
+    label: "Mint Bubblegum",
+    bubbleClass: "bg-gradient-to-br from-[#84fab0] to-[#8fd3f4]",
+    css: "linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)",
+  },
+  {
+    id: "peach-sunset",
     emoji: "🍑",
-    label: "Peach Pop",
-    bubbleClass: "bg-gradient-to-br from-orange-200 via-rose-100 to-amber-200",
-    css: "linear-gradient(160deg, #fed7aa 0%, #ffe4e6 45%, #fde68a 100%)",
+    label: "Peach Sunset",
+    bubbleClass: "bg-gradient-to-br from-[#ff9a9e] to-[#fecfef]",
+    css: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%)",
   },
   {
-    id: "goth-fairy",
-    emoji: "🖤",
-    label: "Goth Fairy Night",
-    bubbleClass: "bg-gradient-to-br from-slate-800 via-purple-950 to-indigo-900",
-    css: "linear-gradient(160deg, #1e293b 0%, #3b0764 50%, #312e81 100%)",
+    id: "midnight-starlight",
+    emoji: "🌌",
+    label: "Midnight Starlight",
+    bubbleClass: "bg-gradient-to-br from-[#09203f] to-[#537895]",
+    css: "linear-gradient(135deg, #09203f 0%, #537895 100%)",
     dark: true,
   },
   {
-    id: "unicorn",
-    emoji: "🦄",
-    label: "Unicorn Rainbow",
+    id: "rainbow-swirl",
+    emoji: "🌈",
+    label: "Rainbow Swirl",
     bubbleClass: "mood-unicorn-bubble",
-    css: "var(--mood-unicorn-bg)",
+    css: "linear-gradient(135deg, #ff9a8b 0%, #ff6a88 55%, #ff99ac 100%)",
+  },
+  {
+    id: "barbie-core",
+    emoji: "🎀",
+    label: "Barbie Core",
+    bubbleClass: "bg-gradient-to-br from-[#f857a6] to-[#ff5858]",
+    css: "linear-gradient(135deg, #f857a6 0%, #ff5858 100%)",
+  },
+  {
+    id: "aqua-mermaid",
+    emoji: "🫧",
+    label: "Aqua Mermaid",
+    bubbleClass: "bg-gradient-to-br from-[#48c6ef] to-[#6f86d6]",
+    css: "linear-gradient(135deg, #48c6ef 0%, #6f86d6 100%)",
   },
 ];
 
+const LEGACY_BACKDROP_IDS: Record<string, CandySwatch["id"]> = {
+  "strawberry-milk": "strawberry-pop",
+  "lavender-dream": "electric-grape",
+  "lemon-sorbet": "neon-lemonade",
+  "mint-choc": "mint-bubblegum",
+  "peach-pop": "peach-sunset",
+  "goth-fairy": "midnight-starlight",
+  unicorn: "rainbow-swirl",
+};
+
 export const DEFAULT_BACKDROP: BackdropTheme = {
-  id: "strawberry-milk",
+  id: "strawberry-pop",
   css: CANDY_SWATCHES[0].css,
 };
 
@@ -101,8 +146,17 @@ export function hueToBackdrop(hue: number): BackdropTheme {
   return {
     id: "custom-hue",
     hue: h,
-    css: `linear-gradient(160deg, hsl(${h} 85% 88%) 0%, hsl(${(h + 28) % 360} 70% 94%) 50%, hsl(${(h + 55) % 360} 80% 86%) 100%)`,
+    // Use hsl() (export-safe) — never oklab/oklch for room gradients
+    css: `linear-gradient(135deg, hsl(${h}, 95%, 62%) 0%, hsl(${(h + 32) % 360}, 90%, 72%) 50%, hsl(${(h + 58) % 360}, 92%, 66%) 100%)`,
   };
+}
+
+export function resolveBackdropPreset(
+  id?: string | null,
+): CandySwatch | undefined {
+  if (!id) return undefined;
+  const mapped = LEGACY_BACKDROP_IDS[id] ?? id;
+  return CANDY_SWATCHES.find((s) => s.id === mapped);
 }
 
 export function readBackdropTheme(): BackdropTheme {
@@ -112,7 +166,16 @@ export function readBackdropTheme(): BackdropTheme {
     if (!raw) return DEFAULT_BACKDROP;
     const parsed = JSON.parse(raw) as BackdropTheme;
     if (!parsed?.css || !parsed?.id) return DEFAULT_BACKDROP;
-    return parsed;
+    const preset = resolveBackdropPreset(parsed.id);
+    if (preset) {
+      return {
+        id: preset.id,
+        css: preset.css,
+        dark: preset.dark,
+      };
+    }
+    if (parsed.id === "custom-hue") return parsed;
+    return DEFAULT_BACKDROP;
   } catch {
     return DEFAULT_BACKDROP;
   }

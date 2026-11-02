@@ -174,25 +174,27 @@ export function playShutterClick() {
   });
 }
 
+/** Cheerful high-pitched magic chime for vault unlock (no low sonar pulses). */
 export function playUnlockSound() {
   if (stealth || typeof window === "undefined") return;
   const audio = getCtx();
   if (!audio) return;
   void audio.resume().then(() => {
     const t0 = audio.currentTime;
-    const notes = [262, 330, 392, 523, 784];
+    // Bright sparkly arpeggio — all mid/high so it feels fairy-tale, not tactical
+    const notes = [523, 659, 784, 988, 1175, 1568];
     notes.forEach((f, i) => {
       const osc = audio.createOscillator();
       const gain = audio.createGain();
       osc.type = i % 2 === 0 ? "triangle" : "sine";
-      osc.frequency.setValueAtTime(f, t0 + i * 0.07);
-      gain.gain.setValueAtTime(0.0001, t0 + i * 0.07);
-      gain.gain.exponentialRampToValueAtTime(0.07, t0 + i * 0.07 + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + i * 0.07 + 0.28);
+      osc.frequency.setValueAtTime(f, t0 + i * 0.055);
+      gain.gain.setValueAtTime(0.0001, t0 + i * 0.055);
+      gain.gain.exponentialRampToValueAtTime(0.06, t0 + i * 0.055 + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + i * 0.055 + 0.26);
       osc.connect(gain);
       gain.connect(audio.destination);
-      osc.start(t0 + i * 0.07);
-      osc.stop(t0 + i * 0.07 + 0.32);
+      osc.start(t0 + i * 0.055);
+      osc.stop(t0 + i * 0.055 + 0.3);
     });
   });
 }

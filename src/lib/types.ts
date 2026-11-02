@@ -52,6 +52,8 @@ export type BrowserEntitlement = {
   stripeCheckoutSessionId: string | null;
   purchasedAt: string | null;
   pdfExportCount: number;
+  /** HMAC lifetime VIP license (scvip_…) */
+  licenseKey?: string | null;
 };
 
 export type PublicClub = Pick<

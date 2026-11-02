@@ -7,6 +7,7 @@ import {
   type BackdropTheme,
 } from "@/lib/backdropTheme";
 import { ensureAudio, playChime, playMarimbaPitch, playPop } from "@/lib/audio";
+import { useIsCompactLayout } from "@/hooks/useIsCompactLayout";
 
 type Sparkle = { id: number; left: number; top: number };
 
@@ -15,7 +16,8 @@ type BackdropColorPickerProps = {
   onClose: () => void;
   theme: BackdropTheme;
   onChange: (theme: BackdropTheme) => void;
-  anchorRef?: React.RefObject<HTMLElement | null>;
+  /** Whole launcher wrapper — clicks here should not auto-close */
+  rootRef?: React.RefObject<HTMLElement | null>;
 };
 
 export function BackdropColorPicker({
@@ -23,7 +25,9 @@ export function BackdropColorPicker({
   onClose,
   theme,
   onChange,
+  rootRef,
 }: BackdropColorPickerProps) {
+  const compact = useIsCompactLayout();
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const [hue, setHue] = useState(theme.hue ?? 320);
@@ -41,7 +45,10 @@ export function BackdropColorPicker({
       if (e.key === "Escape") onClose();
     }
     function onPointer(e: PointerEvent) {
-      if (!panelRef.current?.contains(e.target as Node)) onClose();
+      const target = e.target as Node;
+      if (panelRef.current?.contains(target)) return;
+      if (rootRef?.current?.contains(target)) return;
+      onClose();
     }
     window.addEventListener("keydown", onKey);
     window.addEventListener("pointerdown", onPointer);
@@ -49,9 +56,19 @@ export function BackdropColorPicker({
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointerdown", onPointer);
     };
-  }, [open, onClose]);
+  }, [open, onClose, rootRef]);
 
   if (!open) return null;
+
+  const panelClass = compact
+    ? `fixed inset-x-0 bottom-0 z-[90] mx-auto w-full max-w-lg
+        animate-[mood-pop_0.28s_ease-out] rounded-t-[1.75rem] border-4 border-b-0 border-pink-200/90
+        bg-gradient-to-b from-white via-pink-50/90 to-violet-50 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]
+        shadow-[0_-18px_50px_rgba(74,43,69,0.28)]`
+    : `absolute right-0 top-[calc(100%+0.55rem)] z-[80] w-[min(20rem,calc(100vw-1.5rem))]
+        origin-top-right animate-[mood-pop_0.28s_ease-out]
+        rounded-[1.75rem] border-4 border-pink-200/90 bg-gradient-to-b from-white via-pink-50/90 to-violet-50
+        p-3.5 shadow-[0_18px_50px_rgba(74,43,69,0.28)]`;
 
   function spawnSparkle(clientX?: number, clientY?: number) {
     const panel = panelRef.current;
@@ -93,18 +110,23 @@ export function BackdropColorPicker({
   }
 
   return (
+    <>
+      {compact ? (
+        <button
+          type="button"
+          aria-label="Close room paint"
+          className="fixed inset-0 z-[85] bg-slate-900/30"
+          onClick={onClose}
+        />
+      ) : null}
     <div
       ref={panelRef}
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
-      className="absolute right-0 top-[calc(100%+0.55rem)] z-[70] w-[min(22rem,calc(100vw-1.5rem))]
-        origin-top-right animate-[mood-pop_0.28s_ease-out]
-        rounded-[1.75rem] border-4 border-pink-200/90 bg-gradient-to-b from-white via-pink-50/90 to-violet-50
-        p-4 shadow-[0_18px_50px_rgba(74,43,69,0.28)]"
+      className={panelClass}
       onPointerDown={(e) => e.stopPropagation()}
     >
-      {/* Watercolor tin lid shine */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-6 top-0 h-2 rounded-b-full bg-gradient-to-r from-pink-200/0 via-white/80 to-violet-200/0"
@@ -115,7 +137,7 @@ export function BackdropColorPicker({
           id={titleId}
           className="m-0 text-sm font-black tracking-tight text-slate-800"
         >
-          🌈 Paint Your Room Vibe
+          🎨 Paint Your Room
         </h2>
         <button
           type="button"
@@ -124,16 +146,16 @@ export function BackdropColorPicker({
             onClose();
           }}
           className="grid h-8 w-8 place-items-center rounded-full bg-pink-100 text-sm font-black text-pink-600 transition hover:bg-pink-200 active:scale-95"
-          aria-label="Close mood studio"
+          aria-label="Close room paint palette"
         >
           ✕
         </button>
       </div>
 
       <p className="mb-2 text-[0.65rem] font-extrabold uppercase tracking-wide text-pink-500">
-        Candy Swatch Bubbles
+        Room Vibes
       </p>
-      <div className="mb-4 grid grid-cols-4 gap-2.5">
+      <div className="mb-4 grid grid-cols-5 gap-2">
         {CANDY_SWATCHES.map((swatch) => {
           const active = theme.id === swatch.id;
           return (
@@ -141,7 +163,7 @@ export function BackdropColorPicker({
               key={swatch.id}
               type="button"
               onClick={() => pickSwatch(swatch)}
-              className={`group flex flex-col items-center gap-1 rounded-2xl p-1.5 transition
+              className={`group flex flex-col items-center gap-1 rounded-2xl p-1 transition
                 hover:-translate-y-1 hover:scale-105 active:scale-95
                 ${active ? "ring-2 ring-pink-400 ring-offset-2" : ""}`}
               aria-pressed={active}
@@ -149,13 +171,17 @@ export function BackdropColorPicker({
               title={swatch.label}
             >
               <span
-                className={`grid h-12 w-12 place-items-center rounded-full border-2 border-white text-lg shadow-md
-                  transition group-hover:shadow-lg ${swatch.bubbleClass}`}
+                className="grid h-11 w-11 place-items-center rounded-full border-2 border-white text-base shadow-md transition group-hover:shadow-lg"
+                style={{
+                  backgroundImage: swatch.css,
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                }}
                 aria-hidden
               >
                 {swatch.emoji}
               </span>
-              <span className="w-full truncate text-center text-[0.55rem] font-bold leading-tight text-slate-700">
+              <span className="w-full truncate text-center text-[0.5rem] font-bold leading-tight text-slate-700">
                 {swatch.label}
               </span>
             </button>
@@ -188,7 +214,7 @@ export function BackdropColorPicker({
           <span>Drag to mix slime colors</span>
           <span
             className="inline-flex h-5 w-5 rounded-full border border-white shadow"
-            style={{ background: `hsl(${hue} 80% 70%)` }}
+            style={{ backgroundColor: `hsl(${hue} 80% 70%)` }}
             aria-hidden
           />
         </div>
@@ -203,39 +229,50 @@ export function BackdropColorPicker({
         ))}
       </div>
     </div>
+    </>
   );
 }
 
 type BackdropMagicButtonProps = {
   theme: BackdropTheme;
   onChange: (theme: BackdropTheme) => void;
+  /** Phone header: palette icon only */
+  iconOnly?: boolean;
 };
 
-/** Header launcher + Magic Mood Studio popover */
+/** Header launcher + Paint Your Room popover */
 export function BackdropMagicButton({
   theme,
   onChange,
+  iconOnly = false,
 }: BackdropMagicButtonProps) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div ref={wrapRef} className="relative">
+    <div ref={wrapRef} className="relative z-[80]">
       <button
         type="button"
         onClick={() => {
           void ensureAudio().then(() => playChime());
           setOpen((v) => !v);
         }}
-        className="flex cursor-pointer items-center gap-1.5 rounded-full bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400
-          px-3.5 py-1.5 text-xs font-black text-white shadow-sm transition-all hover:scale-105 active:scale-95"
+        className={
+          iconOnly
+            ? `grid min-h-[44px] min-w-[44px] cursor-pointer place-items-center rounded-full
+                bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 text-base text-white
+                shadow-sm transition-all hover:scale-105 active:scale-95`
+            : `flex min-h-[44px] cursor-pointer items-center gap-1.5 rounded-full bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400
+                px-3.5 py-1.5 text-xs font-black text-white shadow-sm transition-all hover:scale-105 active:scale-95`
+        }
         aria-expanded={open}
         aria-haspopup="dialog"
+        aria-label="Room Vibes"
       >
         <span className="inline-block animate-bounce" aria-hidden>
-          🪄
+          {iconOnly ? "🎨" : "🪄"}
         </span>
-        <span>Room Vibes</span>
+        {!iconOnly ? <span>Room Vibes</span> : null}
       </button>
 
       <BackdropColorPicker
@@ -243,7 +280,7 @@ export function BackdropMagicButton({
         onClose={() => setOpen(false)}
         theme={theme}
         onChange={onChange}
-        anchorRef={wrapRef}
+        rootRef={wrapRef}
       />
     </div>
   );
