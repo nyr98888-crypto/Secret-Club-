@@ -111,7 +111,7 @@ export function BackdropColorPicker({
         role="presentation"
         className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[1px]"
         onClick={() => {
-          // Don't close when tapping the Room Vibes trigger itself
+          // Don't close when tapping the Room Colors trigger itself
           onClose();
         }}
         onPointerDown={(e) => {
@@ -154,7 +154,7 @@ export function BackdropColorPicker({
         </div>
 
         <p className="mb-2 text-[0.65rem] font-extrabold uppercase tracking-wide text-pink-600">
-          Room Vibes
+          Room Colors
         </p>
         <div className="mb-4 grid grid-cols-5 gap-2">
           {CANDY_SWATCHES.map((swatch) => {
@@ -275,12 +275,12 @@ export function BackdropMagicButton({
         }
         aria-expanded={open}
         aria-haspopup="dialog"
-        aria-label="Room Vibes"
+        aria-label="Room Colors"
       >
         <span className="inline-block" aria-hidden>
           {iconOnly ? "🎨" : "🪄"}
         </span>
-        {!iconOnly ? <span>Room Vibes</span> : null}
+        {!iconOnly ? <span>Room Colors</span> : null}
       </button>
 
       <BackdropColorPicker

@@ -61,7 +61,7 @@ export function PageClaimTab({
     ? `${claim.mascot} ${claim.title || `${claim.memberName}'s Page`}`
     : side === "left"
       ? "🍓 Maya's Page"
-      : "🐼 Tap to Claim";
+      : "🐼 Name My Page";
 
   function save() {
     const member = members.find((m) => m.id === memberId) ?? members[0];
@@ -122,7 +122,7 @@ export function PageClaimTab({
           onPointerDown={(e) => e.stopPropagation()}
         >
           <p className="mb-2 text-[0.65rem] font-black uppercase tracking-wide text-pink-500">
-            Claim this page
+            Name My Page
           </p>
           {members.length > 0 ? (
             <div className="mb-2 flex flex-wrap gap-1">

@@ -32,17 +32,13 @@ import {
   PHOTO_FILE_ACCEPT,
   processPhotoFile,
 } from "@/lib/photoDataUrl";
-import { FREE_ITEMS_PER_PACK } from "@/lib/vaultAccess";
 import { useVaultAccess } from "@/hooks/useVaultAccess";
 
-/** Folder ids treated as fully vault-gated in the desktop flyout */
+/** Folder ids treated as fully vault-gated in the desktop tray */
 const PREMIUM_MANIFEST_FOLDERS = new Set([
   "chibi_characters",
-  "diverse_chibis",
-  "y2k_cyber",
-  "y2k_charms",
+  "coquette",
   "locks_and_keys",
-  "secret_notes",
 ]);
 
 type DrawerTab = AssetCategory | "paper";
@@ -303,6 +299,7 @@ export function AssetDrawer({
                     }`
               }
             >
+              {t.icon ? `${t.icon} ` : ""}
               {t.label}
             </button>
           );
@@ -633,22 +630,19 @@ export function AssetDrawer({
           onAddSticker={(sticker: ManifestSticker, opts) => {
             const fromSrc =
               sticker.src.match(/^\/stickers\/([^/]+)\//)?.[1] ?? "";
-            const indexInPack = Number(
-              (sticker.id.match(/_(\d+)$/) || [])[1] || "999",
-            );
-            const premium = PREMIUM_MANIFEST_FOLDERS.has(fromSrc);
-            const locked =
-              Boolean(opts?.locked) ||
-              (!isVip && (premium || indexInPack > FREE_ITEMS_PER_PACK));
+            const premiumPack =
+              Boolean(opts?.locked) || PREMIUM_MANIFEST_FOLDERS.has(fromSrc);
 
             pick({
-              id: `sticker-${sticker.id}`,
+              id: sticker.id.startsWith("sticker-")
+                ? sticker.id
+                : `sticker-${sticker.id}`,
               category: "stickers",
               label: sticker.name,
               src: sticker.src,
               defaultWidth: 18,
-              locked: locked || undefined,
-              action: locked ? "open-vip" : undefined,
+              locked: !isVip && premiumPack ? true : undefined,
+              action: !isVip && premiumPack ? "open-vip" : undefined,
             });
           }}
           headerAction={

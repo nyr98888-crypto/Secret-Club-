@@ -1,6 +1,6 @@
 /**
  * Scans public/stickers/** and writes src/constants/stickers.ts
- * Only includes physical .png / .webp / .jpg / .jpeg files that exist on disk.
+ * One UI tab per folder (13 curated packs).
  * Usage: node scripts/generateStickerCatalog.mjs
  */
 import fs from "node:fs";
@@ -12,79 +12,90 @@ const ROOT = path.resolve(__dirname, "..");
 const STICKERS_DIR = path.join(ROOT, "public", "stickers");
 const OUT_FILE = path.join(ROOT, "src", "constants", "stickers.ts");
 
-/** Strict raster images only — no svg placeholders */
 const IMAGE_EXT = new Set([".png", ".webp", ".jpg", ".jpeg"]);
 
-const FOLDER_TO_TAB = {
-  tactile_charms: "charms",
-  kawaii_animals: "animals",
-  gems_and_ribbons: "gems-ribbons",
-  y2k_charms: "y2k-cyber",
-  y2k_cyber: "y2k-cyber",
-  sweet_stationery: "stationery",
-  tactile_stationery: "stationery",
-  sweet_treats: "sweet-treats",
-  chibi_characters: "chibis",
-  diverse_chibis: "chibis",
-  glitter_sparkles: "sparkles",
-  friendship_badges: "badges",
-  locks_and_keys: "secret-vault",
-  secret_notes: "secret-vault",
-  doodles_and_botanicals: "doodles",
-  general: "extras",
+/** Folder id → display tab (1:1 with curated packs) */
+const FOLDER_META = {
+  charms: { tabId: "charms", label: "Charms", icon: "🔮", itemLabel: "Charm" },
+  chibi_characters: {
+    tabId: "chibis",
+    label: "Chibis",
+    icon: "👧",
+    itemLabel: "Chibi",
+    premium: true,
+  },
+  coquette: {
+    tabId: "coquette",
+    label: "Coquette",
+    icon: "🩰",
+    itemLabel: "Coquette",
+    premium: true,
+  },
+  cuties: { tabId: "cuties", label: "Cuties", icon: "🧸", itemLabel: "Cutie" },
+  "doodles-sparkles": {
+    tabId: "doodles",
+    label: "Doodles",
+    icon: "🌟",
+    itemLabel: "Doodle",
+  },
+  gems_and_ribbons: {
+    tabId: "gems-ribbons",
+    label: "Gems & Ribbons",
+    icon: "🎀",
+    itemLabel: "Gem",
+  },
+  glitter_sparkles: {
+    tabId: "glitter",
+    label: "Glitter",
+    icon: "✨",
+    itemLabel: "Glitter",
+  },
+  kawaii_animals: {
+    tabId: "animals",
+    label: "Animals",
+    icon: "🐾",
+    itemLabel: "Animal",
+  },
+  locks_and_keys: {
+    tabId: "locks",
+    label: "Locks",
+    icon: "🗝️",
+    itemLabel: "Lock",
+    premium: true,
+  },
+  sweets: { tabId: "sweets", label: "Sweets", icon: "🧁", itemLabel: "Sweet" },
+  sweet_stationery: {
+    tabId: "stationery",
+    label: "Stationery",
+    icon: "✏️",
+    itemLabel: "Stationery",
+  },
+  "tape-mounts": {
+    tabId: "tape",
+    label: "Tape & Mounts",
+    icon: "📎",
+    itemLabel: "Tape",
+  },
+  words: { tabId: "words", label: "Words", icon: "💬", itemLabel: "Word" },
 };
 
-const FOLDER_LABEL = {
-  tactile_charms: "Charm",
-  kawaii_animals: "Animal",
-  gems_and_ribbons: "Gem",
-  y2k_charms: "Charm",
-  y2k_cyber: "Cyber",
-  sweet_stationery: "Stationery",
-  tactile_stationery: "Texture",
-  sweet_treats: "Treat",
-  chibi_characters: "Chibi",
-  diverse_chibis: "Chibi",
-  glitter_sparkles: "Sparkle",
-  friendship_badges: "Badge",
-  locks_and_keys: "Lock",
-  secret_notes: "Note",
-  doodles_and_botanicals: "Doodle",
-  general: "Sticker",
-};
-
-const STICKER_TABS = [
-  { id: "charms", label: "Charms" },
-  { id: "animals", label: "Animals" },
-  { id: "chibis", label: "Chibis" },
-  { id: "gems-ribbons", label: "Gems & Ribbons" },
-  { id: "y2k-cyber", label: "Y2K & Cyber" },
-  { id: "stationery", label: "Stationery" },
-  { id: "sweet-treats", label: "Sweet Treats" },
-  { id: "sparkles", label: "Sparkles" },
-  { id: "badges", label: "Badges" },
-  { id: "secret-vault", label: "Secret Vault" },
-  { id: "doodles", label: "Doodles" },
-  { id: "extras", label: "Extras" },
-];
-
-function stickerName(folder, file) {
+function stickerName(folder, file, itemLabel) {
   const base = file.replace(/\.[^.]+$/, "");
   const numMatch = base.match(/(\d+)\s*$/);
   const num = numMatch ? numMatch[1].padStart(3, "0") : null;
-  const label = FOLDER_LABEL[folder] || "Sticker";
-  if (num) return `${label} ${num}`;
-  // Fallback: strip folder prefix + new/ underscores
+  if (num) return `${itemLabel} ${num}`;
   const cleaned = base
-    .replace(new RegExp(`^${folder}_`, "i"), "")
+    .replace(new RegExp(`^${folder.replace(/[-_]/g, "[-_]")}_`, "i"), "")
     .replace(/_?new_?/gi, " ")
     .replace(/[_-]+/g, " ")
     .trim();
-  return cleaned
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ") || label;
+  return (
+    cleaned
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ") || itemLabel
+  );
 }
 
 function walkImages(folder) {
@@ -96,9 +107,7 @@ function walkImages(folder) {
       if (!d.isFile()) return false;
       const ext = path.extname(d.name).toLowerCase();
       if (!IMAGE_EXT.has(ext)) return false;
-      // Raw studio JPGs live under y2k_cyber; use tactile_charms PNGs instead
       if (/^phoenix/i.test(d.name)) return false;
-      // Must resolve to a real non-empty file
       const full = path.join(abs, d.name);
       try {
         const st = fs.statSync(full);
@@ -121,36 +130,66 @@ function main() {
     .readdirSync(STICKERS_DIR, { withFileTypes: true })
     .filter((d) => d.isDirectory())
     .map((d) => d.name)
-    .sort();
+    .sort((a, b) => a.localeCompare(b));
 
+  const tabs = [];
+  const tabSeen = new Set();
   const items = [];
-  let skipped = 0;
 
   for (const folder of folders) {
-    const tabId = FOLDER_TO_TAB[folder] ?? "extras";
-    const files = walkImages(folder);
-    for (const file of files) {
-      const rel = `/stickers/${folder}/${file}`;
-      const disk = path.join(STICKERS_DIR, folder, file);
-      if (!fs.existsSync(disk)) {
-        skipped += 1;
-        continue;
-      }
+    const meta = FOLDER_META[folder] || {
+      tabId: folder.replace(/[^a-z0-9]+/gi, "-").toLowerCase(),
+      label: folder.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+      icon: "✨",
+      itemLabel: "Sticker",
+    };
+
+    if (!tabSeen.has(meta.tabId)) {
+      tabSeen.add(meta.tabId);
+      tabs.push({
+        id: meta.tabId,
+        label: meta.label,
+        icon: meta.icon,
+        folder,
+        isPremium: Boolean(meta.premium),
+      });
+    }
+
+    for (const file of walkImages(folder)) {
       const stem = file.replace(/\.[^.]+$/, "");
       const id = `sticker-${folder}-${stem}`.replace(/[^\w-]+/g, "-");
       items.push({
         id,
-        src: rel,
+        src: `/stickers/${folder}/${file}`,
         category: folder,
-        tabId,
-        name: stickerName(folder, file),
+        tabId: meta.tabId,
+        name: stickerName(folder, file, meta.itemLabel),
+        isLocked: Boolean(meta.premium) || undefined,
       });
     }
   }
 
-  const counts = Object.fromEntries(
-    STICKER_TABS.map((t) => [t.id, items.filter((i) => i.tabId === t.id).length]),
-  );
+  // Stable UI order matching curated pack list
+  const ORDER = [
+    "animals",
+    "glitter",
+    "gems-ribbons",
+    "sweets",
+    "stationery",
+    "locks",
+    "tape",
+    "words",
+    "charms",
+    "coquette",
+    "chibis",
+    "cuties",
+    "doodles",
+  ];
+  tabs.sort((a, b) => {
+    const ai = ORDER.indexOf(a.id);
+    const bi = ORDER.indexOf(b.id);
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+  });
 
   const body = `/* AUTO-GENERATED by scripts/generateStickerCatalog.mjs — do not edit by hand */
 /* ${items.length} stickers across ${folders.length} folders */
@@ -160,7 +199,7 @@ export interface StickerItem {
   src: string;
   /** Source folder under public/stickers/ */
   category: string;
-  /** Display-tab id (merged friendly groups) */
+  /** Display-tab id (friendly UI group) */
   tabId: string;
   name: string;
   /** Reserved for Magic Box gating */
@@ -168,16 +207,34 @@ export interface StickerItem {
 }
 
 export type StickerTabId =
-${STICKER_TABS.map((t) => `  | "${t.id}"`).join("\n")};
+${tabs.map((t) => `  | "${t.id}"`).join("\n")};
 
-export const STICKER_TABS: { id: StickerTabId; label: string }[] = ${JSON.stringify(STICKER_TABS, null, 2)};
+export const STICKER_TABS: {
+  id: StickerTabId;
+  label: string;
+  icon: string;
+  folder: string;
+  isPremium?: boolean;
+}[] = ${JSON.stringify(tabs, null, 2)};
 
-export const STICKERS: StickerItem[] = ${JSON.stringify(items, null, 2)};
+export const STICKERS: StickerItem[] = ${JSON.stringify(
+    items.map((i) => {
+      const out = { ...i };
+      if (!out.isLocked) delete out.isLocked;
+      return out;
+    }),
+    null,
+    2,
+  )};
 
 export const STICKER_COUNT = ${items.length} as const;
 
 export function stickersForTab(tabId: StickerTabId | string): StickerItem[] {
   return STICKERS.filter((s) => s.tabId === tabId);
+}
+
+export function stickersForFolder(folder: string): StickerItem[] {
+  return STICKERS.filter((s) => s.category === folder);
 }
 `;
 
@@ -185,9 +242,9 @@ export function stickersForTab(tabId: StickerTabId | string): StickerItem[] {
   fs.writeFileSync(OUT_FILE, body, "utf8");
 
   console.log(`Wrote ${items.length} stickers → ${path.relative(ROOT, OUT_FILE)}`);
-  if (skipped) console.log(`Skipped missing paths: ${skipped}`);
-  for (const [id, n] of Object.entries(counts)) {
-    if (n > 0) console.log(`  ${id}: ${n}`);
+  for (const t of tabs) {
+    const n = items.filter((i) => i.tabId === t.id).length;
+    console.log(`  ${t.icon} ${t.label} (${t.id}): ${n}${t.isPremium ? " [premium]" : ""}`);
   }
 }
 

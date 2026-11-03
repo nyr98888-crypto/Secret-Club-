@@ -51,7 +51,7 @@ export type CandySwatch = {
   dark?: boolean;
 };
 
-/** Saturated candy Room Vibes — kids love rich, punchy hues */
+/** Saturated candy Room Colors — kids love rich, punchy hues */
 export const CANDY_SWATCHES: CandySwatch[] = [
   {
     id: "strawberry-pop",

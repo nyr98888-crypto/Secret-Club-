@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { isVipPassToken } from "@/config/vipPasses";
+import { setVaultUnlocked } from "@/lib/localClub";
 import {
   readVaultAccess,
   unlockVault,
@@ -74,8 +75,10 @@ export function useVipKeyFromUrl() {
 
     void (async () => {
       try {
+        // Persist VIP + skip the 3-key passcode / secret room on this device
         localStorage.setItem(VIP_UNLOCK_FLAG, "true");
         localStorage.setItem(VIP_ASSIGNED_KEY, key);
+        setVaultUnlocked(true);
 
         const res = await fetch("/api/license/verify", {
           method: "POST",
@@ -97,6 +100,7 @@ export function useVipKeyFromUrl() {
         }
       } catch {
         if (!cancelled) {
+          setVaultUnlocked(true);
           window.dispatchEvent(new CustomEvent("sc:vault-unlocked"));
         }
       }

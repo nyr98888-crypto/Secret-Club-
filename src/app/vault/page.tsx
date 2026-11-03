@@ -23,6 +23,8 @@ import {
 import { SecretRoomOpening } from "@/components/SecretRoomOpening";
 import { UnlockVaultModal } from "@/components/vault/UnlockVaultModal";
 import { useVaultAccess } from "@/hooks/useVaultAccess";
+import { isVipPassToken } from "@/config/vipPasses";
+import { isVipUnlocked, VIP_ASSIGNED_KEY, VIP_UNLOCK_FLAG } from "@/hooks/useVipAccess";
 import { VaultTopChrome } from "@/components/VaultTopChrome";
 import { ScrapbookCanvas } from "@/components/ScrapbookCanvas";
 import { Bookshelf } from "@/components/Bookshelf";
@@ -64,8 +66,21 @@ export default function VaultPage() {
     );
     setBook(ensured);
     setShelf(readScrapbooks());
-    // First-time users skip the lock screen and land on Page 1 with a welcome polaroid
-    if (brandNew || isVaultUnlocked()) {
+
+    // Sync VIP from `?key=` before first paint so we never flash the passcode screen
+    try {
+      const urlKey = new URLSearchParams(window.location.search).get("key");
+      if (urlKey && isVipPassToken(urlKey)) {
+        localStorage.setItem(VIP_UNLOCK_FLAG, "true");
+        localStorage.setItem(VIP_ASSIGNED_KEY, urlKey);
+        setVaultUnlocked(true);
+      }
+    } catch {
+      /* ignore */
+    }
+
+    // VIP `?key=` / stored VIP, first-time shelf, or already unlocked → skip passcode
+    if (brandNew || isVaultUnlocked() || isVipUnlocked()) {
       setVaultUnlocked(true);
       setViewMode("scrapbook");
     } else {
@@ -73,6 +88,19 @@ export default function VaultPage() {
     }
     setReady(true);
   }, [router]);
+
+  // If a VIP key unlocks after mount (URL bootstrap), skip the secret room
+  useEffect(() => {
+    function enterScrapbookFromVip() {
+      if (!isVipUnlocked()) return;
+      setVaultUnlocked(true);
+      setViewMode((mode) => (mode === "secret_room" ? "scrapbook" : mode));
+    }
+    window.addEventListener("sc:vault-unlocked", enterScrapbookFromVip);
+    enterScrapbookFromVip();
+    return () =>
+      window.removeEventListener("sc:vault-unlocked", enterScrapbookFromVip);
+  }, []);
 
   const author = useMemo(() => {
     const founder = club?.members.find((m) => m.isFounder) ?? club?.members[0];

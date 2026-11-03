@@ -1,37 +1,9 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
+import { STICKER_TABS, stickersForTab } from "@/constants/stickers";
 import { useVipAccess } from "@/hooks/useVipAccess";
-import {
-  DEFAULT_STICKER_MANIFEST,
-  type ManifestSticker,
-  type StickerManifest,
-} from "./StickerFlyoutSystem";
-
-type Category = {
-  id: string;
-  label: string;
-  icon: string;
-  /** Entire pack gated behind VIP / promo key */
-  isPremium?: boolean;
-};
-
-/** Maps to real folders under public/stickers */
-const CATEGORIES: Category[] = [
-  { id: "kawaii_animals", label: "Animals", icon: "🐾" },
-  { id: "glitter_sparkles", label: "Glitter", icon: "✨" },
-  { id: "gems_and_ribbons", label: "Gems & Bows", icon: "🎀" },
-  { id: "sweet_treats", label: "Sweets", icon: "🧁" },
-  { id: "sweet_stationery", label: "Stationery", icon: "✏️" },
-  { id: "locks_and_keys", label: "Locks", icon: "🗝️", isPremium: true },
-  { id: "tactile_stationery", label: "Tape & Pins", icon: "📎" },
-  { id: "tactile_charms", label: "Charms", icon: "🔮" },
-  { id: "chibi_characters", label: "Chibis", icon: "👧", isPremium: true },
-  { id: "diverse_chibis", label: "Squad", icon: "🧸", isPremium: true },
-  { id: "doodles_and_botanicals", label: "Doodles", icon: "🌿" },
-  { id: "friendship_badges", label: "Badges", icon: "🏅" },
-  { id: "y2k_cyber", label: "Y2K", icon: "💿", isPremium: true },
-];
+import type { ManifestSticker } from "./StickerFlyoutSystem";
 
 export type TrayTool = {
   id: string;
@@ -41,7 +13,6 @@ export type TrayTool = {
 };
 
 type DesktopStickerTrayProps = {
-  stickerManifest?: StickerManifest;
   onAddSticker: (sticker: ManifestSticker, opts?: { locked?: boolean }) => void;
   onRequestVip?: (reason?: string) => void;
   /** Full-width Add Snap (or similar) pinned above category pills */
@@ -52,9 +23,9 @@ type DesktopStickerTrayProps = {
 
 /**
  * Desktop right sidebar — fixed viewport height, sticky header, vertical sticker grid.
+ * Categories come from the generated STICKER_TABS registry (public/stickers scan).
  */
 export function DesktopStickerTray({
-  stickerManifest = DEFAULT_STICKER_MANIFEST,
   onAddSticker,
   onRequestVip,
   headerAction,
@@ -63,15 +34,8 @@ export function DesktopStickerTray({
 }: DesktopStickerTrayProps) {
   const { isUnlocked } = useVipAccess();
 
-  const categories = useMemo(
-    () =>
-      CATEGORIES.filter(
-        (cat) => (stickerManifest[cat.id]?.items?.length ?? 0) > 0,
-      ),
-    [stickerManifest],
-  );
-
-  const defaultCat = categories[0]?.id ?? "kawaii_animals";
+  const categories = STICKER_TABS;
+  const defaultCat = categories[0]?.id ?? "animals";
   const [activeCategory, setActiveCategory] = useState(defaultCat);
   const [activeTool, setActiveTool] = useState<string | null>(null);
 
@@ -80,7 +44,10 @@ export function DesktopStickerTray({
   const packIsPremium = Boolean(activePack?.isPremium);
   const isLocked = !isUnlocked() && packIsPremium;
 
-  const currentStickers = stickerManifest?.[activeCategory]?.items ?? [];
+  const currentStickers = useMemo(
+    () => stickersForTab(activeCategory),
+    [activeCategory],
+  );
   const activeToolPanel = toolPanels.find((t) => t.id === activeTool);
 
   return (
@@ -169,7 +136,14 @@ export function DesktopStickerTray({
                         "💖 Unlock this Bestie Vault pack with a VIP Club Key.",
                       );
                     }
-                    onAddSticker(sticker, { locked: isLocked });
+                    onAddSticker(
+                      {
+                        id: sticker.id,
+                        name: sticker.name,
+                        src: sticker.src,
+                      },
+                      { locked: isLocked },
+                    );
                   }}
                   className={`group relative flex aspect-square items-center justify-center rounded-2xl border border-pink-100 bg-pink-50/50 p-2 shadow-sm transition-transform hover:scale-105 hover:bg-pink-100/70 active:scale-95 ${
                     isLocked ? "opacity-70" : ""

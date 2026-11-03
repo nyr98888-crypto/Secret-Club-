@@ -1,4 +1,160 @@
 {
+  "charms": {
+    "id": "charms",
+    "title": "Charms",
+    "items": [
+      {
+        "id": "charms_001",
+        "name": "charm-boba-cup-mini",
+        "src": "/stickers/charms/charm-boba-cup-mini.png"
+      },
+      {
+        "id": "charms_002",
+        "name": "charm-bow-pearl",
+        "src": "/stickers/charms/charm-bow-pearl.png"
+      },
+      {
+        "id": "charms_003",
+        "name": "charm-cassette-tape",
+        "src": "/stickers/charms/charm-cassette-tape.png"
+      },
+      {
+        "id": "charms_004",
+        "name": "charm-cherry-pair",
+        "src": "/stickers/charms/charm-cherry-pair.png"
+      },
+      {
+        "id": "charms_005",
+        "name": "charm-clover-four-leaf",
+        "src": "/stickers/charms/charm-clover-four-leaf.png"
+      },
+      {
+        "id": "charms_006",
+        "name": "charm-compass-gold",
+        "src": "/stickers/charms/charm-compass-gold.png"
+      },
+      {
+        "id": "charms_007",
+        "name": "charm-crystal-prism",
+        "src": "/stickers/charms/charm-crystal-prism.png"
+      },
+      {
+        "id": "charms_008",
+        "name": "charm-daisy-flower",
+        "src": "/stickers/charms/charm-daisy-flower.png"
+      },
+      {
+        "id": "charms_009",
+        "name": "charm-digicam-silver",
+        "src": "/stickers/charms/charm-digicam-silver.png"
+      },
+      {
+        "id": "charms_010",
+        "name": "charm-feather-pastel",
+        "src": "/stickers/charms/charm-feather-pastel.png"
+      },
+      {
+        "id": "charms_011",
+        "name": "charm-gameboy-handheld",
+        "src": "/stickers/charms/charm-gameboy-handheld.png"
+      },
+      {
+        "id": "charms_012",
+        "name": "charm-glitter-star-key",
+        "src": "/stickers/charms/charm-glitter-star-key.png"
+      },
+      {
+        "id": "charms_013",
+        "name": "charm-headphones-retro",
+        "src": "/stickers/charms/charm-headphones-retro.png"
+      },
+      {
+        "id": "charms_014",
+        "name": "charm-heart-padlock-gold",
+        "src": "/stickers/charms/charm-heart-padlock-gold.png"
+      },
+      {
+        "id": "charms_015",
+        "name": "charm-lip-gloss-wand",
+        "src": "/stickers/charms/charm-lip-gloss-wand.png"
+      },
+      {
+        "id": "charms_016",
+        "name": "charm-lucky-horseshoe",
+        "src": "/stickers/charms/charm-lucky-horseshoe.png"
+      },
+      {
+        "id": "charms_017",
+        "name": "charm-magic-wand-star",
+        "src": "/stickers/charms/charm-magic-wand-star.png"
+      },
+      {
+        "id": "charms_018",
+        "name": "charm-moon-cat-silhouette",
+        "src": "/stickers/charms/charm-moon-cat-silhouette.png"
+      },
+      {
+        "id": "charms_019",
+        "name": "charm-motel-keytag-bestie",
+        "src": "/stickers/charms/charm-motel-keytag-bestie.png"
+      },
+      {
+        "id": "charms_020",
+        "name": "charm-motel-keytag-secret-club",
+        "src": "/stickers/charms/charm-motel-keytag-secret-club.png"
+      },
+      {
+        "id": "charms_021",
+        "name": "charm-perfume-vintage",
+        "src": "/stickers/charms/charm-perfume-vintage.png"
+      },
+      {
+        "id": "charms_022",
+        "name": "charm-pink-flip-phone",
+        "src": "/stickers/charms/charm-pink-flip-phone.png"
+      },
+      {
+        "id": "charms_023",
+        "name": "charm-polaroid-mini",
+        "src": "/stickers/charms/charm-polaroid-mini.png"
+      },
+      {
+        "id": "charms_024",
+        "name": "charm-potion-bottle-pink",
+        "src": "/stickers/charms/charm-potion-bottle-pink.png"
+      },
+      {
+        "id": "charms_025",
+        "name": "charm-smiley-flower",
+        "src": "/stickers/charms/charm-smiley-flower.png"
+      },
+      {
+        "id": "charms_026",
+        "name": "charm-sneaker-mini",
+        "src": "/stickers/charms/charm-sneaker-mini.png"
+      },
+      {
+        "id": "charms_027",
+        "name": "charm-strawberry-bead",
+        "src": "/stickers/charms/charm-strawberry-bead.png"
+      },
+      {
+        "id": "charms_028",
+        "name": "charm-tamagotchi-pet",
+        "src": "/stickers/charms/charm-tamagotchi-pet.png"
+      },
+      {
+        "id": "charms_029",
+        "name": "charm-teddy-keyring",
+        "src": "/stickers/charms/charm-teddy-keyring.png"
+      },
+      {
+        "id": "charms_030",
+        "name": "charm-winged-heart",
+        "src": "/stickers/charms/charm-winged-heart.png"
+      }
+    ]
+  },
   "chibi_characters": {
     "id": "chibi_characters",
     "title": "Chibis",
@@ -95,551 +251,621 @@
       }
     ]
   },
-  "diverse_chibis": {
-    "id": "diverse_chibis",
-    "title": "Diverse Chibis",
+  "coquette": {
+    "id": "coquette",
+    "title": "Coquette",
     "items": [
       {
-        "id": "diverse_chibis_001",
-        "name": "diverse_chibis_new_001",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_001.png"
+        "id": "coquette_001",
+        "name": "angel-wings-gold",
+        "src": "/stickers/coquette/angel-wings-gold.png"
       },
       {
-        "id": "diverse_chibis_002",
-        "name": "diverse_chibis_new_002",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_002.png"
+        "id": "coquette_002",
+        "name": "boombox-pastel",
+        "src": "/stickers/coquette/boombox-pastel.png"
       },
       {
-        "id": "diverse_chibis_003",
-        "name": "diverse_chibis_new_003",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_003.png"
+        "id": "coquette_003",
+        "name": "butterfly-blue-morpho",
+        "src": "/stickers/coquette/butterfly-blue-morpho.png"
       },
       {
-        "id": "diverse_chibis_004",
-        "name": "diverse_chibis_new_004",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_004.png"
+        "id": "coquette_004",
+        "name": "butterfly-monarch-pink",
+        "src": "/stickers/coquette/butterfly-monarch-pink.png"
       },
       {
-        "id": "diverse_chibis_005",
-        "name": "diverse_chibis_new_005",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_005.png"
+        "id": "coquette_005",
+        "name": "candle-pillar-swirl",
+        "src": "/stickers/coquette/candle-pillar-swirl.png"
       },
       {
-        "id": "diverse_chibis_006",
-        "name": "diverse_chibis_new_006",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_006.png"
+        "id": "coquette_006",
+        "name": "cherry-duo-leaves",
+        "src": "/stickers/coquette/cherry-duo-leaves.png"
       },
       {
-        "id": "diverse_chibis_007",
-        "name": "diverse_chibis_new_007",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_007.png"
+        "id": "coquette_007",
+        "name": "claw-clip-butterfly",
+        "src": "/stickers/coquette/claw-clip-butterfly.png"
       },
       {
-        "id": "diverse_chibis_008",
-        "name": "diverse_chibis_new_008",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_008.png"
+        "id": "coquette_008",
+        "name": "daisy-trio-cluster",
+        "src": "/stickers/coquette/daisy-trio-cluster.png"
       },
       {
-        "id": "diverse_chibis_009",
-        "name": "diverse_chibis_new_009",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_009.png"
+        "id": "coquette_009",
+        "name": "disco-ball-sparkle",
+        "src": "/stickers/coquette/disco-ball-sparkle.png"
       },
       {
-        "id": "diverse_chibis_010",
-        "name": "diverse_chibis_new_010",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_010.png"
+        "id": "coquette_010",
+        "name": "halo-golden-sparkle",
+        "src": "/stickers/coquette/halo-golden-sparkle.png"
       },
       {
-        "id": "diverse_chibis_011",
-        "name": "diverse_chibis_new_011",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_011.png"
+        "id": "coquette_011",
+        "name": "heart-locket-open",
+        "src": "/stickers/coquette/heart-locket-open.png"
       },
       {
-        "id": "diverse_chibis_012",
-        "name": "diverse_chibis_new_012",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_012.png"
+        "id": "coquette_012",
+        "name": "lace-heart-doily",
+        "src": "/stickers/coquette/lace-heart-doily.png"
       },
       {
-        "id": "diverse_chibis_013",
-        "name": "diverse_chibis_new_013",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_013.png"
+        "id": "coquette_013",
+        "name": "lemon-slice-fresh",
+        "src": "/stickers/coquette/lemon-slice-fresh.png"
       },
       {
-        "id": "diverse_chibis_014",
-        "name": "diverse_chibis_new_014",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_014.png"
+        "id": "coquette_014",
+        "name": "lip-print-pink",
+        "src": "/stickers/coquette/lip-print-pink.png"
       },
       {
-        "id": "diverse_chibis_015",
-        "name": "diverse_chibis_new_015",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_015.png"
+        "id": "coquette_015",
+        "name": "magic-crystal-ball",
+        "src": "/stickers/coquette/magic-crystal-ball.png"
       },
       {
-        "id": "diverse_chibis_016",
-        "name": "diverse_chibis_new_016",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_016.png"
+        "id": "coquette_016",
+        "name": "nail-polish-pink",
+        "src": "/stickers/coquette/nail-polish-pink.png"
       },
       {
-        "id": "diverse_chibis_017",
-        "name": "diverse_chibis_new_017",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_017.png"
+        "id": "coquette_017",
+        "name": "peach-fruit-blush",
+        "src": "/stickers/coquette/peach-fruit-blush.png"
       },
       {
-        "id": "diverse_chibis_018",
-        "name": "diverse_chibis_new_018",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_018.png"
+        "id": "coquette_018",
+        "name": "pearl-hair-clip",
+        "src": "/stickers/coquette/pearl-hair-clip.png"
       },
       {
-        "id": "diverse_chibis_019",
-        "name": "diverse_chibis_new_019",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_019.png"
+        "id": "coquette_019",
+        "name": "pearl-necklace-strand",
+        "src": "/stickers/coquette/pearl-necklace-strand.png"
       },
       {
-        "id": "diverse_chibis_020",
-        "name": "diverse_chibis_new_020",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_020.png"
+        "id": "coquette_020",
+        "name": "perfume-spray-bottle",
+        "src": "/stickers/coquette/perfume-spray-bottle.png"
       },
       {
-        "id": "diverse_chibis_021",
-        "name": "diverse_chibis_new_021",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_021.png"
+        "id": "coquette_021",
+        "name": "pink-electric-guitar",
+        "src": "/stickers/coquette/pink-electric-guitar.png"
       },
       {
-        "id": "diverse_chibis_022",
-        "name": "diverse_chibis_new_022",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_022.png"
+        "id": "coquette_022",
+        "name": "retro-sunglasses-heart",
+        "src": "/stickers/coquette/retro-sunglasses-heart.png"
       },
       {
-        "id": "diverse_chibis_023",
-        "name": "diverse_chibis_new_023",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_023.png"
+        "id": "coquette_023",
+        "name": "retro-sunglasses-pink-oval",
+        "src": "/stickers/coquette/retro-sunglasses-pink-oval.png"
       },
       {
-        "id": "diverse_chibis_024",
-        "name": "diverse_chibis_new_024",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_024.png"
+        "id": "coquette_024",
+        "name": "retro-vinyl-record",
+        "src": "/stickers/coquette/retro-vinyl-record.png"
       },
       {
-        "id": "diverse_chibis_025",
-        "name": "diverse_chibis_new_025",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_025.png"
+        "id": "coquette_025",
+        "name": "ribbon-swirl-pair",
+        "src": "/stickers/coquette/ribbon-swirl-pair.png"
       },
       {
-        "id": "diverse_chibis_026",
-        "name": "diverse_chibis_new_026",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_026.png"
+        "id": "coquette_026",
+        "name": "roller-skate-pink",
+        "src": "/stickers/coquette/roller-skate-pink.png"
       },
       {
-        "id": "diverse_chibis_027",
-        "name": "diverse_chibis_new_027",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_027.png"
+        "id": "coquette_027",
+        "name": "rose-bud-pink",
+        "src": "/stickers/coquette/rose-bud-pink.png"
       },
       {
-        "id": "diverse_chibis_028",
-        "name": "diverse_chibis_new_028",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_028.png"
+        "id": "coquette_028",
+        "name": "scrunchie-silk-pink",
+        "src": "/stickers/coquette/scrunchie-silk-pink.png"
       },
       {
-        "id": "diverse_chibis_029",
-        "name": "diverse_chibis_new_029",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_029.png"
+        "id": "coquette_029",
+        "name": "seashell-pearl-inside",
+        "src": "/stickers/coquette/seashell-pearl-inside.png"
       },
       {
-        "id": "diverse_chibis_030",
-        "name": "diverse_chibis_new_030",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_030.png"
+        "id": "coquette_030",
+        "name": "silk-bow-black-velvet",
+        "src": "/stickers/coquette/silk-bow-black-velvet.png"
       },
       {
-        "id": "diverse_chibis_031",
-        "name": "diverse_chibis_new_031",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_031.png"
+        "id": "coquette_031",
+        "name": "silk-bow-cream",
+        "src": "/stickers/coquette/silk-bow-cream.png"
       },
       {
-        "id": "diverse_chibis_032",
-        "name": "diverse_chibis_new_032",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_032.png"
+        "id": "coquette_032",
+        "name": "silk-bow-lavender",
+        "src": "/stickers/coquette/silk-bow-lavender.png"
       },
       {
-        "id": "diverse_chibis_033",
-        "name": "diverse_chibis_new_033",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_033.png"
+        "id": "coquette_033",
+        "name": "silk-bow-pink-classic",
+        "src": "/stickers/coquette/silk-bow-pink-classic.png"
       },
       {
-        "id": "diverse_chibis_034",
-        "name": "diverse_chibis_new_034",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_034.png"
+        "id": "coquette_034",
+        "name": "strawberry-single-fruit",
+        "src": "/stickers/coquette/strawberry-single-fruit.png"
       },
       {
-        "id": "diverse_chibis_035",
-        "name": "diverse_chibis_new_035",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_035.png"
+        "id": "coquette_035",
+        "name": "sunflower-mini",
+        "src": "/stickers/coquette/sunflower-mini.png"
       },
       {
-        "id": "diverse_chibis_036",
-        "name": "diverse_chibis_new_036",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_036.png"
+        "id": "coquette_036",
+        "name": "tiara-princess-pearls",
+        "src": "/stickers/coquette/tiara-princess-pearls.png"
       },
       {
-        "id": "diverse_chibis_037",
-        "name": "diverse_chibis_new_037",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_037.png"
+        "id": "coquette_037",
+        "name": "tulip-trio-pastel",
+        "src": "/stickers/coquette/tulip-trio-pastel.png"
       },
       {
-        "id": "diverse_chibis_038",
-        "name": "diverse_chibis_new_038",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_038.png"
+        "id": "coquette_038",
+        "name": "vintage-compact-mirror",
+        "src": "/stickers/coquette/vintage-compact-mirror.png"
       },
       {
-        "id": "diverse_chibis_039",
-        "name": "diverse_chibis_new_039",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_039.png"
+        "id": "coquette_039",
+        "name": "vintage-pocket-watch",
+        "src": "/stickers/coquette/vintage-pocket-watch.png"
       },
       {
-        "id": "diverse_chibis_040",
-        "name": "diverse_chibis_new_040",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_040.png"
-      },
-      {
-        "id": "diverse_chibis_041",
-        "name": "diverse_chibis_new_041",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_041.png"
-      },
-      {
-        "id": "diverse_chibis_042",
-        "name": "diverse_chibis_new_042",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_042.png"
-      },
-      {
-        "id": "diverse_chibis_043",
-        "name": "diverse_chibis_new_043",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_043.png"
-      },
-      {
-        "id": "diverse_chibis_044",
-        "name": "diverse_chibis_new_044",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_044.png"
-      },
-      {
-        "id": "diverse_chibis_045",
-        "name": "diverse_chibis_new_045",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_045.png"
-      },
-      {
-        "id": "diverse_chibis_046",
-        "name": "diverse_chibis_new_046",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_046.png"
-      },
-      {
-        "id": "diverse_chibis_047",
-        "name": "diverse_chibis_new_047",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_047.png"
-      },
-      {
-        "id": "diverse_chibis_048",
-        "name": "diverse_chibis_new_048",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_048.png"
-      },
-      {
-        "id": "diverse_chibis_049",
-        "name": "diverse_chibis_new_049",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_049.png"
-      },
-      {
-        "id": "diverse_chibis_050",
-        "name": "diverse_chibis_new_050",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_050.png"
-      },
-      {
-        "id": "diverse_chibis_051",
-        "name": "diverse_chibis_new_051",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_051.png"
-      },
-      {
-        "id": "diverse_chibis_052",
-        "name": "diverse_chibis_new_052",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_052.png"
-      },
-      {
-        "id": "diverse_chibis_053",
-        "name": "diverse_chibis_new_053",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_053.png"
-      },
-      {
-        "id": "diverse_chibis_054",
-        "name": "diverse_chibis_new_054",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_054.png"
-      },
-      {
-        "id": "diverse_chibis_055",
-        "name": "diverse_chibis_new_055",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_055.png"
-      },
-      {
-        "id": "diverse_chibis_056",
-        "name": "diverse_chibis_new_056",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_056.png"
-      },
-      {
-        "id": "diverse_chibis_057",
-        "name": "diverse_chibis_new_057",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_057.png"
-      },
-      {
-        "id": "diverse_chibis_058",
-        "name": "diverse_chibis_new_058",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_058.png"
-      },
-      {
-        "id": "diverse_chibis_059",
-        "name": "diverse_chibis_new_059",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_059.png"
-      },
-      {
-        "id": "diverse_chibis_060",
-        "name": "diverse_chibis_new_060",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_060.png"
-      },
-      {
-        "id": "diverse_chibis_061",
-        "name": "diverse_chibis_new_061",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_061.png"
-      },
-      {
-        "id": "diverse_chibis_062",
-        "name": "diverse_chibis_new_062",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_062.png"
-      },
-      {
-        "id": "diverse_chibis_063",
-        "name": "diverse_chibis_new_063",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_063.png"
-      },
-      {
-        "id": "diverse_chibis_064",
-        "name": "diverse_chibis_new_064",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_064.png"
-      },
-      {
-        "id": "diverse_chibis_065",
-        "name": "diverse_chibis_new_065",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_065.png"
-      },
-      {
-        "id": "diverse_chibis_066",
-        "name": "diverse_chibis_new_066",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_066.png"
-      },
-      {
-        "id": "diverse_chibis_067",
-        "name": "diverse_chibis_new_067",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_067.png"
-      },
-      {
-        "id": "diverse_chibis_068",
-        "name": "diverse_chibis_new_068",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_068.png"
-      },
-      {
-        "id": "diverse_chibis_069",
-        "name": "diverse_chibis_new_069",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_069.png"
-      },
-      {
-        "id": "diverse_chibis_070",
-        "name": "diverse_chibis_new_070",
-        "src": "/stickers/diverse_chibis/diverse_chibis_new_070.png"
+        "id": "coquette_040",
+        "name": "vintage-telephone-rotary",
+        "src": "/stickers/coquette/vintage-telephone-rotary.png"
       }
     ]
   },
-  "doodles_and_botanicals": {
-    "id": "doodles_and_botanicals",
+  "cuties": {
+    "id": "cuties",
+    "title": "Cuties",
+    "items": [
+      {
+        "id": "cuties_001",
+        "name": "alpaca-rainbow-scarf",
+        "src": "/stickers/cuties/alpaca-rainbow-scarf.png"
+      },
+      {
+        "id": "cuties_002",
+        "name": "axolotl-floating-bubbles",
+        "src": "/stickers/cuties/axolotl-floating-bubbles.png"
+      },
+      {
+        "id": "cuties_003",
+        "name": "baby-deer-spotted",
+        "src": "/stickers/cuties/baby-deer-spotted.png"
+      },
+      {
+        "id": "cuties_004",
+        "name": "bear-hugging-honey-pot",
+        "src": "/stickers/cuties/bear-hugging-honey-pot.png"
+      },
+      {
+        "id": "cuties_005",
+        "name": "bear-sleeping-crescent-moon",
+        "src": "/stickers/cuties/bear-sleeping-crescent-moon.png"
+      },
+      {
+        "id": "cuties_006",
+        "name": "bunny-balloon",
+        "src": "/stickers/cuties/bunny-balloon.png"
+      },
+      {
+        "id": "cuties_007",
+        "name": "bunny-boba",
+        "src": "/stickers/cuties/bunny-boba.png"
+      },
+      {
+        "id": "cuties_008",
+        "name": "bunny-bow",
+        "src": "/stickers/cuties/bunny-bow.png"
+      },
+      {
+        "id": "cuties_009",
+        "name": "bunny-sleeping-cloud",
+        "src": "/stickers/cuties/bunny-sleeping-cloud.png"
+      },
+      {
+        "id": "cuties_010",
+        "name": "bunny-strawberry",
+        "src": "/stickers/cuties/bunny-strawberry.png"
+      },
+      {
+        "id": "cuties_011",
+        "name": "capybara-flower",
+        "src": "/stickers/cuties/capybara-flower.png"
+      },
+      {
+        "id": "cuties_012",
+        "name": "capybara-orange",
+        "src": "/stickers/cuties/capybara-orange.png"
+      },
+      {
+        "id": "cuties_013",
+        "name": "capybara-spa-towel",
+        "src": "/stickers/cuties/capybara-spa-towel.png"
+      },
+      {
+        "id": "cuties_014",
+        "name": "cat-cardboard-box",
+        "src": "/stickers/cuties/cat-cardboard-box.png"
+      },
+      {
+        "id": "cuties_015",
+        "name": "cat-flower-crown",
+        "src": "/stickers/cuties/cat-flower-crown.png"
+      },
+      {
+        "id": "cuties_016",
+        "name": "cat-pink-beanie",
+        "src": "/stickers/cuties/cat-pink-beanie.png"
+      },
+      {
+        "id": "cuties_017",
+        "name": "cat-sleeping-loaf",
+        "src": "/stickers/cuties/cat-sleeping-loaf.png"
+      },
+      {
+        "id": "cuties_018",
+        "name": "cat-strawberry-hat",
+        "src": "/stickers/cuties/cat-strawberry-hat.png"
+      },
+      {
+        "id": "cuties_019",
+        "name": "cat-sunglasses",
+        "src": "/stickers/cuties/cat-sunglasses.png"
+      },
+      {
+        "id": "cuties_020",
+        "name": "corgi-heart-butt",
+        "src": "/stickers/cuties/corgi-heart-butt.png"
+      },
+      {
+        "id": "cuties_021",
+        "name": "dolphin-jumping",
+        "src": "/stickers/cuties/dolphin-jumping.png"
+      },
+      {
+        "id": "cuties_022",
+        "name": "duckling-bucket-hat",
+        "src": "/stickers/cuties/duckling-bucket-hat.png"
+      },
+      {
+        "id": "cuties_023",
+        "name": "duckling-matcha-cup",
+        "src": "/stickers/cuties/duckling-matcha-cup.png"
+      },
+      {
+        "id": "cuties_024",
+        "name": "duckling-rainboots",
+        "src": "/stickers/cuties/duckling-rainboots.png"
+      },
+      {
+        "id": "cuties_025",
+        "name": "fox-curled-tail",
+        "src": "/stickers/cuties/fox-curled-tail.png"
+      },
+      {
+        "id": "cuties_026",
+        "name": "frog-lily-pad-umbrella",
+        "src": "/stickers/cuties/frog-lily-pad-umbrella.png"
+      },
+      {
+        "id": "cuties_027",
+        "name": "frog-mushroom-hat",
+        "src": "/stickers/cuties/frog-mushroom-hat.png"
+      },
+      {
+        "id": "cuties_028",
+        "name": "hamster-boba-pearl",
+        "src": "/stickers/cuties/hamster-boba-pearl.png"
+      },
+      {
+        "id": "cuties_029",
+        "name": "hamster-sunflower-seed",
+        "src": "/stickers/cuties/hamster-sunflower-seed.png"
+      },
+      {
+        "id": "cuties_030",
+        "name": "hedgehog-flower",
+        "src": "/stickers/cuties/hedgehog-flower.png"
+      },
+      {
+        "id": "cuties_031",
+        "name": "kitten-yarn-ball",
+        "src": "/stickers/cuties/kitten-yarn-ball.png"
+      },
+      {
+        "id": "cuties_032",
+        "name": "koala-eucalyptus",
+        "src": "/stickers/cuties/koala-eucalyptus.png"
+      },
+      {
+        "id": "cuties_033",
+        "name": "lamb-bell-collar",
+        "src": "/stickers/cuties/lamb-bell-collar.png"
+      },
+      {
+        "id": "cuties_034",
+        "name": "otter-shell-love",
+        "src": "/stickers/cuties/otter-shell-love.png"
+      },
+      {
+        "id": "cuties_035",
+        "name": "panda-bamboo-heart",
+        "src": "/stickers/cuties/panda-bamboo-heart.png"
+      },
+      {
+        "id": "cuties_036",
+        "name": "penguin-earmuffs",
+        "src": "/stickers/cuties/penguin-earmuffs.png"
+      },
+      {
+        "id": "cuties_037",
+        "name": "piglet-tulip",
+        "src": "/stickers/cuties/piglet-tulip.png"
+      },
+      {
+        "id": "cuties_038",
+        "name": "poodle-pink-bow",
+        "src": "/stickers/cuties/poodle-pink-bow.png"
+      },
+      {
+        "id": "cuties_039",
+        "name": "puppy-bandana",
+        "src": "/stickers/cuties/puppy-bandana.png"
+      },
+      {
+        "id": "cuties_040",
+        "name": "red-panda-apple",
+        "src": "/stickers/cuties/red-panda-apple.png"
+      },
+      {
+        "id": "cuties_041",
+        "name": "seal-pup-blushing",
+        "src": "/stickers/cuties/seal-pup-blushing.png"
+      },
+      {
+        "id": "cuties_042",
+        "name": "shiba-donut-bed",
+        "src": "/stickers/cuties/shiba-donut-bed.png"
+      },
+      {
+        "id": "cuties_043",
+        "name": "shiba-waving-paw",
+        "src": "/stickers/cuties/shiba-waving-paw.png"
+      },
+      {
+        "id": "cuties_044",
+        "name": "unicorn-rainbow-mane",
+        "src": "/stickers/cuties/unicorn-rainbow-mane.png"
+      },
+      {
+        "id": "cuties_045",
+        "name": "whale-water-spout-heart",
+        "src": "/stickers/cuties/whale-water-spout-heart.png"
+      }
+    ]
+  },
+  "doodles-sparkles": {
+    "id": "doodles-sparkles",
     "title": "Doodles",
     "items": [
       {
-        "id": "doodles_and_botanicals_001",
-        "name": "doodles_and_botanicals_001",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_001.png"
+        "id": "doodles-sparkles_001",
+        "name": "doodle-arrow-curved-curly",
+        "src": "/stickers/doodles-sparkles/doodle-arrow-curved-curly.png"
       },
       {
-        "id": "doodles_and_botanicals_002",
-        "name": "doodles_and_botanicals_002",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_002.png"
+        "id": "doodles-sparkles_002",
+        "name": "doodle-cloud-smiling",
+        "src": "/stickers/doodles-sparkles/doodle-cloud-smiling.png"
       },
       {
-        "id": "doodles_and_botanicals_003",
-        "name": "doodles_and_botanicals_003",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_003.png"
+        "id": "doodles-sparkles_003",
+        "name": "doodle-clover-leaf-stem",
+        "src": "/stickers/doodles-sparkles/doodle-clover-leaf-stem.png"
       },
       {
-        "id": "doodles_and_botanicals_004",
-        "name": "doodles_and_botanicals_004",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_004.png"
+        "id": "doodles-sparkles_004",
+        "name": "doodle-crescent-moon-dots",
+        "src": "/stickers/doodles-sparkles/doodle-crescent-moon-dots.png"
       },
       {
-        "id": "doodles_and_botanicals_005",
-        "name": "doodles_and_botanicals_005",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_005.png"
+        "id": "doodles-sparkles_005",
+        "name": "doodle-crown-three-points",
+        "src": "/stickers/doodles-sparkles/doodle-crown-three-points.png"
       },
       {
-        "id": "doodles_and_botanicals_006",
-        "name": "doodles_and_botanicals_006",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_006.png"
+        "id": "doodles-sparkles_006",
+        "name": "doodle-double-heart",
+        "src": "/stickers/doodles-sparkles/doodle-double-heart.png"
       },
       {
-        "id": "doodles_and_botanicals_007",
-        "name": "doodles_and_botanicals_007",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_007.png"
+        "id": "doodles-sparkles_007",
+        "name": "doodle-exclamation-burst",
+        "src": "/stickers/doodles-sparkles/doodle-exclamation-burst.png"
       },
       {
-        "id": "doodles_and_botanicals_008",
-        "name": "doodles_and_botanicals_008",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_008.png"
+        "id": "doodles-sparkles_008",
+        "name": "doodle-flame-pastel",
+        "src": "/stickers/doodles-sparkles/doodle-flame-pastel.png"
       },
       {
-        "id": "doodles_and_botanicals_009",
-        "name": "doodles_and_botanicals_009",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_009.png"
+        "id": "doodles-sparkles_009",
+        "name": "doodle-flower-bloom-simple",
+        "src": "/stickers/doodles-sparkles/doodle-flower-bloom-simple.png"
       },
       {
-        "id": "doodles_and_botanicals_010",
-        "name": "doodles_and_botanicals_010",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_010.png"
+        "id": "doodles-sparkles_010",
+        "name": "doodle-heart-hand-drawn-outline",
+        "src": "/stickers/doodles-sparkles/doodle-heart-hand-drawn-outline.png"
       },
       {
-        "id": "doodles_and_botanicals_011",
-        "name": "doodles_and_botanicals_012",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_012.png"
+        "id": "doodles-sparkles_011",
+        "name": "doodle-heart-solid-puffy",
+        "src": "/stickers/doodles-sparkles/doodle-heart-solid-puffy.png"
       },
       {
-        "id": "doodles_and_botanicals_012",
-        "name": "doodles_and_botanicals_016",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_016.png"
+        "id": "doodles-sparkles_012",
+        "name": "doodle-heart-winged",
+        "src": "/stickers/doodles-sparkles/doodle-heart-winged.png"
       },
       {
-        "id": "doodles_and_botanicals_013",
-        "name": "doodles_and_botanicals_017",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_017.png"
+        "id": "doodles-sparkles_013",
+        "name": "doodle-lightning-bolt-pink",
+        "src": "/stickers/doodles-sparkles/doodle-lightning-bolt-pink.png"
       },
       {
-        "id": "doodles_and_botanicals_014",
-        "name": "doodles_and_botanicals_019",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_019.png"
+        "id": "doodles-sparkles_014",
+        "name": "doodle-lightning-bolt-yellow",
+        "src": "/stickers/doodles-sparkles/doodle-lightning-bolt-yellow.png"
       },
       {
-        "id": "doodles_and_botanicals_015",
-        "name": "doodles_and_botanicals_020",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_020.png"
+        "id": "doodles-sparkles_015",
+        "name": "doodle-music-notes-trio",
+        "src": "/stickers/doodles-sparkles/doodle-music-notes-trio.png"
       },
       {
-        "id": "doodles_and_botanicals_016",
-        "name": "doodles_and_botanicals_021",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_021.png"
+        "id": "doodles-sparkles_016",
+        "name": "doodle-question-mark-swirl",
+        "src": "/stickers/doodles-sparkles/doodle-question-mark-swirl.png"
       },
       {
-        "id": "doodles_and_botanicals_017",
-        "name": "doodles_and_botanicals_030",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_030.png"
+        "id": "doodles-sparkles_017",
+        "name": "doodle-rainbow-arch-pastel",
+        "src": "/stickers/doodles-sparkles/doodle-rainbow-arch-pastel.png"
       },
       {
-        "id": "doodles_and_botanicals_018",
-        "name": "doodles_and_botanicals_031",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_031.png"
+        "id": "doodles-sparkles_018",
+        "name": "doodle-shooting-star-trail",
+        "src": "/stickers/doodles-sparkles/doodle-shooting-star-trail.png"
       },
       {
-        "id": "doodles_and_botanicals_019",
-        "name": "doodles_and_botanicals_047",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_047.png"
+        "id": "doodles-sparkles_019",
+        "name": "doodle-smiley-face-classic",
+        "src": "/stickers/doodles-sparkles/doodle-smiley-face-classic.png"
       },
       {
-        "id": "doodles_and_botanicals_020",
-        "name": "doodles_and_botanicals_049",
-        "src": "/stickers/doodles_and_botanicals/doodles_and_botanicals_049.png"
-      }
-    ]
-  },
-  "friendship_badges": {
-    "id": "friendship_badges",
-    "title": "Badges",
-    "items": [
-      {
-        "id": "friendship_badges_001",
-        "name": "friendship_badges_001",
-        "src": "/stickers/friendship_badges/friendship_badges_001.png"
+        "id": "doodles-sparkles_020",
+        "name": "doodle-speech-bubble-blank",
+        "src": "/stickers/doodles-sparkles/doodle-speech-bubble-blank.png"
       },
       {
-        "id": "friendship_badges_002",
-        "name": "friendship_badges_002",
-        "src": "/stickers/friendship_badges/friendship_badges_002.png"
+        "id": "doodles-sparkles_021",
+        "name": "doodle-speech-bubble-heart",
+        "src": "/stickers/doodles-sparkles/doodle-speech-bubble-heart.png"
       },
       {
-        "id": "friendship_badges_003",
-        "name": "friendship_badges_003",
-        "src": "/stickers/friendship_badges/friendship_badges_003.png"
+        "id": "doodles-sparkles_022",
+        "name": "doodle-spiral-scribble",
+        "src": "/stickers/doodles-sparkles/doodle-spiral-scribble.png"
       },
       {
-        "id": "friendship_badges_004",
-        "name": "friendship_badges_004",
-        "src": "/stickers/friendship_badges/friendship_badges_004.png"
+        "id": "doodles-sparkles_023",
+        "name": "doodle-stars-cluster-5point",
+        "src": "/stickers/doodles-sparkles/doodle-stars-cluster-5point.png"
       },
       {
-        "id": "friendship_badges_005",
-        "name": "friendship_badges_005",
-        "src": "/stickers/friendship_badges/friendship_badges_005.png"
+        "id": "doodles-sparkles_024",
+        "name": "doodle-sun-smiling-rays",
+        "src": "/stickers/doodles-sparkles/doodle-sun-smiling-rays.png"
       },
       {
-        "id": "friendship_badges_006",
-        "name": "friendship_badges_006",
-        "src": "/stickers/friendship_badges/friendship_badges_006.png"
+        "id": "doodles-sparkles_025",
+        "name": "doodle-wink-smiley",
+        "src": "/stickers/doodles-sparkles/doodle-wink-smiley.png"
       },
       {
-        "id": "friendship_badges_007",
-        "name": "friendship_badges_007",
-        "src": "/stickers/friendship_badges/friendship_badges_007.png"
+        "id": "doodles-sparkles_026",
+        "name": "gem-crystal-cluster-purple",
+        "src": "/stickers/doodles-sparkles/gem-crystal-cluster-purple.png"
       },
       {
-        "id": "friendship_badges_008",
-        "name": "friendship_badges_010",
-        "src": "/stickers/friendship_badges/friendship_badges_010.png"
+        "id": "doodles-sparkles_027",
+        "name": "gem-emerald-cut-green",
+        "src": "/stickers/doodles-sparkles/gem-emerald-cut-green.png"
       },
       {
-        "id": "friendship_badges_009",
-        "name": "friendship_badges_016",
-        "src": "/stickers/friendship_badges/friendship_badges_016.png"
+        "id": "doodles-sparkles_028",
+        "name": "gem-faceted-diamond-blue",
+        "src": "/stickers/doodles-sparkles/gem-faceted-diamond-blue.png"
       },
       {
-        "id": "friendship_badges_010",
-        "name": "friendship_badges_017",
-        "src": "/stickers/friendship_badges/friendship_badges_017.png"
+        "id": "doodles-sparkles_029",
+        "name": "gem-faceted-diamond-pink",
+        "src": "/stickers/doodles-sparkles/gem-faceted-diamond-pink.png"
       },
       {
-        "id": "friendship_badges_011",
-        "name": "friendship_badges_020",
-        "src": "/stickers/friendship_badges/friendship_badges_020.png"
+        "id": "doodles-sparkles_030",
+        "name": "gem-heart-crystal-ruby",
+        "src": "/stickers/doodles-sparkles/gem-heart-crystal-ruby.png"
       },
       {
-        "id": "friendship_badges_012",
-        "name": "friendship_badges_025",
-        "src": "/stickers/friendship_badges/friendship_badges_025.png"
+        "id": "doodles-sparkles_031",
+        "name": "glitter-dust-spray",
+        "src": "/stickers/doodles-sparkles/glitter-dust-spray.png"
       },
       {
-        "id": "friendship_badges_013",
-        "name": "friendship_badges_026",
-        "src": "/stickers/friendship_badges/friendship_badges_026.png"
+        "id": "doodles-sparkles_032",
+        "name": "sparkle-star-4point-gold",
+        "src": "/stickers/doodles-sparkles/sparkle-star-4point-gold.png"
       },
       {
-        "id": "friendship_badges_014",
-        "name": "friendship_badges_029",
-        "src": "/stickers/friendship_badges/friendship_badges_029.png"
+        "id": "doodles-sparkles_033",
+        "name": "sparkle-star-4point-lilac",
+        "src": "/stickers/doodles-sparkles/sparkle-star-4point-lilac.png"
       },
       {
-        "id": "friendship_badges_015",
-        "name": "friendship_badges_033",
-        "src": "/stickers/friendship_badges/friendship_badges_033.png"
+        "id": "doodles-sparkles_034",
+        "name": "sparkle-star-4point-pink",
+        "src": "/stickers/doodles-sparkles/sparkle-star-4point-pink.png"
       },
       {
-        "id": "friendship_badges_016",
-        "name": "friendship_badges_034",
-        "src": "/stickers/friendship_badges/friendship_badges_034.png"
+        "id": "doodles-sparkles_035",
+        "name": "sparkle-star-cluster-trio",
+        "src": "/stickers/doodles-sparkles/sparkle-star-cluster-trio.png"
       }
     ]
   },
@@ -729,199 +955,163 @@
       },
       {
         "id": "gems_and_ribbons_017",
-        "name": "gems_and_ribbons_new_017",
-        "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_017.png"
-      },
-      {
-        "id": "gems_and_ribbons_018",
         "name": "gems_and_ribbons_new_018",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_018.png"
       },
       {
-        "id": "gems_and_ribbons_019",
+        "id": "gems_and_ribbons_018",
         "name": "gems_and_ribbons_new_019",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_019.png"
       },
       {
-        "id": "gems_and_ribbons_020",
+        "id": "gems_and_ribbons_019",
         "name": "gems_and_ribbons_new_020",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_020.png"
       },
       {
-        "id": "gems_and_ribbons_021",
+        "id": "gems_and_ribbons_020",
         "name": "gems_and_ribbons_new_021",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_021.png"
       },
       {
-        "id": "gems_and_ribbons_022",
+        "id": "gems_and_ribbons_021",
         "name": "gems_and_ribbons_new_022",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_022.png"
       },
       {
-        "id": "gems_and_ribbons_023",
+        "id": "gems_and_ribbons_022",
         "name": "gems_and_ribbons_new_023",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_023.png"
       },
       {
-        "id": "gems_and_ribbons_024",
+        "id": "gems_and_ribbons_023",
         "name": "gems_and_ribbons_new_024",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_024.png"
       },
       {
-        "id": "gems_and_ribbons_025",
+        "id": "gems_and_ribbons_024",
         "name": "gems_and_ribbons_new_025",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_025.png"
       },
       {
-        "id": "gems_and_ribbons_026",
+        "id": "gems_and_ribbons_025",
         "name": "gems_and_ribbons_new_026",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_026.png"
       },
       {
-        "id": "gems_and_ribbons_027",
+        "id": "gems_and_ribbons_026",
         "name": "gems_and_ribbons_new_027",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_027.png"
       },
       {
-        "id": "gems_and_ribbons_028",
+        "id": "gems_and_ribbons_027",
         "name": "gems_and_ribbons_new_028",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_028.png"
       },
       {
-        "id": "gems_and_ribbons_029",
+        "id": "gems_and_ribbons_028",
         "name": "gems_and_ribbons_new_029",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_029.png"
       },
       {
-        "id": "gems_and_ribbons_030",
+        "id": "gems_and_ribbons_029",
         "name": "gems_and_ribbons_new_030",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_030.png"
       },
       {
-        "id": "gems_and_ribbons_031",
+        "id": "gems_and_ribbons_030",
         "name": "gems_and_ribbons_new_031",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_031.png"
       },
       {
-        "id": "gems_and_ribbons_032",
+        "id": "gems_and_ribbons_031",
         "name": "gems_and_ribbons_new_032",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_032.png"
       },
       {
-        "id": "gems_and_ribbons_033",
+        "id": "gems_and_ribbons_032",
         "name": "gems_and_ribbons_new_033",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_033.png"
       },
       {
-        "id": "gems_and_ribbons_034",
+        "id": "gems_and_ribbons_033",
         "name": "gems_and_ribbons_new_034",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_034.png"
       },
       {
-        "id": "gems_and_ribbons_035",
+        "id": "gems_and_ribbons_034",
         "name": "gems_and_ribbons_new_035",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_035.png"
       },
       {
-        "id": "gems_and_ribbons_036",
+        "id": "gems_and_ribbons_035",
         "name": "gems_and_ribbons_new_036",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_036.png"
       },
       {
-        "id": "gems_and_ribbons_037",
+        "id": "gems_and_ribbons_036",
         "name": "gems_and_ribbons_new_037",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_037.png"
       },
       {
-        "id": "gems_and_ribbons_038",
+        "id": "gems_and_ribbons_037",
         "name": "gems_and_ribbons_new_038",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_038.png"
       },
       {
-        "id": "gems_and_ribbons_039",
+        "id": "gems_and_ribbons_038",
         "name": "gems_and_ribbons_new_039",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_039.png"
       },
       {
-        "id": "gems_and_ribbons_040",
+        "id": "gems_and_ribbons_039",
         "name": "gems_and_ribbons_new_040",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_040.png"
       },
       {
-        "id": "gems_and_ribbons_041",
+        "id": "gems_and_ribbons_040",
         "name": "gems_and_ribbons_new_041",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_041.png"
       },
       {
-        "id": "gems_and_ribbons_042",
+        "id": "gems_and_ribbons_041",
         "name": "gems_and_ribbons_new_042",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_042.png"
       },
       {
-        "id": "gems_and_ribbons_043",
+        "id": "gems_and_ribbons_042",
         "name": "gems_and_ribbons_new_043",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_043.png"
       },
       {
-        "id": "gems_and_ribbons_044",
+        "id": "gems_and_ribbons_043",
         "name": "gems_and_ribbons_new_044",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_044.png"
       },
       {
-        "id": "gems_and_ribbons_045",
+        "id": "gems_and_ribbons_044",
         "name": "gems_and_ribbons_new_045",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_045.png"
       },
       {
-        "id": "gems_and_ribbons_046",
+        "id": "gems_and_ribbons_045",
         "name": "gems_and_ribbons_new_046",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_046.png"
       },
       {
-        "id": "gems_and_ribbons_047",
+        "id": "gems_and_ribbons_046",
         "name": "gems_and_ribbons_new_047",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_047.png"
       },
       {
-        "id": "gems_and_ribbons_048",
-        "name": "gems_and_ribbons_new_048",
-        "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_048.png"
-      },
-      {
-        "id": "gems_and_ribbons_049",
+        "id": "gems_and_ribbons_047",
         "name": "gems_and_ribbons_new_049",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_049.png"
       },
       {
-        "id": "gems_and_ribbons_050",
+        "id": "gems_and_ribbons_048",
         "name": "gems_and_ribbons_new_050",
         "src": "/stickers/gems_and_ribbons/gems_and_ribbons_new_050.png"
-      }
-    ]
-  },
-  "general": {
-    "id": "general",
-    "title": "Extras",
-    "items": [
-      {
-        "id": "general_001",
-        "name": "berry",
-        "src": "/stickers/general/berry.svg"
-      },
-      {
-        "id": "general_002",
-        "name": "bow",
-        "src": "/stickers/general/bow.svg"
-      },
-      {
-        "id": "general_003",
-        "name": "sparkle",
-        "src": "/stickers/general/sparkle.svg"
-      },
-      {
-        "id": "general_004",
-        "name": "unicorn",
-        "src": "/stickers/general/unicorn.svg"
       }
     ]
   },
@@ -1548,122 +1738,6 @@
       }
     ]
   },
-  "secret_notes": {
-    "id": "secret_notes",
-    "title": "Secret Notes",
-    "items": [
-      {
-        "id": "secret_notes_001",
-        "name": "heart_seal",
-        "src": "/stickers/secret_notes/heart_seal.svg"
-      },
-      {
-        "id": "secret_notes_002",
-        "name": "secret_notes_001",
-        "src": "/stickers/secret_notes/secret_notes_001.png"
-      },
-      {
-        "id": "secret_notes_003",
-        "name": "secret_notes_002",
-        "src": "/stickers/secret_notes/secret_notes_002.png"
-      },
-      {
-        "id": "secret_notes_004",
-        "name": "secret_notes_003",
-        "src": "/stickers/secret_notes/secret_notes_003.png"
-      },
-      {
-        "id": "secret_notes_005",
-        "name": "secret_notes_004",
-        "src": "/stickers/secret_notes/secret_notes_004.png"
-      },
-      {
-        "id": "secret_notes_006",
-        "name": "secret_notes_005",
-        "src": "/stickers/secret_notes/secret_notes_005.png"
-      },
-      {
-        "id": "secret_notes_007",
-        "name": "secret_notes_007",
-        "src": "/stickers/secret_notes/secret_notes_007.png"
-      },
-      {
-        "id": "secret_notes_008",
-        "name": "secret_notes_009",
-        "src": "/stickers/secret_notes/secret_notes_009.png"
-      },
-      {
-        "id": "secret_notes_009",
-        "name": "secret_notes_010",
-        "src": "/stickers/secret_notes/secret_notes_010.png"
-      },
-      {
-        "id": "secret_notes_010",
-        "name": "secret_notes_012",
-        "src": "/stickers/secret_notes/secret_notes_012.png"
-      },
-      {
-        "id": "secret_notes_011",
-        "name": "secret_notes_013",
-        "src": "/stickers/secret_notes/secret_notes_013.png"
-      },
-      {
-        "id": "secret_notes_012",
-        "name": "secret_notes_014",
-        "src": "/stickers/secret_notes/secret_notes_014.png"
-      },
-      {
-        "id": "secret_notes_013",
-        "name": "secret_notes_022",
-        "src": "/stickers/secret_notes/secret_notes_022.png"
-      },
-      {
-        "id": "secret_notes_014",
-        "name": "secret_notes_025",
-        "src": "/stickers/secret_notes/secret_notes_025.png"
-      },
-      {
-        "id": "secret_notes_015",
-        "name": "secret_notes_030",
-        "src": "/stickers/secret_notes/secret_notes_030.png"
-      },
-      {
-        "id": "secret_notes_016",
-        "name": "secret_notes_034",
-        "src": "/stickers/secret_notes/secret_notes_034.png"
-      },
-      {
-        "id": "secret_notes_017",
-        "name": "secret_notes_035",
-        "src": "/stickers/secret_notes/secret_notes_035.png"
-      },
-      {
-        "id": "secret_notes_018",
-        "name": "secret_notes_037",
-        "src": "/stickers/secret_notes/secret_notes_037.png"
-      },
-      {
-        "id": "secret_notes_019",
-        "name": "secret_notes_039",
-        "src": "/stickers/secret_notes/secret_notes_039.png"
-      },
-      {
-        "id": "secret_notes_020",
-        "name": "secret_notes_042",
-        "src": "/stickers/secret_notes/secret_notes_042.png"
-      },
-      {
-        "id": "secret_notes_021",
-        "name": "secret_notes_044",
-        "src": "/stickers/secret_notes/secret_notes_044.png"
-      },
-      {
-        "id": "secret_notes_022",
-        "name": "washi_strip",
-        "src": "/stickers/secret_notes/washi_strip.svg"
-      }
-    ]
-  },
   "sweet_stationery": {
     "id": "sweet_stationery",
     "title": "Stationery",
@@ -1970,788 +2044,521 @@
       }
     ]
   },
-  "sweet_treats": {
-    "id": "sweet_treats",
-    "title": "Sweet Treats",
+  "sweets": {
+    "id": "sweets",
+    "title": "Sweets",
     "items": [
       {
-        "id": "sweet_treats_001",
-        "name": "sweet_treats_001",
-        "src": "/stickers/sweet_treats/sweet_treats_001.png"
+        "id": "sweets_001",
+        "name": "banana-milk-carton",
+        "src": "/stickers/sweets/banana-milk-carton.png"
       },
       {
-        "id": "sweet_treats_002",
-        "name": "sweet_treats_002",
-        "src": "/stickers/sweet_treats/sweet_treats_002.png"
+        "id": "sweets_002",
+        "name": "bento-sweet-treats",
+        "src": "/stickers/sweets/bento-sweet-treats.png"
       },
       {
-        "id": "sweet_treats_003",
-        "name": "sweet_treats_003",
-        "src": "/stickers/sweet_treats/sweet_treats_003.png"
+        "id": "sweets_003",
+        "name": "bubble-gum-machine",
+        "src": "/stickers/sweets/bubble-gum-machine.png"
       },
       {
-        "id": "sweet_treats_004",
-        "name": "sweet_treats_004",
-        "src": "/stickers/sweet_treats/sweet_treats_004.png"
+        "id": "sweets_004",
+        "name": "candy-cane-peppermint",
+        "src": "/stickers/sweets/candy-cane-peppermint.png"
       },
       {
-        "id": "sweet_treats_005",
-        "name": "sweet_treats_005",
-        "src": "/stickers/sweet_treats/sweet_treats_005.png"
+        "id": "sweets_005",
+        "name": "cannoli-chocolate-chips",
+        "src": "/stickers/sweets/cannoli-chocolate-chips.png"
       },
       {
-        "id": "sweet_treats_006",
-        "name": "sweet_treats_006",
-        "src": "/stickers/sweet_treats/sweet_treats_006.png"
+        "id": "sweets_006",
+        "name": "cappuccino-heart-foam",
+        "src": "/stickers/sweets/cappuccino-heart-foam.png"
       },
       {
-        "id": "sweet_treats_007",
-        "name": "sweet_treats_007",
-        "src": "/stickers/sweet_treats/sweet_treats_007.png"
+        "id": "sweets_007",
+        "name": "cherry-pie-slice",
+        "src": "/stickers/sweets/cherry-pie-slice.png"
       },
       {
-        "id": "sweet_treats_008",
-        "name": "sweet_treats_008",
-        "src": "/stickers/sweet_treats/sweet_treats_008.png"
+        "id": "sweets_008",
+        "name": "chocolate-bar-wrapper",
+        "src": "/stickers/sweets/chocolate-bar-wrapper.png"
       },
       {
-        "id": "sweet_treats_009",
-        "name": "sweet_treats_009",
-        "src": "/stickers/sweet_treats/sweet_treats_009.png"
+        "id": "sweets_009",
+        "name": "chocolate-milk-carton",
+        "src": "/stickers/sweets/chocolate-milk-carton.png"
       },
       {
-        "id": "sweet_treats_010",
-        "name": "sweet_treats_010",
-        "src": "/stickers/sweet_treats/sweet_treats_010.png"
+        "id": "sweets_010",
+        "name": "cookie-chocolate-chip",
+        "src": "/stickers/sweets/cookie-chocolate-chip.png"
       },
       {
-        "id": "sweet_treats_011",
-        "name": "sweet_treats_015",
-        "src": "/stickers/sweet_treats/sweet_treats_015.png"
+        "id": "sweets_011",
+        "name": "cotton-candy-cloud",
+        "src": "/stickers/sweets/cotton-candy-cloud.png"
       },
       {
-        "id": "sweet_treats_012",
-        "name": "sweet_treats_017",
-        "src": "/stickers/sweet_treats/sweet_treats_017.png"
+        "id": "sweets_012",
+        "name": "crepe-strawberry-cream",
+        "src": "/stickers/sweets/crepe-strawberry-cream.png"
       },
       {
-        "id": "sweet_treats_013",
-        "name": "sweet_treats_020",
-        "src": "/stickers/sweet_treats/sweet_treats_020.png"
+        "id": "sweets_013",
+        "name": "croissant-golden",
+        "src": "/stickers/sweets/croissant-golden.png"
       },
       {
-        "id": "sweet_treats_014",
-        "name": "sweet_treats_023",
-        "src": "/stickers/sweet_treats/sweet_treats_023.png"
+        "id": "sweets_014",
+        "name": "cupcake-cherry-top",
+        "src": "/stickers/sweets/cupcake-cherry-top.png"
       },
       {
-        "id": "sweet_treats_015",
-        "name": "sweet_treats_024",
-        "src": "/stickers/sweet_treats/sweet_treats_024.png"
+        "id": "sweets_015",
+        "name": "dango-trio-skewer",
+        "src": "/stickers/sweets/dango-trio-skewer.png"
       },
       {
-        "id": "sweet_treats_016",
-        "name": "sweet_treats_025",
-        "src": "/stickers/sweet_treats/sweet_treats_025.png"
+        "id": "sweets_016",
+        "name": "gingerbread-man-smile",
+        "src": "/stickers/sweets/gingerbread-man-smile.png"
       },
       {
-        "id": "sweet_treats_017",
-        "name": "sweet_treats_027",
-        "src": "/stickers/sweet_treats/sweet_treats_027.png"
+        "id": "sweets_017",
+        "name": "gummy-bear-pink",
+        "src": "/stickers/sweets/gummy-bear-pink.png"
       },
       {
-        "id": "sweet_treats_018",
-        "name": "sweet_treats_028",
-        "src": "/stickers/sweet_treats/sweet_treats_028.png"
+        "id": "sweets_018",
+        "name": "gummy-bear-yellow",
+        "src": "/stickers/sweets/gummy-bear-yellow.png"
       },
       {
-        "id": "sweet_treats_019",
-        "name": "sweet_treats_031",
-        "src": "/stickers/sweet_treats/sweet_treats_031.png"
+        "id": "sweets_019",
+        "name": "heart-donut-chocolate",
+        "src": "/stickers/sweets/heart-donut-chocolate.png"
       },
       {
-        "id": "sweet_treats_020",
-        "name": "sweet_treats_036",
-        "src": "/stickers/sweet_treats/sweet_treats_036.png"
+        "id": "sweets_020",
+        "name": "heart-donut-pink",
+        "src": "/stickers/sweets/heart-donut-pink.png"
       },
       {
-        "id": "sweet_treats_021",
-        "name": "sweet_treats_037",
-        "src": "/stickers/sweet_treats/sweet_treats_037.png"
+        "id": "sweets_021",
+        "name": "honey-jar-dipper",
+        "src": "/stickers/sweets/honey-jar-dipper.png"
       },
       {
-        "id": "sweet_treats_022",
-        "name": "sweet_treats_040",
-        "src": "/stickers/sweet_treats/sweet_treats_040.png"
+        "id": "sweets_022",
+        "name": "iced-coffee-tumbler",
+        "src": "/stickers/sweets/iced-coffee-tumbler.png"
       },
       {
-        "id": "sweet_treats_023",
-        "name": "sweet_treats_043",
-        "src": "/stickers/sweet_treats/sweet_treats_043.png"
+        "id": "sweets_023",
+        "name": "lemonade-mason-jar",
+        "src": "/stickers/sweets/lemonade-mason-jar.png"
       },
       {
-        "id": "sweet_treats_024",
-        "name": "sweet_treats_047",
-        "src": "/stickers/sweet_treats/sweet_treats_047.png"
+        "id": "sweets_024",
+        "name": "lollipop-swirl-rainbow",
+        "src": "/stickers/sweets/lollipop-swirl-rainbow.png"
       },
       {
-        "id": "sweet_treats_025",
-        "name": "sweet_treats_048",
-        "src": "/stickers/sweet_treats/sweet_treats_048.png"
+        "id": "sweets_025",
+        "name": "macaron-stack-pastel",
+        "src": "/stickers/sweets/macaron-stack-pastel.png"
       },
       {
-        "id": "sweet_treats_026",
-        "name": "sweet_treats_049",
-        "src": "/stickers/sweet_treats/sweet_treats_049.png"
+        "id": "sweets_026",
+        "name": "marshmallow-trio",
+        "src": "/stickers/sweets/marshmallow-trio.png"
       },
       {
-        "id": "sweet_treats_027",
-        "name": "sweet_treats_050",
-        "src": "/stickers/sweet_treats/sweet_treats_050.png"
+        "id": "sweets_027",
+        "name": "matcha-boba-cup",
+        "src": "/stickers/sweets/matcha-boba-cup.png"
+      },
+      {
+        "id": "sweets_028",
+        "name": "mochi-strawberry-daifuku",
+        "src": "/stickers/sweets/mochi-strawberry-daifuku.png"
+      },
+      {
+        "id": "sweets_029",
+        "name": "pancake-stack-syrup",
+        "src": "/stickers/sweets/pancake-stack-syrup.png"
+      },
+      {
+        "id": "sweets_030",
+        "name": "popsicle-watermelon",
+        "src": "/stickers/sweets/popsicle-watermelon.png"
+      },
+      {
+        "id": "sweets_031",
+        "name": "pretzel-strawberry-dip",
+        "src": "/stickers/sweets/pretzel-strawberry-dip.png"
+      },
+      {
+        "id": "sweets_032",
+        "name": "shaved-ice-kakigori",
+        "src": "/stickers/sweets/shaved-ice-kakigori.png"
+      },
+      {
+        "id": "sweets_033",
+        "name": "soft-serve-ice-cream",
+        "src": "/stickers/sweets/soft-serve-ice-cream.png"
+      },
+      {
+        "id": "sweets_034",
+        "name": "strawberry-boba-cup",
+        "src": "/stickers/sweets/strawberry-boba-cup.png"
+      },
+      {
+        "id": "sweets_035",
+        "name": "strawberry-milk-carton",
+        "src": "/stickers/sweets/strawberry-milk-carton.png"
+      },
+      {
+        "id": "sweets_036",
+        "name": "strawberry-shortcake-slice",
+        "src": "/stickers/sweets/strawberry-shortcake-slice.png"
+      },
+      {
+        "id": "sweets_037",
+        "name": "sundae-cherry-syrup",
+        "src": "/stickers/sweets/sundae-cherry-syrup.png"
+      },
+      {
+        "id": "sweets_038",
+        "name": "taiyaki-ice-cream",
+        "src": "/stickers/sweets/taiyaki-ice-cream.png"
+      },
+      {
+        "id": "sweets_039",
+        "name": "taro-boba-cup",
+        "src": "/stickers/sweets/taro-boba-cup.png"
+      },
+      {
+        "id": "sweets_040",
+        "name": "waffle-heart-berry",
+        "src": "/stickers/sweets/waffle-heart-berry.png"
       }
     ]
   },
-  "tactile_charms": {
-    "id": "tactile_charms",
-    "title": "Charms",
+  "tape-mounts": {
+    "id": "tape-mounts",
+    "title": "Tape & Mounts",
     "items": [
       {
-        "id": "tactile_charms_001",
-        "name": "tactile_charms_001",
-        "src": "/stickers/tactile_charms/tactile_charms_001.png"
+        "id": "tape-mounts_001",
+        "name": "binder-clip-pastel-mint",
+        "src": "/stickers/tape-mounts/binder-clip-pastel-mint.png"
       },
       {
-        "id": "tactile_charms_002",
-        "name": "tactile_charms_002",
-        "src": "/stickers/tactile_charms/tactile_charms_002.png"
+        "id": "tape-mounts_002",
+        "name": "binder-clip-pastel-pink",
+        "src": "/stickers/tape-mounts/binder-clip-pastel-pink.png"
       },
       {
-        "id": "tactile_charms_003",
-        "name": "tactile_charms_003",
-        "src": "/stickers/tactile_charms/tactile_charms_003.png"
+        "id": "tape-mounts_003",
+        "name": "gold-star-sticker-seal",
+        "src": "/stickers/tape-mounts/gold-star-sticker-seal.png"
       },
       {
-        "id": "tactile_charms_004",
-        "name": "tactile_charms_004",
-        "src": "/stickers/tactile_charms/tactile_charms_004.png"
+        "id": "tape-mounts_004",
+        "name": "paperclip-gold-heart",
+        "src": "/stickers/tape-mounts/paperclip-gold-heart.png"
       },
       {
-        "id": "tactile_charms_005",
-        "name": "tactile_charms_005",
-        "src": "/stickers/tactile_charms/tactile_charms_005.png"
+        "id": "tape-mounts_005",
+        "name": "paperclip-pink-enamel",
+        "src": "/stickers/tape-mounts/paperclip-pink-enamel.png"
       },
       {
-        "id": "tactile_charms_006",
-        "name": "tactile_charms_006",
-        "src": "/stickers/tactile_charms/tactile_charms_006.png"
+        "id": "tape-mounts_006",
+        "name": "paperclip-rose-gold-classic",
+        "src": "/stickers/tape-mounts/paperclip-rose-gold-classic.png"
       },
       {
-        "id": "tactile_charms_007",
-        "name": "tactile_charms_007",
-        "src": "/stickers/tactile_charms/tactile_charms_007.png"
+        "id": "tape-mounts_007",
+        "name": "photo-corner-black-vintage",
+        "src": "/stickers/tape-mounts/photo-corner-black-vintage.png"
       },
       {
-        "id": "tactile_charms_008",
-        "name": "tactile_charms_008",
-        "src": "/stickers/tactile_charms/tactile_charms_008.png"
+        "id": "tape-mounts_008",
+        "name": "photo-corner-clear-acetate",
+        "src": "/stickers/tape-mounts/photo-corner-clear-acetate.png"
       },
       {
-        "id": "tactile_charms_009",
-        "name": "tactile_charms_009",
-        "src": "/stickers/tactile_charms/tactile_charms_009.png"
+        "id": "tape-mounts_009",
+        "name": "photo-corner-gold-top-left",
+        "src": "/stickers/tape-mounts/photo-corner-gold-top-left.png"
       },
       {
-        "id": "tactile_charms_010",
-        "name": "tactile_charms_010",
-        "src": "/stickers/tactile_charms/tactile_charms_010.png"
+        "id": "tape-mounts_010",
+        "name": "photo-corner-pink-kraft",
+        "src": "/stickers/tape-mounts/photo-corner-pink-kraft.png"
       },
       {
-        "id": "tactile_charms_011",
-        "name": "tactile_charms_011",
-        "src": "/stickers/tactile_charms/tactile_charms_011.png"
+        "id": "tape-mounts_011",
+        "name": "photo-corner-rose-gold",
+        "src": "/stickers/tape-mounts/photo-corner-rose-gold.png"
       },
       {
-        "id": "tactile_charms_012",
-        "name": "tactile_charms_012",
-        "src": "/stickers/tactile_charms/tactile_charms_012.png"
+        "id": "tape-mounts_012",
+        "name": "push-pin-pastel-pink",
+        "src": "/stickers/tape-mounts/push-pin-pastel-pink.png"
       },
       {
-        "id": "tactile_charms_013",
-        "name": "tactile_charms_013",
-        "src": "/stickers/tactile_charms/tactile_charms_013.png"
+        "id": "tape-mounts_013",
+        "name": "push-pin-pastel-yellow",
+        "src": "/stickers/tape-mounts/push-pin-pastel-yellow.png"
       },
       {
-        "id": "tactile_charms_014",
-        "name": "tactile_charms_014",
-        "src": "/stickers/tactile_charms/tactile_charms_014.png"
+        "id": "tape-mounts_014",
+        "name": "push-pin-rose-gold-heart",
+        "src": "/stickers/tape-mounts/push-pin-rose-gold-heart.png"
       },
       {
-        "id": "tactile_charms_015",
-        "name": "tactile_charms_015",
-        "src": "/stickers/tactile_charms/tactile_charms_015.png"
+        "id": "tape-mounts_015",
+        "name": "safety-pin-gold-pearl",
+        "src": "/stickers/tape-mounts/safety-pin-gold-pearl.png"
       },
       {
-        "id": "tactile_charms_016",
-        "name": "tactile_charms_016",
-        "src": "/stickers/tactile_charms/tactile_charms_016.png"
+        "id": "tape-mounts_016",
+        "name": "stamp-postage-cherry",
+        "src": "/stickers/tape-mounts/stamp-postage-cherry.png"
       },
       {
-        "id": "tactile_charms_017",
-        "name": "tactile_charms_017",
-        "src": "/stickers/tactile_charms/tactile_charms_017.png"
+        "id": "tape-mounts_017",
+        "name": "stamp-postage-flower",
+        "src": "/stickers/tape-mounts/stamp-postage-flower.png"
+      },
+      {
+        "id": "tape-mounts_018",
+        "name": "tape-corner-diagonal-gingham",
+        "src": "/stickers/tape-mounts/tape-corner-diagonal-gingham.png"
+      },
+      {
+        "id": "tape-mounts_019",
+        "name": "tape-cross-pink",
+        "src": "/stickers/tape-mounts/tape-cross-pink.png"
+      },
+      {
+        "id": "tape-mounts_020",
+        "name": "torn-paper-note-grid",
+        "src": "/stickers/tape-mounts/torn-paper-note-grid.png"
+      },
+      {
+        "id": "tape-mounts_021",
+        "name": "torn-paper-note-yellow-lined",
+        "src": "/stickers/tape-mounts/torn-paper-note-yellow-lined.png"
+      },
+      {
+        "id": "tape-mounts_022",
+        "name": "washi-checker-black-white",
+        "src": "/stickers/tape-mounts/washi-checker-black-white.png"
+      },
+      {
+        "id": "tape-mounts_023",
+        "name": "washi-gold-foil",
+        "src": "/stickers/tape-mounts/washi-gold-foil.png"
+      },
+      {
+        "id": "tape-mounts_024",
+        "name": "washi-heart-stripes",
+        "src": "/stickers/tape-mounts/washi-heart-stripes.png"
+      },
+      {
+        "id": "tape-mounts_025",
+        "name": "washi-lilac-gingham",
+        "src": "/stickers/tape-mounts/washi-lilac-gingham.png"
+      },
+      {
+        "id": "tape-mounts_026",
+        "name": "washi-mint-polka",
+        "src": "/stickers/tape-mounts/washi-mint-polka.png"
+      },
+      {
+        "id": "tape-mounts_027",
+        "name": "washi-pastel-rainbow",
+        "src": "/stickers/tape-mounts/washi-pastel-rainbow.png"
+      },
+      {
+        "id": "tape-mounts_028",
+        "name": "washi-pink-gingham",
+        "src": "/stickers/tape-mounts/washi-pink-gingham.png"
+      },
+      {
+        "id": "tape-mounts_029",
+        "name": "washi-rose-gold-glitter",
+        "src": "/stickers/tape-mounts/washi-rose-gold-glitter.png"
+      },
+      {
+        "id": "tape-mounts_030",
+        "name": "washi-silver-holographic",
+        "src": "/stickers/tape-mounts/washi-silver-holographic.png"
+      },
+      {
+        "id": "tape-mounts_031",
+        "name": "washi-strawberry-print",
+        "src": "/stickers/tape-mounts/washi-strawberry-print.png"
+      },
+      {
+        "id": "tape-mounts_032",
+        "name": "washi-translucent-frosted",
+        "src": "/stickers/tape-mounts/washi-translucent-frosted.png"
+      },
+      {
+        "id": "tape-mounts_033",
+        "name": "washi-yellow-daisy",
+        "src": "/stickers/tape-mounts/washi-yellow-daisy.png"
+      },
+      {
+        "id": "tape-mounts_034",
+        "name": "wax-seal-heart-pink",
+        "src": "/stickers/tape-mounts/wax-seal-heart-pink.png"
+      },
+      {
+        "id": "tape-mounts_035",
+        "name": "wax-seal-letter-gold",
+        "src": "/stickers/tape-mounts/wax-seal-letter-gold.png"
       }
     ]
   },
-  "tactile_stationery": {
-    "id": "tactile_stationery",
-    "title": "Stationery Textures",
+  "words": {
+    "id": "words",
+    "title": "Words & Slang",
     "items": [
       {
-        "id": "tactile_stationery_001",
-        "name": "tactile_stationery_001",
-        "src": "/stickers/tactile_stationery/tactile_stationery_001.png"
+        "id": "words_001",
+        "name": "word-angel",
+        "src": "/stickers/words/word-angel.png"
       },
       {
-        "id": "tactile_stationery_002",
-        "name": "tactile_stationery_002",
-        "src": "/stickers/tactile_stationery/tactile_stationery_002.png"
+        "id": "words_002",
+        "name": "word-besties",
+        "src": "/stickers/words/word-besties.png"
       },
       {
-        "id": "tactile_stationery_003",
-        "name": "tactile_stationery_003",
-        "src": "/stickers/tactile_stationery/tactile_stationery_003.png"
+        "id": "words_003",
+        "name": "word-bffs",
+        "src": "/stickers/words/word-bffs.png"
       },
       {
-        "id": "tactile_stationery_004",
-        "name": "tactile_stationery_004",
-        "src": "/stickers/tactile_stationery/tactile_stationery_004.png"
+        "id": "words_004",
+        "name": "word-cutie",
+        "src": "/stickers/words/word-cutie.png"
       },
       {
-        "id": "tactile_stationery_005",
-        "name": "tactile_stationery_005",
-        "src": "/stickers/tactile_stationery/tactile_stationery_005.png"
+        "id": "words_005",
+        "name": "word-dreamy",
+        "src": "/stickers/words/word-dreamy.png"
       },
       {
-        "id": "tactile_stationery_006",
-        "name": "tactile_stationery_006",
-        "src": "/stickers/tactile_stationery/tactile_stationery_006.png"
+        "id": "words_006",
+        "name": "word-forever",
+        "src": "/stickers/words/word-forever.png"
       },
       {
-        "id": "tactile_stationery_007",
-        "name": "tactile_stationery_007",
-        "src": "/stickers/tactile_stationery/tactile_stationery_007.png"
+        "id": "words_007",
+        "name": "word-golden",
+        "src": "/stickers/words/word-golden.png"
       },
       {
-        "id": "tactile_stationery_008",
-        "name": "tactile_stationery_008",
-        "src": "/stickers/tactile_stationery/tactile_stationery_008.png"
+        "id": "words_008",
+        "name": "word-iconic",
+        "src": "/stickers/words/word-iconic.png"
       },
       {
-        "id": "tactile_stationery_009",
-        "name": "tactile_stationery_009",
-        "src": "/stickers/tactile_stationery/tactile_stationery_009.png"
+        "id": "words_009",
+        "name": "word-love-ya",
+        "src": "/stickers/words/word-love-ya.png"
       },
       {
-        "id": "tactile_stationery_010",
-        "name": "tactile_stationery_010",
-        "src": "/stickers/tactile_stationery/tactile_stationery_010.png"
+        "id": "words_010",
+        "name": "word-magic",
+        "src": "/stickers/words/word-magic.png"
       },
       {
-        "id": "tactile_stationery_011",
-        "name": "tactile_stationery_014",
-        "src": "/stickers/tactile_stationery/tactile_stationery_014.png"
+        "id": "words_011",
+        "name": "word-main-character",
+        "src": "/stickers/words/word-main-character.png"
       },
       {
-        "id": "tactile_stationery_012",
-        "name": "tactile_stationery_017",
-        "src": "/stickers/tactile_stationery/tactile_stationery_017.png"
+        "id": "words_012",
+        "name": "word-memories",
+        "src": "/stickers/words/word-memories.png"
       },
       {
-        "id": "tactile_stationery_013",
-        "name": "tactile_stationery_019",
-        "src": "/stickers/tactile_stationery/tactile_stationery_019.png"
+        "id": "words_013",
+        "name": "word-mood",
+        "src": "/stickers/words/word-mood.png"
       },
       {
-        "id": "tactile_stationery_014",
-        "name": "tactile_stationery_028",
-        "src": "/stickers/tactile_stationery/tactile_stationery_028.png"
+        "id": "words_014",
+        "name": "word-omg",
+        "src": "/stickers/words/word-omg.png"
       },
       {
-        "id": "tactile_stationery_015",
-        "name": "tactile_stationery_036",
-        "src": "/stickers/tactile_stationery/tactile_stationery_036.png"
+        "id": "words_015",
+        "name": "word-pure-joy",
+        "src": "/stickers/words/word-pure-joy.png"
       },
       {
-        "id": "tactile_stationery_016",
-        "name": "tactile_stationery_037",
-        "src": "/stickers/tactile_stationery/tactile_stationery_037.png"
+        "id": "words_016",
+        "name": "word-queen",
+        "src": "/stickers/words/word-queen.png"
       },
       {
-        "id": "tactile_stationery_017",
-        "name": "tactile_stationery_050",
-        "src": "/stickers/tactile_stationery/tactile_stationery_050.png"
+        "id": "words_017",
+        "name": "word-secret-club",
+        "src": "/stickers/words/word-secret-club.png"
       },
       {
-        "id": "tactile_stationery_018",
-        "name": "wax_seal",
-        "src": "/stickers/tactile_stationery/wax_seal.svg"
-      }
-    ]
-  },
-  "y2k_charms": {
-    "id": "y2k_charms",
-    "title": "Y2K Charms",
-    "items": [
-      {
-        "id": "y2k_charms_001",
-        "name": "y2k_charms_new_001",
-        "src": "/stickers/y2k_charms/y2k_charms_new_001.png"
-      },
-      {
-        "id": "y2k_charms_002",
-        "name": "y2k_charms_new_002",
-        "src": "/stickers/y2k_charms/y2k_charms_new_002.png"
-      },
-      {
-        "id": "y2k_charms_003",
-        "name": "y2k_charms_new_003",
-        "src": "/stickers/y2k_charms/y2k_charms_new_003.png"
-      },
-      {
-        "id": "y2k_charms_004",
-        "name": "y2k_charms_new_004",
-        "src": "/stickers/y2k_charms/y2k_charms_new_004.png"
-      },
-      {
-        "id": "y2k_charms_005",
-        "name": "y2k_charms_new_005",
-        "src": "/stickers/y2k_charms/y2k_charms_new_005.png"
-      },
-      {
-        "id": "y2k_charms_006",
-        "name": "y2k_charms_new_006",
-        "src": "/stickers/y2k_charms/y2k_charms_new_006.png"
-      },
-      {
-        "id": "y2k_charms_007",
-        "name": "y2k_charms_new_007",
-        "src": "/stickers/y2k_charms/y2k_charms_new_007.png"
-      },
-      {
-        "id": "y2k_charms_008",
-        "name": "y2k_charms_new_008",
-        "src": "/stickers/y2k_charms/y2k_charms_new_008.png"
-      },
-      {
-        "id": "y2k_charms_009",
-        "name": "y2k_charms_new_009",
-        "src": "/stickers/y2k_charms/y2k_charms_new_009.png"
-      },
-      {
-        "id": "y2k_charms_010",
-        "name": "y2k_charms_new_010",
-        "src": "/stickers/y2k_charms/y2k_charms_new_010.png"
-      },
-      {
-        "id": "y2k_charms_011",
-        "name": "y2k_charms_new_011",
-        "src": "/stickers/y2k_charms/y2k_charms_new_011.png"
-      },
-      {
-        "id": "y2k_charms_012",
-        "name": "y2k_charms_new_012",
-        "src": "/stickers/y2k_charms/y2k_charms_new_012.png"
-      },
-      {
-        "id": "y2k_charms_013",
-        "name": "y2k_charms_new_013",
-        "src": "/stickers/y2k_charms/y2k_charms_new_013.png"
-      },
-      {
-        "id": "y2k_charms_014",
-        "name": "y2k_charms_new_014",
-        "src": "/stickers/y2k_charms/y2k_charms_new_014.png"
-      },
-      {
-        "id": "y2k_charms_015",
-        "name": "y2k_charms_new_015",
-        "src": "/stickers/y2k_charms/y2k_charms_new_015.png"
-      },
-      {
-        "id": "y2k_charms_016",
-        "name": "y2k_charms_new_016",
-        "src": "/stickers/y2k_charms/y2k_charms_new_016.png"
-      },
-      {
-        "id": "y2k_charms_017",
-        "name": "y2k_charms_new_017",
-        "src": "/stickers/y2k_charms/y2k_charms_new_017.png"
-      },
-      {
-        "id": "y2k_charms_018",
-        "name": "y2k_charms_new_018",
-        "src": "/stickers/y2k_charms/y2k_charms_new_018.png"
-      },
-      {
-        "id": "y2k_charms_019",
-        "name": "y2k_charms_new_019",
-        "src": "/stickers/y2k_charms/y2k_charms_new_019.png"
-      },
-      {
-        "id": "y2k_charms_020",
-        "name": "y2k_charms_new_020",
-        "src": "/stickers/y2k_charms/y2k_charms_new_020.png"
-      },
-      {
-        "id": "y2k_charms_021",
-        "name": "y2k_charms_new_021",
-        "src": "/stickers/y2k_charms/y2k_charms_new_021.png"
-      },
-      {
-        "id": "y2k_charms_022",
-        "name": "y2k_charms_new_022",
-        "src": "/stickers/y2k_charms/y2k_charms_new_022.png"
-      },
-      {
-        "id": "y2k_charms_023",
-        "name": "y2k_charms_new_023",
-        "src": "/stickers/y2k_charms/y2k_charms_new_023.png"
-      },
-      {
-        "id": "y2k_charms_024",
-        "name": "y2k_charms_new_024",
-        "src": "/stickers/y2k_charms/y2k_charms_new_024.png"
-      },
-      {
-        "id": "y2k_charms_025",
-        "name": "y2k_charms_new_025",
-        "src": "/stickers/y2k_charms/y2k_charms_new_025.png"
-      },
-      {
-        "id": "y2k_charms_026",
-        "name": "y2k_charms_new_026",
-        "src": "/stickers/y2k_charms/y2k_charms_new_026.png"
-      },
-      {
-        "id": "y2k_charms_027",
-        "name": "y2k_charms_new_027",
-        "src": "/stickers/y2k_charms/y2k_charms_new_027.png"
-      },
-      {
-        "id": "y2k_charms_028",
-        "name": "y2k_charms_new_028",
-        "src": "/stickers/y2k_charms/y2k_charms_new_028.png"
-      },
-      {
-        "id": "y2k_charms_029",
-        "name": "y2k_charms_new_029",
-        "src": "/stickers/y2k_charms/y2k_charms_new_029.png"
-      },
-      {
-        "id": "y2k_charms_030",
-        "name": "y2k_charms_new_030",
-        "src": "/stickers/y2k_charms/y2k_charms_new_030.png"
-      },
-      {
-        "id": "y2k_charms_031",
-        "name": "y2k_charms_new_031",
-        "src": "/stickers/y2k_charms/y2k_charms_new_031.png"
-      },
-      {
-        "id": "y2k_charms_032",
-        "name": "y2k_charms_new_032",
-        "src": "/stickers/y2k_charms/y2k_charms_new_032.png"
-      },
-      {
-        "id": "y2k_charms_033",
-        "name": "y2k_charms_new_033",
-        "src": "/stickers/y2k_charms/y2k_charms_new_033.png"
-      },
-      {
-        "id": "y2k_charms_034",
-        "name": "y2k_charms_new_034",
-        "src": "/stickers/y2k_charms/y2k_charms_new_034.png"
-      },
-      {
-        "id": "y2k_charms_035",
-        "name": "y2k_charms_new_035",
-        "src": "/stickers/y2k_charms/y2k_charms_new_035.png"
-      },
-      {
-        "id": "y2k_charms_036",
-        "name": "y2k_charms_new_036",
-        "src": "/stickers/y2k_charms/y2k_charms_new_036.png"
-      },
-      {
-        "id": "y2k_charms_037",
-        "name": "y2k_charms_new_037",
-        "src": "/stickers/y2k_charms/y2k_charms_new_037.png"
-      },
-      {
-        "id": "y2k_charms_038",
-        "name": "y2k_charms_new_038",
-        "src": "/stickers/y2k_charms/y2k_charms_new_038.png"
-      },
-      {
-        "id": "y2k_charms_039",
-        "name": "y2k_charms_new_039",
-        "src": "/stickers/y2k_charms/y2k_charms_new_039.png"
-      },
-      {
-        "id": "y2k_charms_040",
-        "name": "y2k_charms_new_040",
-        "src": "/stickers/y2k_charms/y2k_charms_new_040.png"
-      },
-      {
-        "id": "y2k_charms_041",
-        "name": "y2k_charms_new_041",
-        "src": "/stickers/y2k_charms/y2k_charms_new_041.png"
-      },
-      {
-        "id": "y2k_charms_042",
-        "name": "y2k_charms_new_042",
-        "src": "/stickers/y2k_charms/y2k_charms_new_042.png"
-      },
-      {
-        "id": "y2k_charms_043",
-        "name": "y2k_charms_new_043",
-        "src": "/stickers/y2k_charms/y2k_charms_new_043.png"
-      },
-      {
-        "id": "y2k_charms_044",
-        "name": "y2k_charms_new_044",
-        "src": "/stickers/y2k_charms/y2k_charms_new_044.png"
-      },
-      {
-        "id": "y2k_charms_045",
-        "name": "y2k_charms_new_045",
-        "src": "/stickers/y2k_charms/y2k_charms_new_045.png"
-      },
-      {
-        "id": "y2k_charms_046",
-        "name": "y2k_charms_new_046",
-        "src": "/stickers/y2k_charms/y2k_charms_new_046.png"
-      },
-      {
-        "id": "y2k_charms_047",
-        "name": "y2k_charms_new_047",
-        "src": "/stickers/y2k_charms/y2k_charms_new_047.png"
-      },
-      {
-        "id": "y2k_charms_048",
-        "name": "y2k_charms_new_048",
-        "src": "/stickers/y2k_charms/y2k_charms_new_048.png"
-      },
-      {
-        "id": "y2k_charms_049",
-        "name": "y2k_charms_new_049",
-        "src": "/stickers/y2k_charms/y2k_charms_new_049.png"
-      },
-      {
-        "id": "y2k_charms_050",
-        "name": "y2k_charms_new_050",
-        "src": "/stickers/y2k_charms/y2k_charms_new_050.png"
-      },
-      {
-        "id": "y2k_charms_051",
-        "name": "y2k_charms_new_051",
-        "src": "/stickers/y2k_charms/y2k_charms_new_051.png"
-      },
-      {
-        "id": "y2k_charms_052",
-        "name": "y2k_charms_new_052",
-        "src": "/stickers/y2k_charms/y2k_charms_new_052.png"
-      },
-      {
-        "id": "y2k_charms_053",
-        "name": "y2k_charms_new_053",
-        "src": "/stickers/y2k_charms/y2k_charms_new_053.png"
-      },
-      {
-        "id": "y2k_charms_054",
-        "name": "y2k_charms_new_054",
-        "src": "/stickers/y2k_charms/y2k_charms_new_054.png"
-      },
-      {
-        "id": "y2k_charms_055",
-        "name": "y2k_charms_new_055",
-        "src": "/stickers/y2k_charms/y2k_charms_new_055.png"
-      },
-      {
-        "id": "y2k_charms_056",
-        "name": "y2k_charms_new_056",
-        "src": "/stickers/y2k_charms/y2k_charms_new_056.png"
-      },
-      {
-        "id": "y2k_charms_057",
-        "name": "y2k_charms_new_057",
-        "src": "/stickers/y2k_charms/y2k_charms_new_057.png"
-      },
-      {
-        "id": "y2k_charms_058",
-        "name": "y2k_charms_new_058",
-        "src": "/stickers/y2k_charms/y2k_charms_new_058.png"
-      },
-      {
-        "id": "y2k_charms_059",
-        "name": "y2k_charms_new_059",
-        "src": "/stickers/y2k_charms/y2k_charms_new_059.png"
-      },
-      {
-        "id": "y2k_charms_060",
-        "name": "y2k_charms_new_060",
-        "src": "/stickers/y2k_charms/y2k_charms_new_060.png"
-      }
-    ]
-  },
-  "y2k_cyber": {
-    "id": "y2k_cyber",
-    "title": "Y2K & Cyber",
-    "items": [
-      {
-        "id": "y2k_cyber_001",
-        "name": "remove-bg_-0 (6)",
-        "src": "/stickers/y2k_cyber/remove-bg_-0 (6).png"
-      },
-      {
-        "id": "y2k_cyber_002",
-        "name": "y2k_cyber_001",
-        "src": "/stickers/y2k_cyber/y2k_cyber_001.png"
-      },
-      {
-        "id": "y2k_cyber_003",
-        "name": "y2k_cyber_002",
-        "src": "/stickers/y2k_cyber/y2k_cyber_002.png"
-      },
-      {
-        "id": "y2k_cyber_004",
-        "name": "y2k_cyber_003",
-        "src": "/stickers/y2k_cyber/y2k_cyber_003.png"
-      },
-      {
-        "id": "y2k_cyber_005",
-        "name": "y2k_cyber_004",
-        "src": "/stickers/y2k_cyber/y2k_cyber_004.png"
-      },
-      {
-        "id": "y2k_cyber_006",
-        "name": "y2k_cyber_005",
-        "src": "/stickers/y2k_cyber/y2k_cyber_005.png"
-      },
-      {
-        "id": "y2k_cyber_007",
-        "name": "y2k_cyber_006",
-        "src": "/stickers/y2k_cyber/y2k_cyber_006.png"
-      },
-      {
-        "id": "y2k_cyber_008",
-        "name": "y2k_cyber_007",
-        "src": "/stickers/y2k_cyber/y2k_cyber_007.png"
-      },
-      {
-        "id": "y2k_cyber_009",
-        "name": "y2k_cyber_008",
-        "src": "/stickers/y2k_cyber/y2k_cyber_008.png"
-      },
-      {
-        "id": "y2k_cyber_010",
-        "name": "y2k_cyber_009",
-        "src": "/stickers/y2k_cyber/y2k_cyber_009.png"
-      },
-      {
-        "id": "y2k_cyber_011",
-        "name": "y2k_cyber_010",
-        "src": "/stickers/y2k_cyber/y2k_cyber_010.png"
-      },
-      {
-        "id": "y2k_cyber_012",
-        "name": "y2k_cyber_011",
-        "src": "/stickers/y2k_cyber/y2k_cyber_011.png"
-      },
-      {
-        "id": "y2k_cyber_013",
-        "name": "y2k_cyber_012",
-        "src": "/stickers/y2k_cyber/y2k_cyber_012.png"
-      },
-      {
-        "id": "y2k_cyber_014",
-        "name": "y2k_cyber_013",
-        "src": "/stickers/y2k_cyber/y2k_cyber_013.png"
-      },
-      {
-        "id": "y2k_cyber_015",
-        "name": "y2k_cyber_014",
-        "src": "/stickers/y2k_cyber/y2k_cyber_014.png"
-      },
-      {
-        "id": "y2k_cyber_016",
-        "name": "y2k_cyber_017",
-        "src": "/stickers/y2k_cyber/y2k_cyber_017.png"
-      },
-      {
-        "id": "y2k_cyber_017",
-        "name": "y2k_cyber_018",
-        "src": "/stickers/y2k_cyber/y2k_cyber_018.png"
-      },
-      {
-        "id": "y2k_cyber_018",
-        "name": "y2k_cyber_020",
-        "src": "/stickers/y2k_cyber/y2k_cyber_020.png"
-      },
-      {
-        "id": "y2k_cyber_019",
-        "name": "y2k_cyber_021",
-        "src": "/stickers/y2k_cyber/y2k_cyber_021.png"
-      },
-      {
-        "id": "y2k_cyber_020",
-        "name": "y2k_cyber_022",
-        "src": "/stickers/y2k_cyber/y2k_cyber_022.png"
-      },
-      {
-        "id": "y2k_cyber_021",
-        "name": "y2k_cyber_026",
-        "src": "/stickers/y2k_cyber/y2k_cyber_026.png"
-      },
-      {
-        "id": "y2k_cyber_022",
-        "name": "y2k_cyber_027",
-        "src": "/stickers/y2k_cyber/y2k_cyber_027.png"
+        "id": "words_018",
+        "name": "word-shine",
+        "src": "/stickers/words/word-shine.png"
       },
       {
-        "id": "y2k_cyber_023",
-        "name": "y2k_cyber_031",
-        "src": "/stickers/y2k_cyber/y2k_cyber_031.png"
+        "id": "words_019",
+        "name": "word-slay",
+        "src": "/stickers/words/word-slay.png"
       },
       {
-        "id": "y2k_cyber_024",
-        "name": "y2k_cyber_034",
-        "src": "/stickers/y2k_cyber/y2k_cyber_034.png"
+        "id": "words_020",
+        "name": "word-so-real",
+        "src": "/stickers/words/word-so-real.png"
       },
       {
-        "id": "y2k_cyber_025",
-        "name": "y2k_cyber_037",
-        "src": "/stickers/y2k_cyber/y2k_cyber_037.png"
+        "id": "words_021",
+        "name": "word-spill-the-tea",
+        "src": "/stickers/words/word-spill-the-tea.png"
       },
       {
-        "id": "y2k_cyber_026",
-        "name": "y2k_cyber_040",
-        "src": "/stickers/y2k_cyber/y2k_cyber_040.png"
+        "id": "words_022",
+        "name": "word-sweetheart",
+        "src": "/stickers/words/word-sweetheart.png"
       },
       {
-        "id": "y2k_cyber_027",
-        "name": "y2k_cyber_041",
-        "src": "/stickers/y2k_cyber/y2k_cyber_041.png"
+        "id": "words_023",
+        "name": "word-unfiltered",
+        "src": "/stickers/words/word-unfiltered.png"
       },
       {
-        "id": "y2k_cyber_028",
-        "name": "y2k_cyber_045",
-        "src": "/stickers/y2k_cyber/y2k_cyber_045.png"
+        "id": "words_024",
+        "name": "word-vibe-check",
+        "src": "/stickers/words/word-vibe-check.png"
       },
       {
-        "id": "y2k_cyber_029",
-        "name": "y2k_cyber_049",
-        "src": "/stickers/y2k_cyber/y2k_cyber_049.png"
+        "id": "words_025",
+        "name": "word-xoxo",
+        "src": "/stickers/words/word-xoxo.png"
       }
     ]
   }

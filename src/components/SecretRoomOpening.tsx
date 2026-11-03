@@ -32,8 +32,8 @@ type SecretRoomOpeningProps = {
 };
 
 /**
- * Dreamy secret-room gate — floating locked diary + emoji passcode.
- * Recovers the original hero-book entrance experience for returning members.
+ * Dreamy secret-room gate — diary left / passcode right on desktop,
+ * stacked on mobile, locked to the viewport (no scroll).
  */
 export function SecretRoomOpening({
   club,
@@ -102,8 +102,8 @@ export function SecretRoomOpening({
 
   return (
     <div
-      className="relative flex min-h-dvh w-full flex-col items-center justify-center overflow-hidden
-        bg-gradient-to-br from-pink-200 via-purple-100 to-rose-200 px-4 py-8"
+      className="relative flex h-screen w-screen flex-col items-center justify-center overflow-hidden
+        bg-gradient-to-b from-[#FFE5EC] via-[#FFF0F5] to-[#FCE7F3] px-4 py-3 select-none sm:py-4"
       data-circle={club.vaultType}
       data-aesthetic={club.aesthetic}
     >
@@ -147,116 +147,108 @@ export function SecretRoomOpening({
         </div>
       ) : null}
 
-      <p className="relative z-10 mb-1 font-toy text-sm font-bold uppercase tracking-[0.2em] text-pink-500">
-        {club.vaultType === "squad" ? "SquadVault" : "BestieVault"}
-      </p>
-      <h1 className="secret-room-title club-title relative z-10 mb-4 max-w-md text-center text-3xl font-bold text-[#2D0C1E] sm:text-4xl">
-        <span aria-hidden>{emblem}</span> {title}
-      </h1>
-
-      {/* 3D fuzzy diary cover — hero welcome above the lock */}
-      <div
-        className={`relative z-10 mb-4 transition-all duration-700 ${
-          opening ? "scale-125 opacity-0" : "scale-100 opacity-100"
-        }`}
-        style={{ perspective: 1200 }}
-      >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[58%] h-40 w-[70%] -translate-x-1/2 rounded-[100%]
-            bg-pink-400/25 blur-2xl"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full
-            bg-gradient-to-tr from-pink-300/45 via-fuchsia-200/35 to-rose-200/40 blur-3xl sm:h-[22rem] sm:w-[22rem]"
-        />
-
-        <button
-          type="button"
-          onClick={tapPadlock}
-          disabled={opening}
-          aria-label="Tap fuzzy diary to unlock"
-          className={`relative mx-auto block w-[min(72vw,18.5rem)] origin-center outline-none
-            transition active:scale-[0.98]
-            ${opening ? "animate-[secret-cover-open_1s_ease-in_forwards]" : "animate-diary-welcome"}
-            ${lockClicked ? "scale-105" : ""}`}
-        >
-          <span
-            className="relative block overflow-hidden rounded-[1.6rem]
-              shadow-[0_28px_50px_-8px_rgba(190,24,93,0.45),0_12px_24px_rgba(244,114,182,0.35),0_0_0_1px_rgba(255,255,255,0.55)]"
-            style={{ aspectRatio: "3 / 4" }}
-          >
-            <Image
-              src="/fuzzy-diary-cover.png"
-              alt="Secret Club fuzzy diary cover"
-              fill
-              priority
-              className="object-cover object-center"
-              sizes="(max-width: 640px) 72vw, 296px"
-            />
-          </span>
-          {/* Soft ground shadow under the floating book */}
-          <span
-            aria-hidden
-            className="pointer-events-none absolute -bottom-3 left-1/2 h-5 w-[72%] -translate-x-1/2 rounded-[100%]
-              bg-pink-900/20 blur-md"
-          />
-        </button>
-      </div>
-
-      <p
-        className={`relative z-10 mb-4 rounded-full border border-pink-200 bg-white/85 px-4 py-2 text-center
-          text-xs font-extrabold text-pink-600 shadow-sm backdrop-blur-sm transition
-          ${opening ? "opacity-0" : "animate-pulse"}`}
-      >
-        ✨ Tap the diary or enter your passcode to unlock ✨
-      </p>
-
-      {/* Passcode pad lives in front of the floating diary */}
-      <div
-        className={`relative z-20 w-full max-w-md rounded-[1.75rem] border-4 border-white/90
-          bg-white/75 p-4 shadow-[0_12px_40px_rgba(74,43,69,0.18)] backdrop-blur-md transition-all duration-500
-          ${opening ? "translate-y-8 scale-95 opacity-0" : "opacity-100"}
-          ${lockClicked ? "ring-4 ring-pink-300/70" : ""}`}
-      >
-        <p className="mb-2 text-center text-sm font-bold text-pink-500">
-          Enter the 3-key passcode for {club.clubName}
+      {/* Compact header branding */}
+      <div className="relative z-10 mb-3 shrink-0 text-center md:mb-4">
+        <p className="text-[10px] font-black uppercase tracking-widest text-pink-400">
+          {club.vaultType === "squad" ? "SQUADVAULT" : "BESTIEVAULT"}
         </p>
-        <EmojiPad
-          lockKey={`secret-room:${club.createdAt}`}
-          clubName={club.clubName}
-          vaultUrl="/vault"
-          mode="unlock"
-          targetLength={PASSCODE_LENGTH}
-          onComplete={async (glyphs) => {
-            if (opening) return "partial";
-            if (glyphs.length < PASSCODE_LENGTH) return "partial";
-            if (!passcodesMatch(glyphs, club.passcode)) {
-              setError("Wrong key — try again");
-              playChime();
-              return "wrong";
-            }
-            setError("");
-            finishUnlock();
-            return "complete";
-          }}
-        />
-        {error ? (
-          <p className="mt-2 text-center text-sm font-bold text-rose-500">{error}</p>
-        ) : null}
+        <h1 className="secret-room-title club-title flex items-center justify-center gap-2 text-2xl font-black text-pink-600 md:text-3xl">
+          <span aria-hidden>{emblem}</span> {title}
+        </h1>
       </div>
 
-      <button
-        type="button"
-        className="relative z-10 mt-5 text-xs font-bold text-pink-500/80 underline-offset-2 hover:underline"
-        onClick={() => {
-          clearLocalClub();
-          router.replace("/");
-        }}
+      {/* Main: stacked mobile · side-by-side desktop */}
+      <div
+        className={`relative z-10 flex w-full max-w-4xl shrink-0 flex-col items-center justify-center gap-6
+          md:flex-row md:gap-12
+          ${opening ? "pointer-events-none opacity-0 transition-opacity duration-700" : ""}`}
       >
-        Reset / Start Over
-      </button>
+        {/* LEFT: 3D diary */}
+        <div className="flex shrink-0 flex-col items-center justify-center">
+          <div className="relative" style={{ perspective: 1200 }}>
+            <div
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-[58%] h-28 w-[70%] -translate-x-1/2 rounded-[100%]
+                bg-pink-400/25 blur-2xl md:h-40"
+            />
+            <button
+              type="button"
+              onClick={tapPadlock}
+              disabled={opening}
+              aria-label="Tap diary to focus passcode"
+              className={`relative mx-auto block w-40 origin-center outline-none transition
+                hover:scale-105 active:scale-[0.98] sm:w-56 md:w-72
+                ${opening ? "animate-[secret-cover-open_1s_ease-in_forwards]" : "animate-diary-welcome"}
+                ${lockClicked ? "scale-105" : ""}`}
+            >
+              <span
+                className="relative block h-52 overflow-hidden rounded-3xl border-4 border-white/80
+                  shadow-2xl sm:h-72 md:h-96"
+              >
+                <Image
+                  src="/fuzzy-diary-cover.png"
+                  alt="Secret Club diary cover"
+                  fill
+                  priority
+                  className="object-cover object-center"
+                  sizes="(max-width: 768px) 14rem, 18rem"
+                />
+              </span>
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -bottom-2 left-1/2 h-4 w-[72%] -translate-x-1/2 rounded-[100%]
+                  bg-pink-900/20 blur-md"
+              />
+            </button>
+          </div>
+          <p className="mt-3 rounded-full bg-white/70 px-4 py-1.5 text-xs font-bold text-pink-400 shadow-sm">
+            ✨ Tap the diary or enter your passcode ✨
+          </p>
+        </div>
+
+        {/* RIGHT: 3-key lockbox */}
+        <div
+          className={`secret-room-lockbox w-full max-w-[360px] shrink-0 rounded-3xl border-2 border-pink-200
+            bg-white/95 p-5 shadow-2xl backdrop-blur-md transition md:p-6
+            ${lockClicked ? "ring-4 ring-pink-300/70" : ""}`}
+        >
+          <p className="mb-3 text-center text-xs font-black text-pink-500">
+            Enter the 3-key passcode for {club.clubName}
+          </p>
+          <EmojiPad
+            lockKey={`secret-room:${club.createdAt}`}
+            clubName={club.clubName}
+            vaultUrl="/vault"
+            mode="unlock"
+            targetLength={PASSCODE_LENGTH}
+            onComplete={async (glyphs) => {
+              if (opening) return "partial";
+              if (glyphs.length < PASSCODE_LENGTH) return "partial";
+              if (!passcodesMatch(glyphs, club.passcode)) {
+                setError("Wrong key — try again");
+                playChime();
+                return "wrong";
+              }
+              setError("");
+              finishUnlock();
+              return "complete";
+            }}
+          />
+          {error ? (
+            <p className="mt-2 text-center text-sm font-bold text-rose-500">{error}</p>
+          ) : null}
+          <button
+            type="button"
+            className="mt-3 w-full text-center text-[11px] font-bold text-pink-400 underline hover:text-pink-600"
+            onClick={() => {
+              clearLocalClub();
+              router.replace("/");
+            }}
+          >
+            Forgot code? Ask your bestie · Reset
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

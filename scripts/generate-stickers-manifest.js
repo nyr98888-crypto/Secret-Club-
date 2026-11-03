@@ -14,24 +14,14 @@ const FOLDER_DISPLAY_NAMES = {
   coquette: "Coquette",
   cuties: "Cuties",
   "doodles-sparkles": "Doodles",
-  doodles_and_botanicals: "Doodles",
-  diverse_chibis: "Diverse Chibis",
-  friendship_badges: "Badges",
   gems_and_ribbons: "Gems & Ribbons",
-  general: "Extras",
   glitter_sparkles: "Glitter",
   kawaii_animals: "Kawaii Animals",
   locks_and_keys: "Locks & Keys",
-  secret_notes: "Secret Notes",
-  sweet_stationery: "Stationery",
   sweets: "Sweets",
-  sweet_treats: "Sweet Treats",
+  sweet_stationery: "Stationery",
   "tape-mounts": "Tape & Mounts",
-  tactile_charms: "Charms",
-  tactile_stationery: "Stationery Textures",
   words: "Words & Slang",
-  y2k_charms: "Y2K Charms",
-  y2k_cyber: "Y2K & Cyber",
 };
 
 function titleCaseFolder(folder) {
@@ -59,8 +49,7 @@ function generateManifest() {
     const folderPath = path.join(STICKERS_DIR, folder);
     const files = fs
       .readdirSync(folderPath)
-      .filter((f) => /\.(png|webp|svg|jpg|jpeg)$/i.test(f))
-      // Skip raw studio dumps that are not production stickers
+      .filter((f) => /\.(png|webp|jpg|jpeg)$/i.test(f))
       .filter((f) => !/^phoenix/i.test(f))
       .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 

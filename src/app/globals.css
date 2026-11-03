@@ -906,6 +906,23 @@ a {
   margin: 1rem 0;
 }
 
+/* Compact keypad inside the secret-room lockbox (viewport-locked) */
+.secret-room-lockbox .glyph-grid {
+  gap: 0.4rem;
+  margin: 0.65rem 0;
+}
+
+.secret-room-lockbox .glyph-btn {
+  border-radius: 1rem;
+  font-size: 1.35rem;
+}
+
+.secret-room-lockbox .glyph-slot {
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 1.25rem;
+}
+
 .glyph-btn {
   aspect-ratio: 1;
   border-radius: 1.15rem;

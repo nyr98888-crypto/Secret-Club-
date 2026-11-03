@@ -19,9 +19,9 @@ export const FREE_ITEMS_PER_PACK = 4;
  * Holographic / Y2K Cyber / Chibi Rare / Secret Vault.
  */
 export const PREMIUM_STICKER_TABS = [
-  "y2k-cyber",
   "chibis",
-  "secret-vault",
+  "coquette",
+  "locks",
 ] as const;
 
 /** Free users can fully design sheets 1–5; sheet 6+ opens the vault modal. */
