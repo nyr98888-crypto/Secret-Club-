@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import { exportScrapbookPage, printCanvas } from "@/lib/exportPage";
+import { useVaultAccess } from "@/hooks/useVaultAccess";
 
 type PrintExportActionsProps = {
   /** Optional override; defaults to the live `[data-print-root]` surface */
   getPrintRoot?: () => HTMLElement | null;
   iconOnly?: boolean;
   className?: string;
+  /** Opens Bestie Vault when page has vault-preview stickers */
+  onRequestVip?: (reason?: string) => void;
 };
 
 function defaultPrintRoot(): HTMLElement | null {
@@ -18,14 +21,27 @@ function defaultPrintRoot(): HTMLElement | null {
   );
 }
 
+function pageHasVaultPreview(root: HTMLElement | null): boolean {
+  if (!root) {
+    return Boolean(document.querySelector('[data-vault-preview="true"]'));
+  }
+  return Boolean(
+    root.querySelector('[data-vault-preview="true"]') ||
+      document.querySelector('[data-vault-preview="true"]'),
+  );
+}
+
 /**
  * Kid-friendly Print Page + Save to Photos actions for the vault header.
+ * Free users can print/save freely unless vault-preview stickers are on the page.
  */
 export function PrintExportActions({
   getPrintRoot = defaultPrintRoot,
   iconOnly = false,
   className = "",
+  onRequestVip,
 }: PrintExportActionsProps) {
+  const { isVip } = useVaultAccess();
   const [busy, setBusy] = useState<"print" | "save" | null>(null);
   const [hint, setHint] = useState<string | null>(null);
 
@@ -34,7 +50,17 @@ export function PrintExportActions({
     window.setTimeout(() => setHint(null), 2200);
   }
 
+  function guardVaultPreview(): boolean {
+    if (isVip) return true;
+    const root = getPrintRoot();
+    if (!pageHasVaultPreview(root)) return true;
+    flashHint("Vault Exclusive ✨");
+    onRequestVip?.();
+    return false;
+  }
+
   async function onPrint() {
+    if (!guardVaultPreview()) return;
     const root = getPrintRoot();
     if (!root || busy) return;
     setBusy("print");
@@ -46,6 +72,7 @@ export function PrintExportActions({
   }
 
   async function onSave() {
+    if (!guardVaultPreview()) return;
     const root = getPrintRoot();
     if (!root || busy) return;
     setBusy("save");
@@ -85,9 +112,7 @@ export function PrintExportActions({
           aria-label="Print page for your wall or binder"
           title="Print for your real wall or binder!"
         >
-          <span className={busy === "print" ? "animate-pulse" : "animate-bounce"}>
-            🖨️
-          </span>
+          <span className={busy === "print" ? "animate-pulse" : ""}>🖨️</span>
         </button>
         <button
           type="button"
@@ -118,9 +143,7 @@ export function PrintExportActions({
         title="Print for your real wall or binder!"
       >
         <span className="flex items-center gap-1 text-xs font-black text-emerald-700">
-          <span className="inline-block animate-bounce" aria-hidden>
-            🖨️
-          </span>
+          <span aria-hidden>🖨️</span>
           Print Page
         </span>
         <span className="text-[0.55rem] font-bold text-emerald-600/80">

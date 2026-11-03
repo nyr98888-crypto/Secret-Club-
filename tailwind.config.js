@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        toy: ["Fredoka", "Baloo 2", "cursive"],
+        toy: ["DynaPuff", "Fredoka", "Baloo 2", "cursive"],
       },
       keyframes: {
         float: {

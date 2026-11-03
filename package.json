@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "stickers:catalog": "node scripts/generateStickerCatalog.mjs",
+    "stickers:manifest": "node scripts/generate-stickers-manifest.js",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio"
   },
@@ -16,6 +17,7 @@
     "@vercel/blob": "^2.8.2",
     "drizzle-orm": "^0.45.4",
     "framer-motion": "^14.9.0",
+    "heic2any": "^0.0.4",
     "html-to-image": "^1.11.13",
     "jose": "^6.2.14",
     "jspdf": "^4.2.1",

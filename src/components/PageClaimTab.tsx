@@ -9,6 +9,8 @@ type PageClaimTabProps = {
   claim: PageClaim | null;
   members: LocalMember[];
   onClaim: (claim: PageClaim) => void;
+  /** inline = sits in the shared book-width nav row; floating = absolute over canvas */
+  variant?: "floating" | "inline";
 };
 
 const MASCOTS = ["🍓", "🐼", "🐱", "🐰", "🦄", "🐸", "🐥", "🐻"];
@@ -18,6 +20,7 @@ export function PageClaimTab({
   claim,
   members,
   onClaim,
+  variant = "floating",
 }: PageClaimTabProps) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(claim?.title ?? "");
@@ -77,12 +80,23 @@ export function PageClaimTab({
       ? "bg-pink-400 hover:bg-pink-500"
       : "bg-purple-400 hover:bg-purple-500";
 
+  const inlineTone =
+    side === "left"
+      ? "border-pink-100 text-pink-600"
+      : "border-pink-100 text-purple-600";
+
+  const isInline = variant === "inline";
+
   return (
     <div
       ref={rootRef}
-      className={`absolute z-30 ${
-        side === "left" ? "left-10 top-[-18px]" : "right-10 top-[-18px]"
-      }`}
+      className={
+        isInline
+          ? "relative z-30 shrink-0"
+          : `absolute z-30 ${
+              side === "left" ? "left-10 top-2" : "right-10 top-2"
+            }`
+      }
     >
       <button
         type="button"
@@ -90,14 +104,21 @@ export function PageClaimTab({
           e.stopPropagation();
           setOpen((v) => !v);
         }}
-        className={`flex cursor-pointer items-center gap-1.5 rounded-t-xl px-4 py-1.5 text-xs font-black text-white shadow-sm transition-transform hover:-translate-y-0.5 ${tabTone}`}
+        className={
+          isInline
+            ? `max-w-[9.5rem] truncate rounded-full border bg-white/90 px-3 py-1 text-xs font-bold shadow-sm transition hover:-translate-y-0.5 ${inlineTone}`
+            : `flex cursor-pointer items-center gap-1.5 rounded-full border-[1.5px] border-[#2D0C1E] px-3 py-1 text-[13px] font-bold text-white shadow-[0_2px_6px_rgba(45,12,30,0.18)] transition-transform hover:-translate-y-0.5 ${tabTone}`
+        }
+        style={isInline ? undefined : { fontWeight: 700 }}
       >
         {label}
       </button>
 
       {open ? (
         <div
-          className="absolute top-full left-0 z-50 mt-1 w-56 rounded-2xl border-2 border-pink-200 bg-white p-3 shadow-xl"
+          className={`absolute top-full z-50 mt-1 w-56 rounded-2xl border-2 border-pink-200 bg-white p-3 shadow-xl ${
+            isInline && side === "right" ? "right-0 left-auto" : "left-0"
+          }`}
           onPointerDown={(e) => e.stopPropagation()}
         >
           <p className="mb-2 text-[0.65rem] font-black uppercase tracking-wide text-pink-500">

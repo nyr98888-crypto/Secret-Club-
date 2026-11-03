@@ -19,7 +19,12 @@ export default function DropPage() {
   const vaultUrl = useMemo(() => {
     if (!club) return "";
     if (typeof window === "undefined") return `/join/${club.slug}`;
-    return `${window.location.origin}/join/${club.slug}`;
+    const origin =
+      process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
+      (!/localhost|127\.0\.0\.1|vercel\.app/i.test(window.location.origin)
+        ? window.location.origin
+        : "https://www.secretclubscrapbook.com");
+    return `${origin}/join/${club.slug}`;
   }, [club]);
 
   useEffect(() => {

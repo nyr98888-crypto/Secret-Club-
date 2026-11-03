@@ -8,7 +8,7 @@ import {
   setVaultUnlocked,
   type LocalClub,
 } from "@/lib/localClub";
-import { inviteMessage, nativeShare } from "@/lib/share";
+import { buildClubInviteShare, nativeShare } from "@/lib/share";
 import {
   createScrapbook,
   ensureClubScrapbook,
@@ -28,14 +28,12 @@ import { ScrapbookCanvas } from "@/components/ScrapbookCanvas";
 import { Bookshelf } from "@/components/Bookshelf";
 import { NewScrapbookModal } from "@/components/NewScrapbookModal";
 import { useScrapbookState } from "@/hooks/useScrapbookState";
-import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 
 type ViewMode = "secret_room" | "scrapbook" | "bookshelf";
 
 export default function VaultPage() {
   const router = useRouter();
   const { backdropTheme, setBackdropTheme } = useScrapbookState();
-  const { isLandscapeBook, mode } = useDeviceLayout();
   const { canCreateScrapbook } = useVaultAccess();
   const [club, setClub] = useState<LocalClub | null>(null);
   const [ready, setReady] = useState(false);
@@ -43,6 +41,7 @@ export default function VaultPage() {
   const [newBookOpen, setNewBookOpen] = useState(false);
   const [inviteToast, setInviteToast] = useState("");
   const [vipOpen, setVipOpen] = useState(false);
+  const [vipHeadline, setVipHeadline] = useState<string | undefined>();
   const [book, setBook] = useState<StoredScrapbook | null>(null);
   const [shelf, setShelf] = useState<StoredScrapbook[]>([]);
 
@@ -93,27 +92,38 @@ export default function VaultPage() {
     });
   }, []);
 
+  function openVip(headline?: string) {
+    setVipHeadline(headline);
+    setVipOpen(true);
+  }
+
+  function closeVip() {
+    setVipOpen(false);
+    setVipHeadline(undefined);
+  }
+
   async function handleInvite() {
     if (!club) return;
     const max = club.vaultType === "bestie" ? 2 : 4;
     if (club.members.length >= max) {
-      setVipOpen(true);
+      openVip();
       return;
     }
 
-    const origin =
-      typeof window !== "undefined" ? window.location.origin : "";
-    const url = `${origin}/vault`;
-    const text = `${inviteMessage(club.clubName, url)}\nPasscode: ${club.passcode.join(" ")}`;
-    const result = await nativeShare({
-      title: club.clubName,
-      text,
-      url,
+    const payload = buildClubInviteShare({
+      clubName: club.clubName,
+      clubId: club.createdAt || club.clubName,
+      passcode: club.passcode,
     });
+    const result = await nativeShare(payload);
     setInviteToast(
-      result === "copied" || result === "shared" ? "Copied! ✨" : "Invite ready ✨",
+      result === "copied"
+        ? "Copied invite link! 💌"
+        : result === "shared"
+          ? "Invite sent! 💌"
+          : "Invite ready 💌",
     );
-    window.setTimeout(() => setInviteToast(""), 1800);
+    window.setTimeout(() => setInviteToast(""), 2200);
   }
 
   function openBookshelf() {
@@ -182,7 +192,7 @@ export default function VaultPage() {
             }}
             onCreateNew={() => {
               if (!canCreateScrapbook(shelf.length)) {
-                setVipOpen(true);
+                openVip();
                 return;
               }
               setNewBookOpen(true);
@@ -209,10 +219,10 @@ export default function VaultPage() {
         <NewScrapbookModal
           open={newBookOpen}
           onClose={() => setNewBookOpen(false)}
-          onRequestVip={() => setVipOpen(true)}
+          onRequestVip={() => openVip()}
           onCreate={(name, themeIcon) => {
             if (!canCreateScrapbook(shelf.length)) {
-              setVipOpen(true);
+              openVip();
               return;
             }
             const created = createScrapbook({ name, themeIcon });
@@ -226,8 +236,9 @@ export default function VaultPage() {
         />
         <UnlockVaultModal
           open={vipOpen}
-          onClose={() => setVipOpen(false)}
-          onUnlocked={() => setVipOpen(false)}
+          headline={vipHeadline}
+          onClose={closeVip}
+          onUnlocked={closeVip}
         />
       </main>
     );
@@ -239,8 +250,8 @@ export default function VaultPage() {
   const darkMood = Boolean(backdropTheme.dark);
 
   return (
-    <main
-      className={`theme-shell vault-workspace flex min-h-dvh flex-col transition-all duration-500 ease-out ${
+    <div
+      className={`theme-shell vault-workspace flex h-screen w-screen flex-col overflow-hidden transition-all duration-500 ease-out ${
         darkMood ? "vault-mood-dark" : ""
       }`}
       data-circle={club.vaultType}
@@ -250,6 +261,7 @@ export default function VaultPage() {
         backgroundImage:
           backdropTheme.css ||
           "linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%)",
+        backgroundColor: "#FDE2EC",
         backgroundSize: "cover",
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
@@ -260,83 +272,83 @@ export default function VaultPage() {
         onInvite={handleInvite}
         onBookshelf={openBookshelf}
         onLock={lockVault}
+        onRequestVip={() => openVip()}
         backdropTheme={backdropTheme}
         onBackdropChange={setBackdropTheme}
       />
 
-      <div className="relative z-[1] flex min-h-0 w-full flex-1 flex-col">
-        <header
-          className={`print-hide sticky top-0 z-40 shrink-0 overflow-visible border-b px-3 backdrop-blur-md transition-all duration-500 ease-out sm:px-6 lg:pr-80 xl:pr-[22rem] ${
-            darkMood
-              ? "border-white/10 bg-slate-950/55"
-              : "border-pink-100 bg-white/80"
-          }`}
-          style={{
-            paddingTop: "max(0.5rem, env(safe-area-inset-top))",
-            paddingBottom: "0.5rem",
-          }}
-        >
-          {/* Fixed top nav (~48px): title | Bookshelf · Vibes · ••• */}
-          <div className="flex h-12 items-center justify-between gap-2">
-            <div className="min-w-0 flex-1">
-              <h1
-                className={`m-0 flex items-center gap-1.5 text-base font-black tracking-tight sm:gap-2 sm:text-xl ${
-                  darkMood ? "text-pink-100" : "text-slate-800"
-                }`}
-              >
-                <span className="shrink-0 text-xl leading-none sm:text-2xl" aria-hidden>
-                  {icon}
-                </span>
-                <span className="truncate">{title}</span>
-              </h1>
-              {inviteToast ? (
-                <p className="mt-1 inline-block rounded-full bg-white/90 px-3 py-1 text-xs font-extrabold text-pink-600 shadow-sm">
-                  {inviteToast}
-                </p>
-              ) : null}
-            </div>
-
-            <div
-              id="header-spread-slot-desktop"
-              className={`flex-1 justify-center ${
-                isLandscapeBook ? "flex" : "hidden"
-              }`}
-            />
-
-            <div
-              id="header-actions-slot"
-              className="flex shrink-0 items-center justify-end"
-            />
-          </div>
-
-          {/* Portrait page pill — lives in header, clears the clipboard clasp */}
-          <div
-            id="header-spread-slot"
-            className={`justify-center pb-1 pt-2 ${
-              isLandscapeBook ? "hidden" : "flex"
+      {/* 1. Global Header Bar */}
+      <header
+        className={`print-hide z-20 flex h-16 w-full shrink-0 items-center justify-between border-b px-4 backdrop-blur sm:px-6 ${
+          darkMood
+            ? "border-white/10 bg-slate-950/80"
+            : "border-pink-100 bg-white/80"
+        }`}
+      >
+        <div className="flex min-w-0 items-center gap-2">
+          <h1
+            className={`club-title m-0 flex min-w-0 items-center gap-1.5 text-base font-bold sm:gap-2 sm:text-xl ${
+              darkMood ? "text-pink-100" : "text-[#2D0C1E]"
             }`}
-            data-viewport-mode={mode}
-          />
-        </header>
+          >
+            <span className="shrink-0 text-xl leading-none sm:text-2xl" aria-hidden>
+              {icon}
+            </span>
+            <span className="truncate">{title}</span>
+          </h1>
+          <span
+            className="club-header-badge hidden max-w-[12rem] items-center truncate rounded-full bg-white px-2.5 py-0.5 text-[13px] font-bold text-[#2D0C1E] shadow-[0_2px_6px_rgba(45,12,30,0.12)] sm:inline-flex"
+            style={{ border: "1.5px solid #2D0C1E" }}
+            title={
+              title.trim().toLowerCase() === club.clubName.trim().toLowerCase()
+                ? club.vaultType === "squad"
+                  ? "Squad Vault"
+                  : "Bestie Vault"
+                : club.clubName
+            }
+          >
+            {title.trim().toLowerCase() === club.clubName.trim().toLowerCase()
+              ? club.vaultType === "squad"
+                ? "🛡️ Squad Vault"
+                : "💖 Bestie Vault"
+              : club.clubName}
+          </span>
+          {inviteToast ? (
+            <span
+              role="status"
+              className="inline-flex max-w-[10rem] truncate rounded-full bg-[#2D0C1E] px-2.5 py-0.5 text-[13px] font-bold text-white"
+            >
+              {inviteToast}
+            </span>
+          ) : null}
+        </div>
+        <div
+          id="header-actions-slot"
+          className="flex shrink-0 items-center justify-end gap-3"
+        />
+      </header>
 
+      {/* 2. Main Workspace (Canvas + Sidebar) */}
+      <main className="relative flex min-h-0 w-full flex-1 overflow-hidden">
         {book ? (
           <ScrapbookCanvas
             spreads={book.spreads}
             members={club.members}
             author={author}
             enableAssetDrawer
-            onRequestVip={() => setVipOpen(true)}
+            onRequestVip={(headline) => openVip(headline)}
             onSpreadsChange={persistSpreads}
             className="min-h-0 flex-1"
           />
         ) : null}
-      </div>
+      </main>
 
       <UnlockVaultModal
         open={vipOpen}
-        onClose={() => setVipOpen(false)}
-        onUnlocked={() => setVipOpen(false)}
+        headline={vipHeadline}
+        onClose={closeVip}
+        onUnlocked={closeVip}
       />
-    </main>
+    </div>
   );
 }

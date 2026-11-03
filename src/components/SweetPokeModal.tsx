@@ -86,17 +86,17 @@ export function SweetPokeModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/35 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-labelledby="sweet-poke-title"
       onClick={onClose}
     >
       <div
-        className="flex w-full max-w-sm flex-col items-center gap-5 rounded-t-3xl border-4 border-b-0 border-pink-300 bg-white p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-2xl sm:rounded-3xl sm:border-b-4"
+        className="my-auto flex max-h-[90vh] w-full max-w-sm flex-col items-center gap-5 overflow-y-auto rounded-3xl border-4 border-pink-300 bg-white p-6 pb-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="text-center">
+        <div className="shrink-0 text-center">
           <span className="rounded-full border border-pink-200 bg-pink-50 px-3 py-1 text-xs font-black uppercase tracking-wider text-pink-500">
             Send a Sweet Poke
           </span>
@@ -111,7 +111,7 @@ export function SweetPokeModal({
           </p>
         </div>
 
-        <div className="grid w-full grid-cols-3 gap-3">
+        <div className="grid w-full shrink-0 grid-cols-3 gap-3">
           {POKE_OPTIONS.map((poke) => {
             const isSelected = selectedPoke.id === poke.id;
             return (
@@ -151,7 +151,7 @@ export function SweetPokeModal({
         <button
           type="button"
           onClick={onClose}
-          className="min-h-[44px] w-full rounded-full border border-slate-200 bg-slate-50 text-sm font-bold text-slate-600"
+          className="min-h-[44px] w-full shrink-0 rounded-full border border-slate-200 bg-slate-50 text-sm font-bold text-slate-600"
         >
           Cancel
         </button>

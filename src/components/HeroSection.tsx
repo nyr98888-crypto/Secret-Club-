@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { ensureAudio, playPop } from "@/lib/audio";
 import { vibrateTap } from "@/lib/haptics";
+import { SiteLegalLinks } from "@/components/SiteLegal";
 
 interface HeroSectionProps {
   onStartClub: () => void;
@@ -76,6 +77,12 @@ export function HeroSection({ onStartClub }: HeroSectionProps) {
         >
           🎀 OPEN MY DIARY 🎀
         </button>
+
+        <div
+          className={`relative z-20 mt-8 ${zooming ? "pointer-events-none opacity-0" : ""}`}
+        >
+          <SiteLegalLinks />
+        </div>
       </div>
     </section>
   );

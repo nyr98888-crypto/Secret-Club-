@@ -70,11 +70,11 @@ export function stickerToDrawerAsset(sticker: StickerItem): DrawerAsset {
   };
 }
 
-/** VIP tease tile shown in the stickers tray */
+/** Explicit vault CTA tile shown under sticker shelves */
 export const MAGIC_CHEST_ASSET: DrawerAsset = {
   id: "pack-magic-chest",
   category: "stickers",
-  label: "Magic Chest",
+  label: "Unlock All 250+",
   emoji: "🎁",
   src: "",
   defaultWidth: 16,
@@ -116,7 +116,7 @@ export const DEFAULT_DRAWER_ASSETS: DrawerAsset[] = [
     emoji: "📷",
     src: "",
     defaultWidth: 18,
-    defaultRotation: -2,
+    defaultRotation: 0,
     framePreset: "polaroid",
   },
   {
@@ -126,7 +126,7 @@ export const DEFAULT_DRAWER_ASSETS: DrawerAsset[] = [
     emoji: "💗",
     src: "",
     defaultWidth: 18,
-    defaultRotation: 2,
+    defaultRotation: 0,
     framePreset: "pink_polaroid",
   },
   {
@@ -136,7 +136,7 @@ export const DEFAULT_DRAWER_ASSETS: DrawerAsset[] = [
     emoji: "🧁",
     src: "",
     defaultWidth: 18,
-    defaultRotation: -1,
+    defaultRotation: 0,
     framePreset: "whipped_cream",
   },
   {
@@ -146,7 +146,7 @@ export const DEFAULT_DRAWER_ASSETS: DrawerAsset[] = [
     emoji: "🎞️",
     src: "",
     defaultWidth: 17,
-    defaultRotation: -3,
+    defaultRotation: 0,
     framePreset: "film_strip",
   },
   {
@@ -156,6 +156,7 @@ export const DEFAULT_DRAWER_ASSETS: DrawerAsset[] = [
     emoji: "✨",
     src: "",
     defaultWidth: 18,
+    defaultRotation: 0,
     framePreset: "gold_mirror",
   },
   {
@@ -165,7 +166,7 @@ export const DEFAULT_DRAWER_ASSETS: DrawerAsset[] = [
     emoji: "✉️",
     src: "",
     defaultWidth: 17,
-    defaultRotation: 2,
+    defaultRotation: 0,
     framePreset: "stamp",
   },
   {
@@ -175,7 +176,7 @@ export const DEFAULT_DRAWER_ASSETS: DrawerAsset[] = [
     emoji: "✏️",
     src: "",
     defaultWidth: 18,
-    defaultRotation: 3,
+    defaultRotation: 0,
     framePreset: "doodle",
   },
   {
@@ -185,7 +186,7 @@ export const DEFAULT_DRAWER_ASSETS: DrawerAsset[] = [
     emoji: "🪩",
     src: "",
     defaultWidth: 18,
-    defaultRotation: 1,
+    defaultRotation: 0,
     framePreset: "holo_sleeve",
   },
 
@@ -239,6 +240,8 @@ export type PlacedElementData = {
   /** Who sent this sound charm — shown on the badge */
   fromName?: string;
   washiPatternId?: WashiPatternId;
+  /** Placed from a vault-locked tile — preview until Save/Print unlock */
+  vaultPreview?: boolean;
 };
 
 export type SpawnPoint = { x: number; y: number };
@@ -251,15 +254,16 @@ function initialWidthFor(asset: DrawerAsset): number {
   return asset.defaultWidth;
 }
 
-function naturalRotation(preferred?: number): number {
-  const jitter = Math.random() * 12 - 6; // ±6°
-  return (preferred ?? 0) + jitter;
+/** New placements are always upright — no random tilt */
+function initialRotation(_preferred?: number): number {
+  return 0;
 }
 
 export function createPlacedElement(
   asset: DrawerAsset,
   spawn?: SpawnPoint,
 ): PlacedElementData {
+  const center: SpawnPoint = { x: 50, y: 50 };
   return {
     id:
       typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -269,9 +273,9 @@ export function createPlacedElement(
     category: asset.category,
     src: asset.src,
     label: asset.label,
-    x: spawn?.x ?? 28 + Math.random() * 30,
-    y: spawn?.y ?? 28 + Math.random() * 30,
-    rotation: naturalRotation(asset.defaultRotation),
+    x: spawn?.x ?? center.x,
+    y: spawn?.y ?? center.y,
+    rotation: initialRotation(asset.defaultRotation),
     width: initialWidthFor(asset),
     scale: 1,
     photoSrc: asset.category === "frames" ? null : undefined,
@@ -280,6 +284,7 @@ export function createPlacedElement(
     framePreset: asset.framePreset,
     emoji: asset.emoji && asset.category !== "washi" ? asset.emoji : undefined,
     washiPatternId: asset.washiPatternId,
+    vaultPreview: Boolean(asset.locked || asset.action === "open-vip"),
   };
 }
 
@@ -294,6 +299,7 @@ export function createPlacedPoke(
   spawn?: SpawnPoint,
   fromName?: string,
 ): PlacedElementData {
+  const center: SpawnPoint = { x: 50, y: 50 };
   return {
     id:
       typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -303,9 +309,9 @@ export function createPlacedPoke(
     category: "pokes",
     src: "",
     label: poke.title,
-    x: spawn?.x ?? 28 + Math.random() * 30,
-    y: spawn?.y ?? 28 + Math.random() * 30,
-    rotation: naturalRotation(),
+    x: spawn?.x ?? center.x,
+    y: spawn?.y ?? center.y,
+    rotation: 0,
     width: 26,
     scale: 1,
     emoji: poke.icon,
@@ -318,14 +324,13 @@ export function createPlacedPoke(
 }
 
 /** @deprecated Prefer spawnOnSide from scrapbookStore for spread coords */
-export const PAGE_CENTER = { x: 50, y: 48 } as const;
-export const PAGE_CENTER_JITTER = { x: 8, y: 10 } as const;
+export const PAGE_CENTER = { x: 50, y: 50 } as const;
 
 export function spawnNearCenter(sideBias: "left" | "right" | "center"): SpawnPoint {
   const biasX =
-    sideBias === "left" ? -6 : sideBias === "right" ? 6 : 0;
+    sideBias === "left" ? -25 : sideBias === "right" ? 25 : 0;
   return {
-    x: PAGE_CENTER.x + biasX + (Math.random() * PAGE_CENTER_JITTER.x - PAGE_CENTER_JITTER.x / 2),
-    y: PAGE_CENTER.y + (Math.random() * PAGE_CENTER_JITTER.y - PAGE_CENTER_JITTER.y / 2),
+    x: PAGE_CENTER.x + biasX,
+    y: PAGE_CENTER.y,
   };
 }

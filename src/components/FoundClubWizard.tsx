@@ -11,6 +11,7 @@ import { ensureClubScrapbook } from "@/lib/scrapbookStore";
 import { ToyLockbox } from "./ToyLockbox";
 import { SlotMachineRoller } from "./SlotMachineRoller";
 import { UnlockVaultModal } from "@/components/vault/UnlockVaultModal";
+import { SiteLegalLinks } from "@/components/SiteLegal";
 import { vibrateTap } from "@/lib/haptics";
 import { ensureAudio, playPop } from "@/lib/audio";
 
@@ -186,6 +187,9 @@ export function FoundClubWizard({ onDone }: { onDone: () => void }) {
       )}
 
       <UnlockVaultModal open={vipOpen} onClose={() => setVipOpen(false)} />
+      <div className="mt-10">
+        <SiteLegalLinks />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   CANDY_SWATCHES,
   hueToBackdrop,
@@ -32,8 +33,13 @@ export function BackdropColorPicker({
   const panelRef = useRef<HTMLDivElement>(null);
   const [hue, setHue] = useState(theme.hue ?? 320);
   const [sparkles, setSparkles] = useState<Sparkle[]>([]);
+  const [mounted, setMounted] = useState(false);
   const sparkleId = useRef(0);
   const lastToneAt = useRef(0);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (typeof theme.hue === "number") setHue(theme.hue);
@@ -44,31 +50,11 @@ export function BackdropColorPicker({
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
     }
-    function onPointer(e: PointerEvent) {
-      const target = e.target as Node;
-      if (panelRef.current?.contains(target)) return;
-      if (rootRef?.current?.contains(target)) return;
-      onClose();
-    }
     window.addEventListener("keydown", onKey);
-    window.addEventListener("pointerdown", onPointer);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      window.removeEventListener("pointerdown", onPointer);
-    };
-  }, [open, onClose, rootRef]);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
 
-  if (!open) return null;
-
-  const panelClass = compact
-    ? `fixed inset-x-0 bottom-0 z-[90] mx-auto w-full max-w-lg
-        animate-[mood-pop_0.28s_ease-out] rounded-t-[1.75rem] border-4 border-b-0 border-pink-200/90
-        bg-gradient-to-b from-white via-pink-50/90 to-violet-50 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]
-        shadow-[0_-18px_50px_rgba(74,43,69,0.28)]`
-    : `absolute right-0 top-[calc(100%+0.55rem)] z-[80] w-[min(20rem,calc(100vw-1.5rem))]
-        origin-top-right animate-[mood-pop_0.28s_ease-out]
-        rounded-[1.75rem] border-4 border-pink-200/90 bg-gradient-to-b from-white via-pink-50/90 to-violet-50
-        p-3.5 shadow-[0_18px_50px_rgba(74,43,69,0.28)]`;
+  if (!open || !mounted) return null;
 
   function spawnSparkle(clientX?: number, clientY?: number) {
     const panel = panelRef.current;
@@ -109,128 +95,150 @@ export function BackdropColorPicker({
     }
   }
 
-  return (
+  const panelClass = compact
+    ? `fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-lg max-w-[90vw]
+        animate-[mood-pop_0.28s_ease-out] rounded-t-2xl border-2 border-b-0 border-[#2D0C1E]
+        bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))]
+        shadow-2xl`
+    : `fixed top-20 left-1/2 z-50 w-[min(20rem,90vw)] max-w-[90vw] -translate-x-1/2
+        animate-[mood-pop_0.28s_ease-out] rounded-2xl border-2 border-[#2D0C1E]
+        bg-white p-4 shadow-2xl`;
+
+  const ui = (
     <>
-      {compact ? (
-        <button
-          type="button"
-          aria-label="Close room paint"
-          className="fixed inset-0 z-[85] bg-slate-900/30"
-          onClick={onClose}
-        />
-      ) : null}
-    <div
-      ref={panelRef}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      className={panelClass}
-      onPointerDown={(e) => e.stopPropagation()}
-    >
+      {/* Click-outside / soft backdrop — closes picker */}
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-6 top-0 h-2 rounded-b-full bg-gradient-to-r from-pink-200/0 via-white/80 to-violet-200/0"
+        role="presentation"
+        className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[1px]"
+        onClick={() => {
+          // Don't close when tapping the Room Vibes trigger itself
+          onClose();
+        }}
+        onPointerDown={(e) => {
+          if (rootRef?.current?.contains(e.target as Node)) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+          }
+        }}
       />
 
-      <div className="mb-3 flex items-start justify-between gap-2">
-        <h2
-          id={titleId}
-          className="m-0 text-sm font-black tracking-tight text-slate-800"
-        >
-          🎨 Paint Your Room
-        </h2>
-        <button
-          type="button"
-          onClick={() => {
-            void ensureAudio().then(() => playChime());
-            onClose();
-          }}
-          className="grid h-8 w-8 place-items-center rounded-full bg-pink-100 text-sm font-black text-pink-600 transition hover:bg-pink-200 active:scale-95"
-          aria-label="Close room paint palette"
-        >
-          ✕
-        </button>
-      </div>
-
-      <p className="mb-2 text-[0.65rem] font-extrabold uppercase tracking-wide text-pink-500">
-        Room Vibes
-      </p>
-      <div className="mb-4 grid grid-cols-5 gap-2">
-        {CANDY_SWATCHES.map((swatch) => {
-          const active = theme.id === swatch.id;
-          return (
-            <button
-              key={swatch.id}
-              type="button"
-              onClick={() => pickSwatch(swatch)}
-              className={`group flex flex-col items-center gap-1 rounded-2xl p-1 transition
-                hover:-translate-y-1 hover:scale-105 active:scale-95
-                ${active ? "ring-2 ring-pink-400 ring-offset-2" : ""}`}
-              aria-pressed={active}
-              aria-label={swatch.label}
-              title={swatch.label}
-            >
-              <span
-                className="grid h-11 w-11 place-items-center rounded-full border-2 border-white text-base shadow-md transition group-hover:shadow-lg"
-                style={{
-                  backgroundImage: swatch.css,
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                }}
-                aria-hidden
-              >
-                {swatch.emoji}
-              </span>
-              <span className="w-full truncate text-center text-[0.5rem] font-bold leading-tight text-slate-700">
-                {swatch.label}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="relative overflow-hidden rounded-2xl border-2 border-dashed border-violet-200 bg-white/70 p-3">
-        <p className="mb-2 text-[0.7rem] font-black text-violet-600">
-          ✨ Magic Color Potion
-        </p>
-        <input
-          type="range"
-          min={0}
-          max={360}
-          value={hue}
-          aria-label="Magic color potion hue"
-          className="mood-hue-slider w-full cursor-pointer"
-          onPointerDown={() => void ensureAudio()}
-          onInput={(e) => {
-            const el = e.currentTarget;
-            const next = Number(el.value);
-            const rect = el.getBoundingClientRect();
-            const ratio = next / 360;
-            onHueInput(next, rect.left + ratio * rect.width, rect.top + rect.height / 2);
-          }}
-          onChange={(e) => onHueInput(Number(e.target.value))}
-        />
-        <div className="mt-2 flex items-center justify-between text-[0.6rem] font-bold text-slate-500">
-          <span>Drag to mix slime colors</span>
-          <span
-            className="inline-flex h-5 w-5 rounded-full border border-white shadow"
-            style={{ backgroundColor: `hsl(${hue} 80% 70%)` }}
-            aria-hidden
-          />
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className={panelClass}
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-3 flex items-start justify-between gap-2 pt-1">
+          <h2
+            id={titleId}
+            className="m-0 text-sm font-black tracking-tight text-[#2D0C1E]"
+          >
+            🎨 Paint Your Room
+          </h2>
+          <button
+            type="button"
+            onClick={() => {
+              void ensureAudio().then(() => playChime());
+              onClose();
+            }}
+            className="grid h-8 w-8 min-h-[32px] min-w-[32px] shrink-0 place-items-center rounded-full
+              bg-pink-100 text-sm font-bold text-[#2D0C1E] transition hover:bg-pink-200 active:scale-95"
+            aria-label="Close room paint palette"
+          >
+            ✕
+          </button>
         </div>
 
-        {sparkles.map((s) => (
-          <span
-            key={s.id}
-            aria-hidden
-            className="pointer-events-none absolute h-2 w-2 animate-[mood-sparkle_0.7s_ease-out_forwards] rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]"
-            style={{ left: `${s.left}%`, top: `${s.top}%` }}
+        <p className="mb-2 text-[0.65rem] font-extrabold uppercase tracking-wide text-pink-600">
+          Room Vibes
+        </p>
+        <div className="mb-4 grid grid-cols-5 gap-2">
+          {CANDY_SWATCHES.map((swatch) => {
+            const active = theme.id === swatch.id;
+            return (
+              <button
+                key={swatch.id}
+                type="button"
+                onClick={() => pickSwatch(swatch)}
+                className={`group flex flex-col items-center gap-1 rounded-2xl p-1 transition
+                  hover:-translate-y-1 hover:scale-105 active:scale-95
+                  ${active ? "ring-2 ring-pink-400 ring-offset-2" : ""}`}
+                aria-pressed={active}
+                aria-label={swatch.label}
+                title={swatch.label}
+              >
+                <span
+                  className="grid h-11 w-11 place-items-center rounded-full border-2 border-[#2D0C1E]/25 text-base shadow-md transition group-hover:shadow-lg"
+                  style={{
+                    backgroundImage: swatch.css,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                  }}
+                  aria-hidden
+                >
+                  {swatch.emoji}
+                </span>
+                <span className="w-full truncate text-center text-[0.5rem] font-bold leading-tight text-[#2D0C1E]">
+                  {swatch.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="relative overflow-hidden rounded-2xl border-2 border-dashed border-[#2D0C1E]/25 bg-[#fff9fc] p-3">
+          <p className="mb-2 text-[0.7rem] font-black text-[#2D0C1E]">
+            ✨ Magic Color Potion
+          </p>
+          <input
+            type="range"
+            min={0}
+            max={360}
+            value={hue}
+            aria-label="Magic color potion hue"
+            className="mood-hue-slider w-full cursor-pointer"
+            onPointerDown={() => void ensureAudio()}
+            onInput={(e) => {
+              const el = e.currentTarget;
+              const next = Number(el.value);
+              const rect = el.getBoundingClientRect();
+              const ratio = next / 360;
+              onHueInput(
+                next,
+                rect.left + ratio * rect.width,
+                rect.top + rect.height / 2,
+              );
+            }}
+            onChange={(e) => onHueInput(Number(e.target.value))}
           />
-        ))}
+          <div className="mt-2 flex items-center justify-between gap-2 text-[0.65rem] font-bold text-[#2D0C1E]/80">
+            <span>Drag to mix slime colors</span>
+            <span
+              className="inline-flex h-5 w-5 shrink-0 rounded-full border border-[#2D0C1E]/30 shadow"
+              style={{ backgroundColor: `hsl(${hue} 80% 70%)` }}
+              aria-hidden
+            />
+          </div>
+
+          {sparkles.map((s) => (
+            <span
+              key={s.id}
+              aria-hidden
+              className="pointer-events-none absolute h-2 w-2 animate-[mood-sparkle_0.7s_ease-out_forwards] rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]"
+              style={{ left: `${s.left}%`, top: `${s.top}%` }}
+            />
+          ))}
+        </div>
       </div>
-    </div>
     </>
   );
+
+  /* Portal to body so header overflow/stacking never clips the panel */
+  return createPortal(ui, document.body);
 }
 
 type BackdropMagicButtonProps = {
@@ -250,7 +258,7 @@ export function BackdropMagicButton({
   const wrapRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div ref={wrapRef} className="relative z-[80]">
+    <div ref={wrapRef} className="relative z-[50]">
       <button
         type="button"
         onClick={() => {
@@ -269,7 +277,7 @@ export function BackdropMagicButton({
         aria-haspopup="dialog"
         aria-label="Room Vibes"
       >
-        <span className="inline-block animate-bounce" aria-hidden>
+        <span className="inline-block" aria-hidden>
           {iconOnly ? "🎨" : "🪄"}
         </span>
         {!iconOnly ? <span>Room Vibes</span> : null}

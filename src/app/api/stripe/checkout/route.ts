@@ -7,7 +7,8 @@ export async function POST() {
   const price = vipPriceId();
   const browserId = await getOrCreateBrowserId();
   const origin =
-    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    process.env.NEXT_PUBLIC_APP_URL ||
+    "https://www.secretclubscrapbook.com";
 
   if (!stripe || !price) {
     // Dev fallback: grant VIP without Stripe when keys missing

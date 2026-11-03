@@ -1,13 +1,14 @@
 {
-  "name": "Secret Club",
+  "name": "My Secret Club Scrapbook",
   "short_name": "Secret Club",
-  "description": "Tactile Scrapbook & Bestie Journal",
+  "description": "Tactile bestie digital scrapbook and sticker journal",
   "start_url": "/vault",
+  "id": "https://www.secretclubscrapbook.com/",
   "display": "standalone",
   "display_override": ["standalone", "fullscreen"],
   "orientation": "any",
-  "background_color": "#FDF2F8",
-  "theme_color": "#F472B6",
+  "background_color": "#F37092",
+  "theme_color": "#F37092",
   "icons": [
     {
       "src": "/icon-192.png",

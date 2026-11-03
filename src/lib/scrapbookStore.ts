@@ -104,8 +104,8 @@ function welcomePolaroid(): PlacedElementData {
     src: "",
     label: "Tap me! ♡",
     x: 25,
-    y: 48,
-    rotation: -3,
+    y: 50,
+    rotation: 0,
     width: 22,
     scale: 1,
     photoSrc: null,
@@ -302,23 +302,17 @@ export function deleteScrapbook(id: string): {
 
 /**
  * Spawn point in continuous spread coords (0–100 across both pages).
- * Small random offset so stickers don't stack dead-center.
- * (~±3–4% ≈ ±25px on a typical page width)
+ * Dead-center of the active page half — no random scatter.
+ * Portrait remaps left→25 / right→75 to the visible page center (50%).
  */
 export function spawnOnSide(side: "left" | "right"): { x: number; y: number } {
-  const baseX = side === "left" ? 25 : 75;
   return {
-    x: clampPct(baseX + (Math.random() * 8 - 4)),
-    y: clampPct(44 + (Math.random() * 10 - 5)),
+    x: side === "left" ? 25 : 75,
+    y: 50,
   };
 }
 
-function clampPct(n: number) {
-  return Math.min(92, Math.max(8, n));
-}
-
-/** Subtle natural scatter rotation (±6°) */
-export function spawnRotation(base?: number): number {
-  const jitter = Math.random() * 12 - 6;
-  return (base ?? 0) + jitter;
+/** New assets start completely upright */
+export function spawnRotation(_base?: number): number {
+  return 0;
 }

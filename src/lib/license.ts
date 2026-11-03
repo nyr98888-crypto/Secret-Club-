@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual, randomBytes } from "crypto";
+import { isVipPassToken } from "@/config/vipPasses";
 
 /**
  * HMAC-SHA256 lifetime VIP license keys.
@@ -157,6 +158,11 @@ export async function validateExternalOrLocalLicense(
     return local.ok
       ? { valid: true, local }
       : { valid: false, reason: local.reason, local };
+  }
+
+  // Friend / promo VIP passes from src/config/vipPasses.ts
+  if (isVipPassToken(key)) {
+    return { valid: true, reason: "vip_pass" };
   }
 
   // Optional Lemon Squeezy live validation

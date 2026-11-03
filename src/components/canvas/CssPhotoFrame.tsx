@@ -6,7 +6,11 @@ import {
   useState,
   type MutableRefObject,
 } from "react";
-import { readFileAsDataUrl, sanitizePhotoSrc } from "@/lib/photoDataUrl";
+import {
+  PHOTO_FILE_ACCEPT,
+  processPhotoFile,
+  sanitizePhotoSrc,
+} from "@/lib/photoDataUrl";
 
 /** Pure-CSS scrapbook photo frame shells */
 export type CssFrameArchetype =
@@ -134,26 +138,27 @@ function PhotoAperture({
     oy: number;
   } | null>(null);
   const [localAdjusting, setLocalAdjusting] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const [photoError, setPhotoError] = useState("");
   const isAdjusting = adjusting || localAdjusting;
   const safePhotoSrc = sanitizePhotoSrc(photoSrc);
   const hasPhoto = Boolean(safePhotoSrc);
 
   function openPhotoPicker() {
-    if (pickerLockRef.current) return;
+    if (processing || pickerLockRef.current) return;
     pickerLockRef.current = true;
+    setPhotoError("");
     const input = fileRef.current;
     if (input) {
-      // Temporarily enable so a programmatic click works even after a photo exists
+      // Must stay enabled for iOS Safari programmatic open after a photo exists
       input.disabled = false;
       input.value = "";
+      // Synchronous click inside user gesture — required on iOS
       input.click();
     }
     window.setTimeout(() => {
       pickerLockRef.current = false;
-      if (fileRef.current && hasPhoto) {
-        fileRef.current.disabled = true;
-      }
-    }, 900);
+    }, 1200);
   }
 
   useEffect(() => {
@@ -164,13 +169,6 @@ function PhotoAperture({
       replaceTriggerRef.current = null;
     };
   });
-
-  useEffect(() => {
-    const input = fileRef.current;
-    if (!input) return;
-    // Once filled, keep the file input disabled so accidental taps never re-open the picker
-    input.disabled = hasPhoto;
-  }, [hasPhoto]);
 
   useEffect(() => {
     if (!isAdjusting) return;
@@ -277,19 +275,20 @@ function PhotoAperture({
       ) : (
         <button
           type="button"
+          data-photo-upload="true"
+          disabled={processing}
           className="absolute inset-0 z-[1] flex min-h-[48px] min-w-[48px] flex-col items-center justify-center gap-1 bg-pink-50/90 px-2 text-center"
-          onPointerDown={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
+          onPointerDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
           onClick={(e) => {
-            e.preventDefault();
             e.stopPropagation();
+            e.preventDefault();
             openPhotoPicker();
           }}
           aria-label="Tap to add photo"
         >
-          <span className="animate-bounce text-2xl" aria-hidden>
+          <span className="text-2xl" aria-hidden>
             📸
           </span>
           <span className="text-[0.65rem] font-extrabold leading-tight text-pink-500">
@@ -298,29 +297,59 @@ function PhotoAperture({
         </button>
       )}
 
+      {processing ? (
+        <div
+          className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-2 bg-white/75 backdrop-blur-[1px]"
+          aria-live="polite"
+          aria-busy="true"
+        >
+          <span
+            className="h-9 w-9 animate-spin rounded-full border-[3px] border-[#2D0C1E]/20 border-t-[#2D0C1E]"
+            aria-hidden
+          />
+          <span className="animate-pulse text-[0.7rem] font-bold text-[#2D0C1E]">
+            Prepping photo…
+          </span>
+        </div>
+      ) : null}
+
+      {photoError && !processing ? (
+        <p className="pointer-events-none absolute inset-x-1 bottom-1 z-10 rounded-lg bg-white/95 px-2 py-1 text-center text-[0.6rem] font-bold text-[#b91c1c] shadow">
+          {photoError}
+        </p>
+      ) : null}
+
       {isAdjusting ? (
         <span className="pointer-events-none absolute inset-x-1 bottom-1 z-10 rounded-full bg-white/90 px-2 py-0.5 text-center text-[0.55rem] font-extrabold text-pink-600 shadow">
           Adjust · tap outside
         </span>
       ) : null}
 
+      {/* Dedicated per-frame input — never share htmlFor/id across cards */}
       <input
         ref={fileRef}
         type="file"
-        accept="image/*"
-        disabled={hasPhoto}
-        className="pointer-events-none absolute h-0 w-0 opacity-0"
+        accept={PHOTO_FILE_ACCEPT || "image/*"}
+        className="hidden"
         tabIndex={-1}
         aria-hidden
         onClick={(e) => e.stopPropagation()}
         onChange={(e) => {
-          const file = e.target.files?.[0];
+          const input = e.currentTarget;
+          const file = input.files?.[0];
+          // Reset immediately so the same image can be re-picked
+          input.value = "";
           pickerLockRef.current = false;
           if (!file) return;
-          void readFileAsDataUrl(file)
+          setProcessing(true);
+          setPhotoError("");
+          void processPhotoFile(file)
             .then((dataUrl) => onPhotoChange?.(dataUrl))
-            .catch((err) => console.error("Photo read failed", err));
-          e.target.value = "";
+            .catch((err) => {
+              console.error("Photo read failed", err);
+              setPhotoError("Couldn’t load that photo. Try JPG or another snap?");
+            })
+            .finally(() => setProcessing(false));
         }}
       />
     </div>

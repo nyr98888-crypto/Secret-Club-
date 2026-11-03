@@ -19,8 +19,13 @@ export default function JoinPage() {
   const [error, setError] = useState("");
 
   const joinUrl = useMemo(() => {
-    if (typeof window === "undefined") return `/join/${slug}`;
-    return `${window.location.origin}/join/${slug}`;
+    const origin =
+      process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
+      (typeof window !== "undefined" &&
+      !/localhost|127\.0\.0\.1|vercel\.app/i.test(window.location.origin)
+        ? window.location.origin
+        : "https://www.secretclubscrapbook.com");
+    return `${origin}/join/${slug}`;
   }, [slug]);
 
   useEffect(() => {

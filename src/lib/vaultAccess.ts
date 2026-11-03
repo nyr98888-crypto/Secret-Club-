@@ -1,25 +1,61 @@
 /**
- * Client-side Bestie Vault access + free-tier gates.
+ * Client-side Bestie Vault access + generous free-tier starter kit.
  * VIP proof lives in localStorage as `_sc_auth_sig` (HMAC token from /api/license/verify).
  */
 
-export const AUTH_SIG_KEY = "_sc_auth_sig";
+import { STICKER_TABS, stickersForTab } from "@/constants/stickers";
+import { WASHI_TAPES } from "@/lib/washiTapes";
 
-export const FREE_STICKER_LIMIT = 25;
-export const FREE_SCRAPBOOK_LIMIT = 1;
+export const AUTH_SIG_KEY = "_sc_auth_sig";
+/** Device flag set by promo `?key=` VIP passes */
+export const VIP_UNLOCK_FLAG = "sc_vip_unlocked";
+export const VIP_ASSIGNED_KEY = "sc_assigned_key";
+
+/** First N stickers free in every non-premium sticker pack. */
+export const FREE_ITEMS_PER_PACK = 4;
+
+/**
+ * Specialty packs — entirely vault-gated (no free starters / lock badges on all).
+ * Holographic / Y2K Cyber / Chibi Rare / Secret Vault.
+ */
+export const PREMIUM_STICKER_TABS = [
+  "y2k-cyber",
+  "chibis",
+  "secret-vault",
+] as const;
+
+/** Free users can fully design sheets 1–5; sheet 6+ opens the vault modal. */
+export const FREE_SHEET_LIMIT = 5;
+
+/** Free scrapbooks on the bookshelf (separate from sheet pages). */
+export const FREE_SCRAPBOOK_LIMIT = 3;
+
+/** Warm Cream Craft, Pastel Pink Grid, Mint Notebook Lines */
 export const FREE_PAPER_IDS = [
   "clean-cream",
   "pink-grid",
-  "dot-journal",
+  "pastel-lined",
 ] as const;
-export const FREE_FRAME_PRESETS = ["polaroid", "pink_polaroid"] as const;
 
-/** Categories that require VIP for free users (entire tray). */
-export const VIP_ONLY_CATEGORIES = [
-  "gems",
-  "washi",
-  "pokes",
+/** Classic Polaroid + Doodle Scrap — enough to snap & frame for free */
+export const FREE_FRAME_PRESETS = ["polaroid", "doodle"] as const;
+
+/** Free gem cuts for the Gems tray (asset ids are `gem-${cutId}`). */
+export const FREE_GEM_IDS = [
+  "gem-heart-sapphire",
+  "gem-star-prism",
+  "gem-teardrop-emerald",
+  "gem-brilliant-diamond",
+  "gem-amethyst-cushion",
+  "gem-daisy-blossom",
+  "gem-opal-crescent",
+  "gem-ring-pop-hex",
 ] as const;
+
+/** Premium exclusives — always vault-gated (holographic / chrome). */
+export const PREMIUM_FRAME_PRESETS = ["holo_sleeve", "gold_mirror"] as const;
+export const PREMIUM_PAPER_IDS = ["holographic-starlight", "cyber-black"] as const;
+export const PREMIUM_WASHI_IDS = ["gold-hologram", "y2k-cyber-neon"] as const;
 
 export type VaultAccessState = {
   isVip: boolean;
@@ -50,7 +86,6 @@ export function isAuthSigFormatValid(token: string | null | undefined): boolean 
   if (parts.length < 3) return false;
   const ts = Number(parts[parts.length - 1]);
   if (!Number.isFinite(ts)) return false;
-  // Reject absurdly old / future tokens (5y window)
   const age = Date.now() - ts;
   if (age < -60_000 || age > 1000 * 60 * 60 * 24 * 365 * 5) return false;
   return true;
@@ -74,22 +109,36 @@ export function unlockVault(token: string): void {
 export function clearVaultUnlock(): void {
   if (typeof window === "undefined") return;
   localStorage.removeItem(AUTH_SIG_KEY);
+  try {
+    localStorage.removeItem(VIP_UNLOCK_FLAG);
+    localStorage.removeItem(VIP_ASSIGNED_KEY);
+  } catch {
+    /* ignore */
+  }
   window.dispatchEvent(new CustomEvent("sc:vault-locked"));
 }
 
 export function readVaultAccess(): VaultAccessState {
   const token = getStoredAuthSig();
-  return { isVip: Boolean(token), token };
-}
-
-export function isVipCategory(
-  category: string,
-): category is (typeof VIP_ONLY_CATEGORIES)[number] {
-  return (VIP_ONLY_CATEGORIES as readonly string[]).includes(category);
+  if (token) return { isVip: true, token };
+  if (typeof window !== "undefined") {
+    try {
+      if (localStorage.getItem(VIP_UNLOCK_FLAG) === "true") {
+        return { isVip: true, token: null };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  return { isVip: false, token: null };
 }
 
 export function isFreePaper(paperId: string): boolean {
   return (FREE_PAPER_IDS as readonly string[]).includes(paperId);
+}
+
+export function isPremiumPaper(paperId: string): boolean {
+  return (PREMIUM_PAPER_IDS as readonly string[]).includes(paperId);
 }
 
 export function isFreeFramePreset(preset?: string | null): boolean {
@@ -97,7 +146,57 @@ export function isFreeFramePreset(preset?: string | null): boolean {
   return (FREE_FRAME_PRESETS as readonly string[]).includes(preset);
 }
 
-/** Charms sticker tab is VIP-only on free tier. */
-export function isVipStickerTab(tabId: string): boolean {
-  return tabId === "charms" || tabId === "y2k-cyber";
+export function isPremiumFramePreset(preset?: string | null): boolean {
+  if (!preset) return false;
+  return (PREMIUM_FRAME_PRESETS as readonly string[]).includes(preset);
+}
+
+export function isFreeGemId(id: string): boolean {
+  return (FREE_GEM_IDS as readonly string[]).includes(id);
+}
+
+export function isPremiumWashiId(id: string): boolean {
+  return (PREMIUM_WASHI_IDS as readonly string[]).includes(id);
+}
+
+/** First FREE_ITEMS_PER_PACK washi tapes (excluding premium exclusives). */
+export function getFreeWashiIds(): Set<string> {
+  const ids = new Set<string>();
+  for (const tape of WASHI_TAPES) {
+    if (isPremiumWashiId(tape.id)) continue;
+    ids.add(`washi-${tape.id}`);
+    if (ids.size >= FREE_ITEMS_PER_PACK) break;
+  }
+  return ids;
+}
+
+export function isPremiumStickerTab(tabId: string): boolean {
+  return (PREMIUM_STICKER_TABS as readonly string[]).includes(tabId);
+}
+
+/** First 4 stickers free in every pack — except premium specialty packs (all locked). */
+export function buildFreeStickerIds(): Set<string> {
+  const ids = new Set<string>();
+  for (const tab of STICKER_TABS) {
+    if (isPremiumStickerTab(tab.id)) continue;
+    for (const sticker of stickersForTab(tab.id).slice(0, FREE_ITEMS_PER_PACK)) {
+      ids.add(sticker.id);
+    }
+  }
+  return ids;
+}
+
+export function canUseSheetPage(pageNumber: number, isVip: boolean): boolean {
+  if (isVip) return true;
+  return pageNumber <= FREE_SHEET_LIMIT;
+}
+
+/** @deprecated Tabs are no longer wholly VIP — free starters exist in every pack. */
+export function isVipStickerTab(_tabId: string): boolean {
+  return false;
+}
+
+/** @deprecated Prefer per-item free lists; categories are browsable. */
+export function isVipCategory(_category: string): boolean {
+  return false;
 }

@@ -150,7 +150,7 @@ export function SecretRoomOpening({
       <p className="relative z-10 mb-1 font-toy text-sm font-bold uppercase tracking-[0.2em] text-pink-500">
         {club.vaultType === "squad" ? "SquadVault" : "BestieVault"}
       </p>
-      <h1 className="relative z-10 mb-4 max-w-md text-center font-toy text-3xl font-black tracking-tight text-slate-800 sm:text-4xl">
+      <h1 className="secret-room-title club-title relative z-10 mb-4 max-w-md text-center text-3xl font-bold text-[#2D0C1E] sm:text-4xl">
         <span aria-hidden>{emblem}</span> {title}
       </h1>
 

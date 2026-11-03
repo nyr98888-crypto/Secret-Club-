@@ -1,8 +1,12 @@
+import { buildInviteShareUrl, getShareOrigin } from "@/lib/site";
+
 export type SharePayload = {
   title?: string;
   text: string;
   url?: string;
 };
+
+export { buildInviteShareUrl, getShareOrigin };
 
 export async function nativeShare(
   payload: SharePayload,
@@ -45,4 +49,24 @@ export function inviteMessage(clubName: string, vaultUrl: string) {
 
 export function dropMessage(vaultDropUrl: string) {
   return `New drop locked in the vault. ${vaultDropUrl}`;
+}
+
+/** Build the friend invite payload for Web Share / clipboard */
+export function buildClubInviteShare(input: {
+  clubName: string;
+  clubId: string;
+  passcode: string[];
+}) {
+  const keys = input.passcode.join(" ");
+  const shareUrl = getShareOrigin();
+  const text = [
+    `You're invited to my Secret Club: ${input.clubName}! 🎀✨`,
+    `Our secret keys: ${keys}`,
+    `Open our diary here: ${shareUrl}`,
+  ].join("\n");
+  return {
+    title: "Join my Secret Club! 🍓",
+    text,
+    url: shareUrl,
+  };
 }
