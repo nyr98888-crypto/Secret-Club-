@@ -3,10 +3,11 @@
  * Case-insensitive match; keep these out of public marketing copy.
  */
 export const VIP_TOKENS = [
-  "star-club-maya",
-  "bestie-pass-gem7",
-  "secret-bff-berry",
-  "club-vip-sparkle",
+  "founder-secret-access", // Your test key
+  "strawberry-sparkle-club", // Key 1 (Your friend)
+  "pink-crystal-bestie", // Key 2 (Bestie 1)
+  "golden-charm-vault", // Key 3 (Bestie 2)
+  "glitter-ribbon-pass", // Key 4 (Bestie 3)
 ] as const;
 
 export type VipToken = (typeof VIP_TOKENS)[number];
