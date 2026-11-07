@@ -139,7 +139,7 @@ export function ScrapbookCanvas({
 }: ScrapbookCanvasProps) {
   const [localSpreads, setLocalSpreads] = useState(spreads);
   const { mode, isPortrait, isLandscapeBook } = useDeviceLayout();
-  const { canUseSheet } = useVaultAccess();
+  const { canUseSheet, isVip } = useVaultAccess();
   const [sheetSlide, setSheetSlide] = useState<"next" | "prev" | null>(null);
   const [pokeOpen, setPokeOpen] = useState(false);
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
@@ -812,6 +812,8 @@ export function ScrapbookCanvas({
         open={pokeOpen}
         onClose={() => setPokeOpen(false)}
         onStickPoke={stickPoke}
+        isVip={isVip}
+        onRequestVip={onRequestVip}
       />
     </div>
   );

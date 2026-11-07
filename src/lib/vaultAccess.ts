@@ -1,28 +1,32 @@
 /**
- * Client-side Bestie Vault access + generous free-tier starter kit.
- * VIP proof lives in localStorage as `_sc_auth_sig` (HMAC token from /api/license/verify).
+ * Client-side Bestie Vault access + freemium teaser tier.
+ * VIP proof: `_sc_auth_sig` (HMAC), `secret_club_vip_unlocked`,
+ * and/or `sc_vip_membership_v1` via vipAuth.
  */
 
 import { STICKER_TABS, stickersForTab } from "@/constants/stickers";
 import { WASHI_TAPES } from "@/lib/washiTapes";
+import { checkIsVIP, clearVIPMembership } from "@/lib/vipAuth";
 
 export const AUTH_SIG_KEY = "_sc_auth_sig";
 /** Device flag set by promo `?key=` VIP passes */
 export const VIP_UNLOCK_FLAG = "sc_vip_unlocked";
 export const VIP_ASSIGNED_KEY = "sc_assigned_key";
 
-/** First N stickers free in every non-premium sticker pack. */
-export const FREE_ITEMS_PER_PACK = 4;
+/** First N stickers free in every category (all 13 packs). */
+export const FREE_ITEMS_PER_PACK = 3;
 
 /**
- * Specialty packs — entirely vault-gated (no free starters / lock badges on all).
- * Holographic / Y2K Cyber / Chibi Rare / Secret Vault.
+ * Specialty packs (UI hint only) — free teaser stickers still apply.
  */
 export const PREMIUM_STICKER_TABS = [
   "chibis",
   "coquette",
   "locks",
 ] as const;
+
+/** Free sound charms by SweetPoke id — Bestie Pop + Ding Dong */
+export const FREE_POKE_IDS = ["bestie-pop", "ding-dong"] as const;
 
 /** Free users can fully design sheets 1–5; sheet 6+ opens the vault modal. */
 export const FREE_SHEET_LIMIT = 5;
@@ -109,28 +113,28 @@ export function unlockVault(token: string): void {
 export function clearVaultUnlock(): void {
   if (typeof window === "undefined") return;
   localStorage.removeItem(AUTH_SIG_KEY);
-  try {
-    localStorage.removeItem(VIP_UNLOCK_FLAG);
-    localStorage.removeItem(VIP_ASSIGNED_KEY);
-  } catch {
-    /* ignore */
-  }
+  clearVIPMembership();
   window.dispatchEvent(new CustomEvent("sc:vault-locked"));
 }
 
 export function readVaultAccess(): VaultAccessState {
   const token = getStoredAuthSig();
   if (token) return { isVip: true, token };
-  if (typeof window !== "undefined") {
-    try {
-      if (localStorage.getItem(VIP_UNLOCK_FLAG) === "true") {
-        return { isVip: true, token: null };
-      }
-    } catch {
-      /* ignore */
-    }
-  }
+  if (checkIsVIP()) return { isVip: true, token: null };
   return { isVip: false, token: null };
+}
+
+/** Items at index 0..FREE_ITEMS_PER_PACK-1 are free; index >= N are VIP. */
+export function isStickerLocked(
+  indexInCategory: number,
+  isVIP: boolean,
+): boolean {
+  if (isVIP) return false;
+  return indexInCategory >= FREE_ITEMS_PER_PACK;
+}
+
+export function isFreePokeId(pokeId: string): boolean {
+  return (FREE_POKE_IDS as readonly string[]).includes(pokeId);
 }
 
 export function isFreePaper(paperId: string): boolean {
@@ -174,11 +178,10 @@ export function isPremiumStickerTab(tabId: string): boolean {
   return (PREMIUM_STICKER_TABS as readonly string[]).includes(tabId);
 }
 
-/** First 4 stickers free in every pack — except premium specialty packs (all locked). */
+/** First 3 stickers free in every one of the 13 categories. */
 export function buildFreeStickerIds(): Set<string> {
   const ids = new Set<string>();
   for (const tab of STICKER_TABS) {
-    if (isPremiumStickerTab(tab.id)) continue;
     for (const sticker of stickersForTab(tab.id).slice(0, FREE_ITEMS_PER_PACK)) {
       ids.add(sticker.id);
     }

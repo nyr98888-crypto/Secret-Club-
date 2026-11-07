@@ -15,6 +15,7 @@ import {
   isFreeFramePreset,
   isFreeGemId,
   isFreePaper,
+  isFreePokeId,
   isPremiumFramePreset,
   isPremiumPaper,
   isPremiumWashiId,
@@ -33,8 +34,8 @@ function syncAccess(): VaultAccessState {
 }
 
 /**
- * Client vault access against `_sc_auth_sig`.
- * Free starter: 4 stickers/pack (except premium specialty packs), 5 sheets.
+ * Client vault access against `_sc_auth_sig` + vipAuth membership.
+ * Free starter: 3 stickers/category, 2 frames, 2 sound charms, 5 sheets.
  * VIP: full studio + unlimited sheets.
  */
 export function useVaultAccess() {
@@ -96,7 +97,8 @@ export function useVaultAccess() {
   const canUseAsset = useCallback(
     (asset: DrawerAsset) => {
       if (access.isVip) return true;
-      if (asset.action === "open-vip") return false;
+      // Magic Chest CTA is always a VIP upsell
+      if (asset.id === "pack-magic-chest") return false;
       if (asset.category === "frames") {
         if (isPremiumFramePreset(asset.framePreset)) return false;
         return isFreeFramePreset(asset.framePreset);
@@ -113,8 +115,8 @@ export function useVaultAccess() {
         return isFreeGemId(asset.id);
       }
       if (asset.category === "pokes") {
-        // One free poke path — tray can open, placing still OK for free
-        return true;
+        const pokeId = asset.id.replace(/^poke-/, "");
+        return isFreePokeId(pokeId);
       }
       return !asset.locked;
     },
@@ -126,15 +128,10 @@ export function useVaultAccess() {
       if (access.isVip) {
         return { ...asset, locked: false, action: undefined };
       }
-      const allowed = canUseAsset({
-        ...asset,
-        locked: false,
-        action: asset.action === "open-vip" ? "open-vip" : undefined,
-      });
-      if (asset.action === "open-vip") {
-        return { ...asset, locked: true, action: "open-vip" };
+      // Freemium allow-list wins over catalog isLocked flags
+      if (canUseAsset(asset)) {
+        return { ...asset, locked: false, action: undefined };
       }
-      if (allowed) return { ...asset, locked: false, action: undefined };
       return { ...asset, locked: true, action: "open-vip" };
     },
     [access.isVip, canUseAsset],

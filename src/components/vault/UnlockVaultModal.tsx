@@ -3,7 +3,11 @@
 import { useEffect, useId, useState } from "react";
 import { ParentalGate } from "@/components/ParentalGate";
 import { SiteLegalLinks } from "@/components/SiteLegal";
+import { showVipPassToast } from "@/hooks/useVipAccess";
+import { playUnlockSound } from "@/lib/audio";
+import { setVaultUnlocked } from "@/lib/localClub";
 import { SUPPORT_EMAIL, SUPPORT_MAILTO } from "@/lib/site";
+import { activateVIPKey, isValidVipKey } from "@/lib/vipAuth";
 import { unlockVault } from "@/lib/vaultAccess";
 
 const VIP_PRICE =
@@ -41,6 +45,9 @@ export function UnlockVaultModal({
   const [entered, setEntered] = useState(false);
   const [gateOpen, setGateOpen] = useState(false);
   const [restoreOpen, setRestoreOpen] = useState(false);
+  const [vipPassOpen, setVipPassOpen] = useState(false);
+  const [vipPasscode, setVipPasscode] = useState("");
+  const [vipPassError, setVipPassError] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [restoreEmail, setRestoreEmail] = useState("");
@@ -52,6 +59,9 @@ export function UnlockVaultModal({
       setEntered(false);
       setGateOpen(false);
       setRestoreOpen(false);
+      setVipPassOpen(false);
+      setVipPasscode("");
+      setVipPassError("");
       setError("");
       setRestoreMsg("");
       return;
@@ -78,11 +88,36 @@ export function UnlockVaultModal({
   useEffect(() => {
     if (!open) return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape" && !gateOpen && !restoreOpen) onClose();
+      if (e.key === "Escape" && !gateOpen && !restoreOpen && !vipPassOpen)
+        onClose();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, gateOpen, restoreOpen, onClose]);
+  }, [open, gateOpen, restoreOpen, vipPassOpen, onClose]);
+
+  function claimVipPass() {
+    const code = vipPasscode.trim();
+    if (!code || !isValidVipKey(code)) {
+      setVipPassError("Invalid passcode. Check for typos!");
+      return;
+    }
+    const ok = activateVIPKey(code);
+    if (!ok) {
+      setVipPassError("Invalid passcode. Check for typos!");
+      return;
+    }
+    setVipPassError("");
+    setVaultUnlocked(true);
+    try {
+      playUnlockSound();
+    } catch {
+      /* ignore */
+    }
+    showVipPassToast();
+    onUnlocked?.();
+    setVipPassOpen(false);
+    onClose();
+  }
 
   function launchCheckout() {
     setBusy(true);
@@ -129,6 +164,25 @@ export function UnlockVaultModal({
       setRestoreMsg("Enter a valid license key (or email + key).");
       return;
     }
+
+    // VIP passcodes restore instantly on-device (no network required)
+    if (isValidVipKey(licenseKey) && activateVIPKey(licenseKey)) {
+      setVaultUnlocked(true);
+      try {
+        playUnlockSound();
+      } catch {
+        /* ignore */
+      }
+      showVipPassToast();
+      setRestoreMsg("Vault unlocked! ✨");
+      onUnlocked?.();
+      window.setTimeout(() => {
+        setRestoreOpen(false);
+        onClose();
+      }, 600);
+      return;
+    }
+
     setBusy(true);
     setRestoreMsg("");
     try {
@@ -268,6 +322,70 @@ export function UnlockVaultModal({
             >
               Already purchased? Enter your email or key to restore
             </button>
+
+            {!vipPassOpen ? (
+              <button
+                type="button"
+                className="text-xs font-semibold text-[#a78bfa] underline-offset-2 hover:underline"
+                onClick={() => {
+                  setVipPassOpen(true);
+                  setVipPassError("");
+                }}
+              >
+                Have a VIP Pass?
+              </button>
+            ) : (
+              <div className="w-full rounded-2xl border border-pink-100 bg-white/70 p-3 text-left">
+                <label className="block text-[0.65rem] font-bold uppercase tracking-wide text-[#8a5f7c]">
+                  VIP Passcode
+                  <input
+                    type="text"
+                    value={vipPasscode}
+                    onChange={(e) => {
+                      setVipPasscode(e.target.value);
+                      setVipPassError("");
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        claimVipPass();
+                      }
+                    }}
+                    className="mt-1 w-full rounded-xl border-2 border-pink-100 px-3 py-2 text-sm font-semibold text-[#5b2a4a]"
+                    placeholder="Enter VIP Passcode"
+                    autoFocus
+                    autoComplete="off"
+                    spellCheck={false}
+                  />
+                </label>
+                {vipPassError ? (
+                  <p className="mt-1.5 text-xs font-semibold text-[#d62839]">
+                    {vipPassError}
+                  </p>
+                ) : null}
+                <div className="mt-2 flex gap-2">
+                  <button
+                    type="button"
+                    className="flex-1 rounded-full border border-slate-200 py-2 text-xs font-bold text-slate-600"
+                    onClick={() => {
+                      setVipPassOpen(false);
+                      setVipPasscode("");
+                      setVipPassError("");
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="flex-1 rounded-full py-2 text-xs font-black text-white"
+                    style={{ backgroundColor: "#a78bfa" }}
+                    onClick={claimVipPass}
+                  >
+                    Claim
+                  </button>
+                </div>
+              </div>
+            )}
 
             <button
               type="button"

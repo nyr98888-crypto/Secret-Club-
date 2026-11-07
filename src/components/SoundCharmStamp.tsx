@@ -22,6 +22,11 @@ type SoundCharmStampProps = {
   fromName?: string;
   /** Fire placement burst + sound once when first mounted */
   burstOnMount?: boolean;
+  /**
+   * Incremented by the canvas parent when a tap (not a drag) is detected.
+   * Needed because drag pointer handlers swallow native click.
+   */
+  tapNonce?: number;
   className?: string;
 };
 
@@ -49,27 +54,28 @@ function makeBurst(count = 14): Particle[] {
 
 /**
  * Interactive 3D sound-charm stamp for the scrapbook canvas.
- * Placement: particle burst + sound. Tap anytime: wiggle + replay.
+ * Placement: particle burst + sound. Tap anytime: pulse + replay.
  */
 export function SoundCharmStamp({
   poke,
   charmId,
   fromName = "You",
   burstOnMount = true,
+  tapNonce = 0,
   className = "",
 }: SoundCharmStampProps) {
-  const [wiggle, setWiggle] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const [particles, setParticles] = useState<Particle[]>([]);
   const [bursting, setBursting] = useState(false);
   const didBurst = useRef(false);
-  const dragRef = useRef({ x: 0, y: 0, moved: false });
-  const wiggleTimer = useRef<number | null>(null);
+  const lastTapNonce = useRef(0);
+  const playTimer = useRef<number | null>(null);
   const burstTimer = useRef<number | null>(null);
 
-  function triggerWiggle() {
-    setWiggle(true);
-    if (wiggleTimer.current) window.clearTimeout(wiggleTimer.current);
-    wiggleTimer.current = window.setTimeout(() => setWiggle(false), 650);
+  function triggerPlayAnim() {
+    setPlaying(true);
+    if (playTimer.current) window.clearTimeout(playTimer.current);
+    playTimer.current = window.setTimeout(() => setPlaying(false), 520);
   }
 
   function triggerBurst() {
@@ -84,7 +90,7 @@ export function SoundCharmStamp({
 
   function playCharm() {
     playPokeSound(poke.soundType);
-    triggerWiggle();
+    triggerPlayAnim();
   }
 
   useEffect(() => {
@@ -96,14 +102,22 @@ export function SoundCharmStamp({
     didBurst.current = true;
     if (charmId) BURST_SEEN.add(charmId);
     playPokeSound(poke.soundType);
-    triggerWiggle();
+    triggerPlayAnim();
     triggerBurst();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [burstOnMount, charmId]);
 
+  // Parent-detected tap (drag handlers swallow native click)
+  useEffect(() => {
+    if (!tapNonce || tapNonce === lastTapNonce.current) return;
+    lastTapNonce.current = tapNonce;
+    playCharm();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tapNonce]);
+
   useEffect(
     () => () => {
-      if (wiggleTimer.current) window.clearTimeout(wiggleTimer.current);
+      if (playTimer.current) window.clearTimeout(playTimer.current);
       if (burstTimer.current) window.clearTimeout(burstTimer.current);
     },
     [],
@@ -112,34 +126,18 @@ export function SoundCharmStamp({
   return (
     <div
       className={`relative w-full select-none ${className}`}
-      onPointerDown={(e) => {
-        // Allow parent drag — track movement to distinguish tap vs drag
-        dragRef.current = { x: e.clientX, y: e.clientY, moved: false };
-      }}
-      onPointerMove={(e) => {
-        if (
-          Math.hypot(e.clientX - dragRef.current.x, e.clientY - dragRef.current.y) >
-          8
-        ) {
-          dragRef.current.moved = true;
-        }
-      }}
-      onClick={(e) => {
-        e.stopPropagation();
-        if (dragRef.current.moved) return;
-        playCharm();
-      }}
       role="button"
       tabIndex={0}
       aria-label={`${poke.title} from ${fromName}. Tap to play sound.`}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
+          e.stopPropagation();
           playCharm();
         }
       }}
+      data-sound-charm="true"
     >
-      {/* Particle burst layer */}
       {bursting
         ? particles.map((p) => (
             <span
@@ -166,7 +164,7 @@ export function SoundCharmStamp({
         className={`sound-charm-body relative mx-auto flex w-[92%] flex-col items-center gap-1.5
           rounded-[1.6rem] border-[3px] border-white/90
           px-3 pb-2.5 pt-3 shadow-[0_10px_24px_rgba(74,43,69,0.28),inset_0_1px_0_rgba(255,255,255,0.55)]
-          ${wiggle ? "sound-charm-wiggle" : ""}`}
+          ${playing ? "sound-charm-tap" : ""}`}
         style={{
           backgroundImage: poke.sealColor.includes("gradient")
             ? poke.sealColor
@@ -176,7 +174,6 @@ export function SoundCharmStamp({
           transformStyle: "preserve-3d",
         }}
       >
-        {/* Gloss highlight */}
         <span
           aria-hidden
           className="pointer-events-none absolute inset-x-3 top-1 h-4 rounded-full bg-white/35 blur-[1px]"
@@ -187,16 +184,24 @@ export function SoundCharmStamp({
             bg-white/90 text-3xl shadow-md"
           style={{ transform: "translateZ(12px)" }}
         >
-          <span aria-hidden className={wiggle ? "animate-bounce" : ""}>
+          <span aria-hidden className={playing ? "sound-charm-icon-bounce" : ""}>
             {poke.icon}
           </span>
           <span
             aria-hidden
-            className="poke-speaker absolute -bottom-1 -right-1 grid h-5 w-5 place-items-center
-              rounded-full border border-white bg-pink-500 text-[0.6rem] text-white shadow"
+            className={`absolute -bottom-1 -right-1 grid h-5 w-5 place-items-center
+              rounded-full border border-white bg-pink-500 text-[0.6rem] text-white shadow
+              ${playing ? "poke-speaker-pulse" : "poke-speaker"}`}
           >
             🔊
           </span>
+          {playing ? (
+            <span
+              aria-hidden
+              className="sound-wave-ring pointer-events-none absolute inset-[-6px] rounded-[1.15rem]
+                border-2 border-pink-400/70"
+            />
+          ) : null}
         </div>
 
         <span

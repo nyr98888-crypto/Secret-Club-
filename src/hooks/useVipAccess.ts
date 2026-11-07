@@ -2,39 +2,65 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { isVipPassToken } from "@/config/vipPasses";
+import {
+  activateVIPKey,
+  checkIsVIP,
+  isValidVipKey,
+  VIP_PASS_TOAST,
+} from "@/lib/vipAuth";
 import { setVaultUnlocked } from "@/lib/localClub";
 import {
   readVaultAccess,
-  unlockVault,
   VIP_ASSIGNED_KEY,
   VIP_UNLOCK_FLAG,
 } from "@/lib/vaultAccess";
 
 export { VIP_UNLOCK_FLAG, VIP_ASSIGNED_KEY };
 
-function readLocalVipFlag(): boolean {
-  if (typeof window === "undefined") return false;
-  try {
-    return localStorage.getItem(VIP_UNLOCK_FLAG) === "true";
-  } catch {
-    return false;
-  }
-}
+const VIP_TOAST_EVENT = "sc:vip-pass-toast";
 
 /** Sync check — safe in render / click handlers */
 export function isVipUnlocked(): boolean {
   if (typeof window === "undefined") return false;
-  return readVaultAccess().isVip || readLocalVipFlag();
+  return readVaultAccess().isVip || checkIsVIP();
+}
+
+/** Show the VIP congratulations toast anywhere in the app */
+export function showVipPassToast(message: string = VIP_PASS_TOAST) {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(
+    new CustomEvent(VIP_TOAST_EVENT, { detail: { message } }),
+  );
+}
+
+export function subscribeVipPassToast(
+  handler: (message: string) => void,
+): () => void {
+  function onToast(e: Event) {
+    const detail = (e as CustomEvent<{ message?: string }>).detail;
+    handler(detail?.message || VIP_PASS_TOAST);
+  }
+  window.addEventListener(VIP_TOAST_EVENT, onToast);
+  return () => window.removeEventListener(VIP_TOAST_EVENT, onToast);
+}
+
+/** Strip `vip` query param without a full navigation reload */
+function cleanVipQueryParams() {
+  if (typeof window === "undefined") return;
+  try {
+    const url = new URL(window.location.href);
+    if (!url.searchParams.has("vip")) return;
+    url.searchParams.delete("vip");
+    const next = `${url.pathname}${url.search}${url.hash}`;
+    window.history.replaceState(window.history.state, "", next);
+  } catch {
+    /* ignore */
+  }
 }
 
 /**
  * Reactive VIP unlock state for sticker / pack gating.
  * Does not read URL params (safe outside Suspense).
- *
- * Usage:
- *   const { isUnlocked } = useVipAccess();
- *   const isLocked = !isUnlocked() && pack.isPremium;
  */
 export function useVipAccess() {
   const [unlocked, setUnlocked] = useState(false);
@@ -60,7 +86,7 @@ export function useVipAccess() {
 }
 
 /**
- * Consumes `?key=` promo passes once. Mount only inside Suspense
+ * Consumes `?vip=` single-device passes once. Mount only inside Suspense
  * (see VipAccessBootstrap).
  */
 export function useVipKeyFromUrl() {
@@ -68,47 +94,15 @@ export function useVipKeyFromUrl() {
   const { isUnlocked, isVip } = useVipAccess();
 
   useEffect(() => {
-    const key = searchParams.get("key");
-    if (!key || !isVipPassToken(key)) return;
+    const raw = searchParams.get("vip");
+    if (!raw || !isValidVipKey(raw)) return;
 
-    let cancelled = false;
+    const ok = activateVIPKey(raw);
+    if (!ok) return;
 
-    void (async () => {
-      try {
-        // Persist VIP + skip the 3-key passcode / secret room on this device
-        localStorage.setItem(VIP_UNLOCK_FLAG, "true");
-        localStorage.setItem(VIP_ASSIGNED_KEY, key);
-        setVaultUnlocked(true);
-
-        const res = await fetch("/api/license/verify", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ licenseKey: key }),
-        });
-        const data = (await res.json()) as { token?: string };
-
-        if (cancelled) return;
-
-        if (res.ok && data.token) {
-          try {
-            unlockVault(data.token);
-          } catch {
-            window.dispatchEvent(new CustomEvent("sc:vault-unlocked"));
-          }
-        } else {
-          window.dispatchEvent(new CustomEvent("sc:vault-unlocked"));
-        }
-      } catch {
-        if (!cancelled) {
-          setVaultUnlocked(true);
-          window.dispatchEvent(new CustomEvent("sc:vault-unlocked"));
-        }
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
+    setVaultUnlocked(true);
+    cleanVipQueryParams();
+    showVipPassToast();
   }, [searchParams]);
 
   return { isUnlocked, isVip };

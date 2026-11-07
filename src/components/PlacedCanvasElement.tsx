@@ -92,13 +92,22 @@ export function PlacedCanvasElement({
   const replaceTriggerRef = useRef<(() => void) | null>(null);
   const [dragging, setDragging] = useState(false);
   const [adjustingPhoto, setAdjustingPhoto] = useState(false);
+  /** Increments on poke tap (not drag) so SoundCharmStamp can play despite pointer capture. */
+  const [pokeTapNonce, setPokeTapNonce] = useState(0);
   const activePointers = useRef<Map<number, { x: number; y: number }>>(
     new Map(),
   );
+  const pokeGestureRef = useRef<{
+    x: number;
+    y: number;
+    moved: boolean;
+  } | null>(null);
+  const isPokeRef = useRef(false);
 
   const isFrame = element.category === "frames";
   const isWashi = element.category === "washi" && Boolean(element.washiPatternId);
   const isPoke = element.category === "pokes" && Boolean(element.emoji);
+  isPokeRef.current = isPoke;
   const scale = element.scale ?? 1;
   const legacyGiantFrame =
     isFrame &&
@@ -148,6 +157,17 @@ export function PlacedCanvasElement({
       }
 
       if (modeRef.current === "move") {
+        if (pokeGestureRef.current) {
+          const g = pokeGestureRef.current;
+          if (
+            !g.moved &&
+            Math.hypot(e.clientX - g.x, e.clientY - g.y) > 10
+          ) {
+            g.moved = true;
+          }
+          // Hold position until the user actually drags — keeps taps from nudging the charm
+          if (!g.moved) return;
+        }
         const { x, y } = clientToPercent(e.clientX, e.clientY);
         onChange({ x, y });
         return;
@@ -201,6 +221,11 @@ export function PlacedCanvasElement({
     function onPointerUp(e: PointerEvent) {
       activePointers.current.delete(e.pointerId);
       if (activePointers.current.size === 0) {
+        const gesture = pokeGestureRef.current;
+        if (isPokeRef.current && gesture && !gesture.moved) {
+          setPokeTapNonce((n) => n + 1);
+        }
+        pokeGestureRef.current = null;
         modeRef.current = null;
         transformStartRef.current = null;
         setDragging(false);
@@ -237,6 +262,7 @@ export function PlacedCanvasElement({
     activePointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
     if (activePointers.current.size >= 2) {
+      pokeGestureRef.current = null;
       const pts = [...activePointers.current.values()];
       const [a, b] = pts;
       modeRef.current = "pinch";
@@ -256,6 +282,9 @@ export function PlacedCanvasElement({
       return;
     }
 
+    pokeGestureRef.current = isPoke
+      ? { x: e.clientX, y: e.clientY, moved: false }
+      : null;
     modeRef.current = "move";
     setDragging(true);
     try {
@@ -392,6 +421,7 @@ export function PlacedCanvasElement({
               charmId={element.id}
               fromName={element.fromName || "You"}
               burstOnMount
+              tapNonce={pokeTapNonce}
             />
           </div>
         ) : isWashi && element.washiPatternId ? (
@@ -441,6 +471,13 @@ export function PlacedCanvasElement({
             alt={element.label}
             className="pointer-events-none h-auto w-full object-contain drop-shadow-[0_6px_10px_rgba(74,43,69,0.22)]"
             draggable={false}
+            onError={(e) => {
+              // Invisible placeholder — keep layout, hide broken asset
+              const img = e.currentTarget;
+              img.style.opacity = "0";
+              img.style.visibility = "hidden";
+              img.removeAttribute("src");
+            }}
           />
         )}
 

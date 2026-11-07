@@ -23,8 +23,8 @@ import {
 import { SecretRoomOpening } from "@/components/SecretRoomOpening";
 import { UnlockVaultModal } from "@/components/vault/UnlockVaultModal";
 import { useVaultAccess } from "@/hooks/useVaultAccess";
-import { isVipPassToken } from "@/config/vipPasses";
-import { isVipUnlocked, VIP_ASSIGNED_KEY, VIP_UNLOCK_FLAG } from "@/hooks/useVipAccess";
+import { activateVIPKey, checkIsVIP } from "@/lib/vipAuth";
+import { isVipUnlocked } from "@/hooks/useVipAccess";
 import { VaultTopChrome } from "@/components/VaultTopChrome";
 import { ScrapbookCanvas } from "@/components/ScrapbookCanvas";
 import { Bookshelf } from "@/components/Bookshelf";
@@ -67,20 +67,28 @@ export default function VaultPage() {
     setBook(ensured);
     setShelf(readScrapbooks());
 
-    // Sync VIP from `?key=` before first paint so we never flash the passcode screen
+    // VIP `?vip=` → activate, bypass passcode, clean URL
     try {
-      const urlKey = new URLSearchParams(window.location.search).get("key");
-      if (urlKey && isVipPassToken(urlKey)) {
-        localStorage.setItem(VIP_UNLOCK_FLAG, "true");
-        localStorage.setItem(VIP_ASSIGNED_KEY, urlKey);
+      const urlKey = new URLSearchParams(window.location.search).get("vip");
+      if (urlKey && activateVIPKey(urlKey)) {
         setVaultUnlocked(true);
+        setViewMode("scrapbook");
+        setReady(true);
+        const clean = new URL(window.location.href);
+        clean.searchParams.delete("vip");
+        window.history.replaceState(
+          window.history.state,
+          "",
+          `${clean.pathname}${clean.search}${clean.hash}`,
+        );
+        return;
       }
     } catch {
       /* ignore */
     }
 
-    // VIP `?key=` / stored VIP, first-time shelf, or already unlocked → skip passcode
-    if (brandNew || isVaultUnlocked() || isVipUnlocked()) {
+    // Stored VIP, first-time shelf, or already unlocked → skip passcode
+    if (brandNew || isVaultUnlocked() || isVipUnlocked() || checkIsVIP()) {
       setVaultUnlocked(true);
       setViewMode("scrapbook");
     } else {

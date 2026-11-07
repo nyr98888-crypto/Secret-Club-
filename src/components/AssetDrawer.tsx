@@ -35,12 +35,6 @@ import {
 import { useVaultAccess } from "@/hooks/useVaultAccess";
 
 /** Folder ids treated as fully vault-gated in the desktop tray */
-const PREMIUM_MANIFEST_FOLDERS = new Set([
-  "chibi_characters",
-  "coquette",
-  "locks_and_keys",
-]);
-
 type DrawerTab = AssetCategory | "paper";
 export type SheetSnap = "collapsed" | "peek" | "expanded";
 
@@ -165,13 +159,9 @@ export function AssetDrawer({
       onRequestVip?.();
       return;
     }
-    // Locked tiles: place as preview + soft tip — never hijack with full-screen paywall
+    // Locked tiles → Unlock Full Studio paywall
     if (gated.locked || gated.action === "open-vip") {
-      setVaultTipId(asset.id);
-      window.setTimeout(() => {
-        setVaultTipId((cur) => (cur === asset.id ? null : cur));
-      }, 2400);
-      onPlaceAsset({ ...gated, locked: true, action: "open-vip" });
+      onRequestVip?.("💖 Unlock Full Studio ($4.99) to use this item.");
       if (compact) setSnap("collapsed");
       return;
     }
@@ -628,11 +618,6 @@ export function AssetDrawer({
           className={className}
           onRequestVip={onRequestVip}
           onAddSticker={(sticker: ManifestSticker, opts) => {
-            const fromSrc =
-              sticker.src.match(/^\/stickers\/([^/]+)\//)?.[1] ?? "";
-            const premiumPack =
-              Boolean(opts?.locked) || PREMIUM_MANIFEST_FOLDERS.has(fromSrc);
-
             pick({
               id: sticker.id.startsWith("sticker-")
                 ? sticker.id
@@ -641,8 +626,8 @@ export function AssetDrawer({
               label: sticker.name,
               src: sticker.src,
               defaultWidth: 18,
-              locked: !isVip && premiumPack ? true : undefined,
-              action: !isVip && premiumPack ? "open-vip" : undefined,
+              locked: opts?.locked ? true : undefined,
+              action: opts?.locked ? "open-vip" : undefined,
             });
           }}
           headerAction={

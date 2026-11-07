@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { playPokeSound, type PokeSoundType } from "@/utils/pokeAudio";
+import { isFreePokeId } from "@/lib/vaultAccess";
 
 export type SweetPoke = {
   id: string;
@@ -14,46 +15,88 @@ export type SweetPoke = {
 
 export const POKE_OPTIONS: SweetPoke[] = [
   {
-    id: "heart",
-    icon: "💖",
-    title: "Bestie Hug",
-    soundType: "magic",
-    sealColor: "linear-gradient(135deg, #f472b6 0%, #fb7185 100%)",
+    id: "bestie-pop",
+    icon: "🫧",
+    title: "Bestie Pop",
+    soundType: "pop",
+    sealColor: "linear-gradient(135deg, #7dd3fc 0%, #f472b6 100%)",
   },
   {
-    id: "knock",
+    id: "secret-knock",
     icon: "🚪",
     title: "Secret Knock",
     soundType: "knock",
     sealColor: "linear-gradient(135deg, #fbbf24 0%, #fb923c 100%)",
   },
   {
-    id: "sparkle",
-    icon: "🪄",
+    id: "magic-wish",
+    icon: "✨",
     title: "Magic Wish",
-    soundType: "bell",
+    soundType: "magic",
     sealColor: "linear-gradient(135deg, #c084fc 0%, #818cf8 100%)",
   },
   {
-    id: "drop",
-    icon: "🎵",
-    title: "Drop Song",
-    soundType: "marimba",
-    sealColor: "linear-gradient(135deg, #e879f9 0%, #8b5cf6 100%)",
-  },
-  {
-    id: "snack",
-    icon: "🍓",
-    title: "Snack Break",
-    soundType: "pop",
-    sealColor: "linear-gradient(135deg, #f87171 0%, #ec4899 100%)",
-  },
-  {
-    id: "bell",
+    id: "fairy-chime",
     icon: "🔔",
+    title: "Fairy Chime",
+    soundType: "fairy",
+    sealColor: "linear-gradient(135deg, #fde047 0%, #f9a8d4 100%)",
+  },
+  {
+    id: "sweet-snick",
+    icon: "🍬",
+    title: "Sweet Snick",
+    soundType: "sweet",
+    sealColor: "linear-gradient(135deg, #fb7185 0%, #f472b6 100%)",
+  },
+  {
+    id: "camera-snap",
+    icon: "📸",
+    title: "Camera Snap",
+    soundType: "camera",
+    sealColor: "linear-gradient(135deg, #94a3b8 0%, #64748b 100%)",
+  },
+  {
+    id: "drip-drop",
+    icon: "💧",
+    title: "Drip Drop",
+    soundType: "drip",
+    sealColor: "linear-gradient(135deg, #67e8f9 0%, #38bdf8 100%)",
+  },
+  {
+    id: "kitten-purr",
+    icon: "🐱",
+    title: "Kitten Purr",
+    soundType: "purr",
+    sealColor: "linear-gradient(135deg, #fdba74 0%, #fb7185 100%)",
+  },
+  {
+    id: "ding-dong",
+    icon: "🛎️",
     title: "Ding Dong",
-    soundType: "bell",
+    soundType: "ding",
     sealColor: "linear-gradient(135deg, #fde047 0%, #fbbf24 100%)",
+  },
+  {
+    id: "star-twinkle",
+    icon: "🌟",
+    title: "Star Twinkle",
+    soundType: "twinkle",
+    sealColor: "linear-gradient(135deg, #fef08a 0%, #c084fc 100%)",
+  },
+  {
+    id: "love-sparkle",
+    icon: "💖",
+    title: "Love Sparkle",
+    soundType: "love",
+    sealColor: "linear-gradient(135deg, #f472b6 0%, #fb7185 100%)",
+  },
+  {
+    id: "secret-whisper",
+    icon: "🤫",
+    title: "Secret Whisper",
+    soundType: "whisper",
+    sealColor: "linear-gradient(135deg, #e9d5ff 0%, #a78bfa 100%)",
   },
 ];
 
@@ -61,12 +104,16 @@ type SweetPokeModalProps = {
   open: boolean;
   onClose: () => void;
   onStickPoke: (poke: SweetPoke) => void;
+  isVip?: boolean;
+  onRequestVip?: (reason?: string) => void;
 };
 
 export function SweetPokeModal({
   open,
   onClose,
   onStickPoke,
+  isVip = false,
+  onRequestVip,
 }: SweetPokeModalProps) {
   const [selectedPoke, setSelectedPoke] = useState<SweetPoke>(POKE_OPTIONS[0]);
 
@@ -78,8 +125,13 @@ export function SweetPokeModal({
   if (!open) return null;
 
   function handlePick(poke: SweetPoke) {
+    if (!isVip && !isFreePokeId(poke.id)) {
+      onRequestVip?.(
+        "💖 Unlock Full Studio ($4.99) for every Sound Charm.",
+      );
+      return;
+    }
     setSelectedPoke(poke);
-    // Placement sound + burst happen on the stamp itself
     onStickPoke(poke);
     window.setTimeout(() => onClose(), 0);
   }
@@ -111,9 +163,10 @@ export function SweetPokeModal({
           </p>
         </div>
 
-        <div className="grid w-full shrink-0 grid-cols-3 gap-3">
+        <div className="grid w-full shrink-0 grid-cols-3 gap-2.5 sm:gap-3">
           {POKE_OPTIONS.map((poke) => {
             const isSelected = selectedPoke.id === poke.id;
+            const locked = !isVip && !isFreePokeId(poke.id);
             return (
               <button
                 key={poke.id}
@@ -121,17 +174,19 @@ export function SweetPokeModal({
                 onClick={() => handlePick(poke)}
                 onPointerEnter={() => {
                   setSelectedPoke(poke);
-                  playPokeSound(poke.soundType);
+                  if (!locked) playPokeSound(poke.soundType);
                 }}
-                className={`flex min-h-[88px] flex-col items-center justify-center gap-1 rounded-2xl border-2 p-2
+                className={`relative flex min-h-[84px] flex-col items-center justify-center gap-1 rounded-2xl border-2 p-2
                   transition active:scale-95 ${
                     isSelected
                       ? "border-pink-400 bg-pink-50 shadow-md ring-2 ring-pink-200"
                       : "border-pink-100 bg-white hover:border-pink-200"
-                  }`}
+                  } ${locked ? "opacity-80" : ""}`}
               >
                 <span
-                  className="grid h-10 w-10 place-items-center rounded-full text-xl text-white shadow"
+                  className={`grid h-10 w-10 place-items-center rounded-full text-xl text-white shadow ${
+                    locked ? "opacity-60" : ""
+                  }`}
                   style={{
                     backgroundImage: poke.sealColor,
                     backgroundColor: "#f472b6",
@@ -140,9 +195,14 @@ export function SweetPokeModal({
                 >
                   {poke.icon}
                 </span>
-                <span className="text-center text-[0.65rem] font-black leading-tight text-slate-700">
+                <span className="text-center text-[0.62rem] font-black leading-tight text-slate-700">
                   {poke.title}
                 </span>
+                {locked ? (
+                  <span className="pointer-events-none absolute right-1 top-1 text-[0.65rem]">
+                    🔒
+                  </span>
+                ) : null}
               </button>
             );
           })}
